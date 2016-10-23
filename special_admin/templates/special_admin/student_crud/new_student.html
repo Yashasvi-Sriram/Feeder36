@@ -1,9 +1,11 @@
 {% extends 'special_admin/base.html' %}
 {% block body %}
     <div class='container-fluid'>
-        <div class='row'></div>
+
+        <h1 style="text-align: center;margin: 0;font-size: 50px">New to class..</h1>
+        <hr>
         <div class='col-xs-2'>
-            <form method='post' action='{% url 'special_admin:new' %}' id="create_student_form">
+            <form method='post' action='{% url 'special_admin:new_student' %}' id="create_student_form">
                 {% csrf_token %}
                 <br>
                 <input style='width: 100%' type='text' name='student_name' value='' placeholder='name'><br><br>
@@ -35,7 +37,6 @@
                 });
             </script>
         </div>
-
         {#      Courses enrollment script      #}
         <script type="text/javascript">
             $(document).ready(function () {
@@ -120,6 +121,5 @@
                 </tbody>
             </table>
         </div>
-    </div>
     </div>
 {% endblock %}

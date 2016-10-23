@@ -1,0 +1,126 @@
+{% extends 'special_admin/base.html' %}
+{% block body %}
+    <div class='container-fluid'>
+
+        <h1 style="text-align: center;margin: 0;font-size: 50px">Another One !!</h1>
+        <hr>
+        <div class='col-xs-2'>
+            <form method='post' action='{% url 'special_admin:new_course' %}' id="create_course_form">
+                {% csrf_token %}
+                <br>
+                <input style='width: 100%' type='text' name='course_code' value='' placeholder='code'><br><br>
+                <input style='width: 100%' type='text' name='course_name' value=''
+                       placeholder='name'><br><br>
+                <input type="hidden" value="" id="students_input" name="students">
+                <input id="validate" type='button' name='create_course' value='Create' class='btn-success'>
+            </form>
+            <script type="text/javascript">
+                var signed_students = [];
+                var signed_class_name = 'signed';
+                var no_signed = {{ 0 }};
+                var no_available = {{ all_students|length }};
+
+                function update_totals() {
+                    $('#no_students_available').text(no_available);
+                    $('#no_students_signed').text(no_signed);
+                }
+
+                $(document).ready(function () {
+                    $('#validate').click(function () {
+                        signed_students = [];
+                        $('#students_signed').find('.' + signed_class_name).each(function () {
+                            signed_students.push($(this).attr('id'));
+                        });
+                        $('#students_input').val(signed_students.join(","));
+                        $('#create_course_form').submit();
+                    });
+                });
+            </script>
+        </div>
+        {#      Students enrollment script      #}
+        <script type="text/javascript">
+            $(document).ready(function () {
+                update_totals();
+
+                $('#students_signed').find('.student').click(function () {
+                    $(this).fadeOut(0).removeClass(signed_class_name);
+                    $('#students_available').find('#' + $(this).attr('id')).fadeIn(0);
+                    no_available++;
+                    no_signed--;
+                    update_totals();
+                });
+                $('#students_available').find('.student').click(function () {
+                    $(this).fadeOut(0);
+                    $('#students_signed').find('#' + $(this).attr('id')).fadeIn(0).addClass(signed_class_name);
+                    no_available--;
+                    no_signed++;
+                    update_totals();
+                });
+            });
+        </script>
+        <div class='col-xs-5'>
+            <blockquote><span id='no_students_signed'></span> students registered</blockquote>
+            <table id='students_signed' class='table table-hover table-striped' style='overflow: scroll'>
+                <colgroup>
+                    <col span="1" style="width: 50%;">
+                    <col span="1" style="width: 50%;">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>User Name</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for student in all_students %}
+                    <tr id='{{ student.pk }}' class='student' style="display: none">
+                        <td>
+                            <a href='#'>
+                                {{ student.name }}
+                            </a>
+                        </td>
+                        <td>
+                            <a href='#'>
+                                {{ student.user_name }}
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class='col-xs-5'>
+            <blockquote><span id='no_students_available'></span> students available
+            </blockquote>
+            <table id='students_available' class='table table-hover table-striped' style='overflow: scroll'>
+                <colgroup>
+                    <col span="1" style="width: 50%;">
+                    <col span="1" style="width: 50%;">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>User Name</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for student in all_students %}
+                    <tr id='{{ student.pk }}' class='student'>
+                        <td>
+                            <a href='#'>
+                                {{ student.name }}
+                            </a>
+                        </td>
+                        <td>
+                            <a href='#'>
+                                {{ student.user_name }}
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+{% endblock %}

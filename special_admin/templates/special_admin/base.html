@@ -29,6 +29,7 @@
 <body>
 
 {# navbar #}
+{% block navbar %}
 <nav class="navbar" style="border:0;border-radius:0;">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -36,18 +37,19 @@
         </div>
         <ul class="nav navbar-nav">
             <li><a href="{% url 'special_admin:home' %}">Home</a></li>
-            <li><a href="#">Courses</a></li>
+            <li><a href="{% url 'special_admin:courses' %}">Courses</a></li>
             <li><a href="{% url 'special_admin:students' %}">Students</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <form action="{% url 'special_admin:home' %}" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="log_out" value="True">
-                <button type="submit" class="btn-default btn-lg ">Log</button>
+                <button type="submit" class="btn-danger" style="width: 50px;height: 50px">Log</button>
             </form>
         </ul>
     </div>
 </nav>
+{% endblock %}
 
 {# body block #}
 {% block body %}

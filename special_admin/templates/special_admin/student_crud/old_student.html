@@ -1,7 +1,7 @@
 {% extends 'special_admin/base.html' %}
 {% block body %}
     {% if message %}
-        <div id="message" style="position: fixed;top: 300px;left: 50px;font-size: 50px">
+        <div id="message" style="position: fixed;top: 500px;left: 50px;font-size: 50px">
             {{ message }}
             <script>
                 $(document).ready(function () {
@@ -11,13 +11,16 @@
         </div>
     {% endif %}
     <div class="container-fluid">
+        <h1 style="text-align: center;margin: 0;font-size: 50px">{{ student.name }}..</h1>
+        <hr>
+
         <div class="row">
             <div class="col-xs-2">
-                <form method="post" action="{% url 'special_admin:old' student.pk %}" class="form-horizontal">
+                <form method="post" action="{% url 'special_admin:old_student' student.pk %}" class="form-horizontal">
                     {% csrf_token %}
                     <input type="submit" name="delete_student" value="Delete" class="btn-danger">
                 </form>
-                <form method="post" action="{% url 'special_admin:old' student.pk %}" id="update_student_form">
+                <form method="post" action="{% url 'special_admin:old_student' student.pk %}" id="update_student_form">
                     {% csrf_token %}
                     <br>
                     <input style='width: 100%' type='text' name='student_name' value='{{ student.name }}'

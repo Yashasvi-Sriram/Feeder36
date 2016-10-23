@@ -12,7 +12,7 @@ class Student(models.Model):
     name = models.CharField(max_length=50)
     user_name = models.EmailField(max_length=30)
     password = models.CharField(max_length=20)
-    courses = models.ForeignKey('Course', null=True, on_delete=models.SET_NULL)
+    courses = models.ManyToManyField('Course')
 
     def __str__(self):
         return self.name
@@ -21,7 +21,7 @@ class Student(models.Model):
 class Course(models.Model):
     code = models.CharField(max_length=10)
     name = models.CharField(max_length=50)
-    students = models.ForeignKey(Student, null=True, on_delete=models.SET_NULL)
+    students = models.ManyToManyField(Student)
 
     def __str__(self):
         return self.code + " - " + self.name
