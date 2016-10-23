@@ -1,0 +1,50 @@
+{% extends 'special_admin/base.html' %}
+{% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-2">
+                <a href="{% url 'special_admin:new' %}"><button class="btn-success">Create</button></a>
+            </div>
+            <div class="col-xs-8">
+                <blockquote>{{ all_students.count }} students registered</blockquote>
+                <table class="table table-hover table-striped" style="overflow: scroll">
+                    <colgroup>
+                        <col span="1" style="width: 20%;">
+                        <col span="1" style="width: 70%;">
+                        <col span="1" style="width: 10%;">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>User Name</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for student in all_students %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'special_admin:old' student.pk %}">
+                                    {{ student.name }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{% url 'special_admin:old' student.pk %}">
+                                    {{ student.user_name }}
+                                </a>
+                            </td>
+                            <td>
+                                <form action="{% url 'special_admin:students' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="delete" value="{{ student.pk }}" >
+                                    <input type="submit" value="Delete" class="btn-danger">
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

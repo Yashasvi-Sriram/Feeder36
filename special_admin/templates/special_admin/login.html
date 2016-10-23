@@ -1,19 +1,29 @@
 {% extends 'special_admin/base.html' %}
 {% block body %}
-    <div class="container">
-        <h1>Login</h1>
-        <form method="post" action="{% url 'special_admin:home' %}">
-            {% csrf_token %}
-            {% if email_incorrect %}
-                <div class="text-danger">Email is incorrect</div>
-            {% endif %}
-            <input type="email" name="special_admin_email" placeholder="Email ID" class="form-control">
-            {% if password_incorrect %}
-                <div class="text-danger">Password is incorrect</div>
-            {% endif %}
-            <input type="password" name="special_admin_password" placeholder="Password" class="form-control">
-            <input type="submit" value="Go" class="btn btn-default">
-        </form>
+    <div class="container-fluid row">
+        <div class="col-xs-4"></div>
+        <div class="col-xs-4">
+            <h1>Login</h1>
+            <form method="post" action="{% url 'special_admin:home' %}">
+                {% csrf_token %}
+                {% if email_incorrect %}
+                    <div class="text-danger">Email is incorrect</div>
+                {% endif %}
+                {% if password_incorrect %}
+                    <div class="text-danger">Password is incorrect</div>
+                {% endif %}
+                <div class="row">
+                    <span class="col-xs-6">
+                        <input type="email" name="special_admin_email" placeholder="Email ID" class="form-control">
+                    </span>
+                    <span class="col-xs-6">
+                        <input type="password" name="special_admin_password" placeholder="Password" class="form-control">
+                    </span>
+                </div>
+                <input type="submit" value="Go" class="btn btn-default">
+            </form>
+        </div>
+        <div class="col-xs-4"></div>
     </div>
 {% endblock %}
 
