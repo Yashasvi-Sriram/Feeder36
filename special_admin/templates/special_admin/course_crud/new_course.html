@@ -75,12 +75,12 @@
                 {% for student in all_students %}
                     <tr id='{{ student.pk }}' class='student' style="display: none">
                         <td>
-                            <a href='#'>
+                            <a href='{% url 'special_admin:old_student' student.pk %}'>
                                 {{ student.name }}
                             </a>
                         </td>
                         <td>
-                            <a href='#'>
+                            <a href='{% url 'special_admin:old_student' student.pk %}'>
                                 {{ student.user_name }}
                             </a>
                         </td>
@@ -107,12 +107,12 @@
                 {% for student in all_students %}
                     <tr id='{{ student.pk }}' class='student'>
                         <td>
-                            <a href='#'>
+                            <a href='{% url 'special_admin:old_student' student.pk %}'>
                                 {{ student.name }}
                             </a>
                         </td>
                         <td>
-                            <a href='#'>
+                            <a href='{% url 'special_admin:old_student' student.pk %}'>
                                 {{ student.user_name }}
                             </a>
                         </td>

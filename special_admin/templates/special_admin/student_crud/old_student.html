@@ -99,12 +99,12 @@
                             class='course signed'
                                 {% endif %}>
                             <td>
-                                <a href='#' class='code'>
+                                <a href='{% url 'special_admin:old_course' course.pk %}' class='code'>
                                     {{ course.code }}
                                 </a>
                             </td>
                             <td>
-                                <a href='#' class='name'>
+                                <a href='{% url 'special_admin:old_course' course.pk %}' class='name'>
                                     {{ course.name }}
                                 </a>
                             </td>
@@ -137,12 +137,12 @@
                             class='course'
                                 {% endif %}>
                             <td>
-                                <a href='#' class='code'>
+                                <a href='{% url 'special_admin:old_course' course.pk %}' class='code'>
                                     {{ course.code }}
                                 </a>
                             </td>
                             <td>
-                                <a href='#' class='name'>
+                                <a href='{% url 'special_admin:old_course' course.pk %}' class='name'>
                                     {{ course.name }}
                                 </a>
                             </td>
