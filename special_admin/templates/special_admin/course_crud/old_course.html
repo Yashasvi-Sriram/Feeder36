@@ -11,7 +11,21 @@
         </div>
     {% endif %}
     <div class="container-fluid">
-        <h1 style="text-align: center;margin: 0;font-size: 50px">{{ course.name }}..</h1>
+
+        <div class="row">
+            <div class="col-xs-1"></div>
+            <div class="col-xs-10">
+                <h1 style="text-align: center;margin: 0;font-size: 50px">{{ course.name }}..</h1>
+            </div>
+            <div class="col-xs-1">
+                <a href="{% url 'special_admin:tasks' course.pk %}">
+                    <button class="btn-info" style="width: 100px;height: 50px;font-size: xx-large">
+                        Tasks
+                    </button>
+                </a>
+            </div>
+        </div>
+
         <hr>
 
         <div class="row">

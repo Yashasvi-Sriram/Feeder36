@@ -10,11 +10,12 @@
                 </a>
             </div>
             <div class="col-xs-8">
-                <blockquote>{{ all_courses.count }} courses </blockquote>
+                <blockquote>{{ all_courses|length }} courses </blockquote>
                 <table class="table table-hover table-striped" style="overflow: scroll">
                     <colgroup>
                         <col span="1" style="width: 20%;">
-                        <col span="1" style="width: 70%;">
+                        <col span="1" style="width: 60%;">
+                        <col span="1" style="width: 10%;">
                         <col span="1" style="width: 10%;">
                     </colgroup>
                     <thead>
@@ -35,6 +36,13 @@
                             <td>
                                 <a href="{% url 'special_admin:old_course' course.pk %}">
                                     {{ course.name }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{% url 'special_admin:tasks' course.pk %}">
+                                    <button class="btn-info">
+                                        Tasks
+                                    </button>
                                 </a>
                             </td>
                             <td>

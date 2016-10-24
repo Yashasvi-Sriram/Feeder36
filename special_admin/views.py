@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.http import HttpResponsePermanentRedirect as PerRedirect, HttpResponse
 
-from .models import Student, Course, SpecialAdmin
+from .models import Student, Course, Task, SpecialAdmin
 from .session_keys import SessionKeys as sk
 
 
@@ -240,7 +240,7 @@ def old_course(request, pk):
                                                                                  'all_students': all_students,
                                                                                  'message': 'updated'})
 
-    if request.method == 'GET':
+    elif request.method == 'GET':
         # special admin logged in
         if request.session.get(sk.special_admin_logged, False):
             # getting student sets
@@ -250,6 +250,128 @@ def old_course(request, pk):
                                                                                  'signed_students': signed_students,
                                                                                  'unsigned_students': unsigned_students,
                                                                                  'all_students': all_students})
+        # NOT logged in
+        else:
+            return render(request, 'special_admin/login.html')
+
+
+def tasks(request, pk):
+    all_courses = Course.objects.all()
+    selected_course = get_object_or_404(Course, pk=pk)
+    selected_course_tasks = selected_course.task_set.all()
+
+    if request.method == 'POST':
+        if 'delete' in request.POST:
+            delete_task = get_object_or_404(Task, pk=request.POST['delete'])
+            delete_task.delete()
+            selected_course_tasks = selected_course.task_set.all()
+            return render(request, 'special_admin/task_crud/tasks.html', {'course': selected_course,
+                                                                          'all_course': all_courses,
+                                                                          'course_tasks': selected_course_tasks})
+
+    elif request.method == 'GET':
+        # special admin logged in
+        if request.session.get(sk.special_admin_logged, False):
+            # getting student sets
+            return render(request, 'special_admin/task_crud/tasks.html', {'course': selected_course,
+                                                                          'all_course': all_courses,
+                                                                          'course_tasks': selected_course_tasks})
+        # NOT logged in
+        else:
+            return render(request, 'special_admin/login.html')
+
+
+def new_task(request, pk):
+    course = get_object_or_404(Course, pk=pk)
+
+    if request.method == 'POST':
+        if 'task_tag' in request.POST:
+            # adding new task
+
+            # changing formats
+            date_deadline_str = request.POST['task_deadline_date']
+            date_deadline_parts = date_deadline_str.split("-")
+            date_deadline = date_deadline_parts[2] + "/" + date_deadline_parts[1] + "/" + date_deadline_parts[0]
+            # now date is of format dd/mm/yyyy
+            time_deadline_str = request.POST['task_deadline_time']
+            time_deadline = time_deadline_str + ":00"
+            # now time is of format hh:mm:ss
+            date_time_deadline = date_deadline + " " + time_deadline
+
+            _new_task = Task(tag=request.POST['task_tag'], detail=request.POST['task_detail'],
+                             deadline=date_time_deadline)
+            # saving task
+            _new_task.save()
+
+            # adding to task set of course
+            course.task_set.add(_new_task)
+
+        return PerRedirect(reverse('special_admin:tasks', kwargs={'pk': course.pk}))
+
+    elif request.method == 'GET':
+        # special admin logged in
+        if request.session.get(sk.special_admin_logged, False):
+            return render(request, 'special_admin/task_crud/new_task.html', {'course': course})
+        # NOT logged in
+        else:
+            return render(request, 'special_admin/login.html')
+
+
+def old_task(request, pk):
+    selected_task = get_object_or_404(Task, pk=pk)
+    selected_course = Course.objects.get(pk=selected_task.course_id)
+    date_time_parts = selected_task.deadline.split(" ")
+    date = date_time_parts[0].split("/")
+    time = date_time_parts[1].split(":")
+
+    if request.method == 'POST':
+        # delete student
+        if 'delete_course' in request.POST:
+            selected_task.delete()
+            return PerRedirect(reverse('special_admin:tasks',kwargs={'pk':selected_course.pk}))
+
+        if 'task_tag' in request.POST:
+            # updating old task
+
+            # changing formats
+            date_deadline_str = request.POST['task_deadline_date']
+            date_deadline_parts = date_deadline_str.split("-")
+            date_deadline = date_deadline_parts[2] + "/" + date_deadline_parts[1] + "/" + date_deadline_parts[0]
+            # now date is of format dd/mm/yyyy
+            time_deadline_str = request.POST['task_deadline_time']
+            time_deadline = time_deadline_str + ":00"
+            # now time is of format hh:mm:ss
+            date_time_deadline = date_deadline + " " + time_deadline
+
+            selected_task.tag = request.POST['task_tag']
+            selected_task.detail = request.POST['task_detail']
+            selected_task.deadline = date_time_deadline
+            # saving task
+            selected_task.save()
+
+            date_time_parts = selected_task.deadline.split(" ")
+            date = date_time_parts[0].split("/")
+            time = date_time_parts[1].split(":")
+
+            return render(request, 'special_admin/task_crud/old_task.html', {'task': selected_task,
+                                                                             'year': date[2],
+                                                                             'month': date[1],
+                                                                             'day': date[0],
+                                                                             'hour': time[0],
+                                                                             'minute': time[1],
+                                                                             'course': selected_course,
+                                                                             'message': 'updated'})
+
+    elif request.method == 'GET':
+        # special admin logged in
+        if request.session.get(sk.special_admin_logged, False):
+            return render(request, 'special_admin/task_crud/old_task.html', {'task': selected_task,
+                                                                             'year': date[2],
+                                                                             'month': date[1],
+                                                                             'day': date[0],
+                                                                             'hour': time[0],
+                                                                             'minute': time[1],
+                                                                             'course': selected_course})
         # NOT logged in
         else:
             return render(request, 'special_admin/login.html')
