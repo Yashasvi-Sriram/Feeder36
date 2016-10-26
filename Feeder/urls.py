@@ -6,4 +6,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     # localhost:8036/special_admin/
     url(r'^special_admin/', include('special_admin.urls')),
+    # localhost:8036/android/
+    url(r'^android/', include('android.urls')),
 ]

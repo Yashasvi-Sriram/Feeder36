@@ -44,15 +44,29 @@
             <form action="{% url 'special_admin:home' %}" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="log_out" value="True">
-                <button type="submit" class="btn-danger" style="width: 100px;height: 50px;font-size: xx-large">Log</button>
+                <button type="submit" class="btn-danger" style="width: 100px;height: 50px;font-size: xx-large">Out</button>
             </form>
         </ul>
     </div>
 </nav>
 {% endblock %}
 
+{% block message %}
+    {% if message %}
+        <div id="message" style="position: fixed;top: 700px;left: 50px;font-size: 50px">
+            {{ message }}
+            <script>
+                $(document).ready(function () {
+                    $('#message').delay(3000).fadeOut();
+                });
+            </script>
+        </div>
+    {% endif %}
+{% endblock %}
+
 {# body block #}
 {% block body %}
+
 {% endblock %}
 
 </body>

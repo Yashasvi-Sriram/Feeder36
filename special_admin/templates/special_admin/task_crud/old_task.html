@@ -1,15 +1,5 @@
 {% extends 'special_admin/base.html' %}
 {% block body %}
-    {% if message %}
-        <div id="message" style="position: fixed;top: 200px;left: 50px;font-size: 50px">
-            {{ message }}
-            <script>
-                $(document).ready(function () {
-                    $('#message').delay(3000).fadeOut();
-                });
-            </script>
-        </div>
-    {% endif %}
     <div class='container-fluid'>
         <h1 style='text-align: center;margin: 0;font-size: 50px'>{{ task.tag }} for {{ course.name }}</h1>
         <hr>
@@ -35,7 +25,7 @@
                                                                             value='{{ hour }}:{{ minute }}'><br><br>
                 <textarea style='width: 100%' name='task_detail' placeholder='Specifics'
                           rows='6'>{{ task.detail }}</textarea><br><br>
-                <input id='validate' type='button' name='create_task' value='Create' class='btn-success'>
+                <input id='validate' type='button' name='update_task' value='Update' class='btn-info'>
             </form>
             <script>
                 $(document).ready(function () {

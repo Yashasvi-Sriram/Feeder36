@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.http import HttpResponsePermanentRedirect as PerRedirect, HttpResponse
@@ -64,18 +65,23 @@ def new_student(request):
 
     if request.method == 'POST':
         if 'courses' in request.POST:
-            _new_student = Student(name=request.POST['student_name'], user_name=request.POST['student_user_name'])
-            _new_student.save()
+            try:
+                Student.objects.get(user_name=request.POST['student_user_name'])
+                return render(request, 'special_admin/student_crud/new_student.html', {'all_courses': all_courses,
+                                                                                       'message': 'User Name Already Exists'})
+            except ObjectDoesNotExist:
+                _new_student = Student(name=request.POST['student_name'], user_name=request.POST['student_user_name'])
+                _new_student.save()
 
-            courses_pks_str = request.POST['courses']
-            courses_pks = courses_pks_str.split(',')
-            if not courses_pks_str == '':
-                for course_pk in courses_pks:
-                    course = Course.objects.get(pk=course_pk)
-                    _new_student.course_set.add(course)
-                    course.student_set.add(_new_student)
+                courses_pks_str = request.POST['courses']
+                courses_pks = courses_pks_str.split(',')
+                if not courses_pks_str == '':
+                    for course_pk in courses_pks:
+                        course = Course.objects.get(pk=course_pk)
+                        _new_student.course_set.add(course)
+                        course.student_set.add(_new_student)
 
-        return PerRedirect(reverse('special_admin:students'))
+                return PerRedirect(reverse('special_admin:students'))
 
     elif request.method == 'GET':
         # special admin logged in
@@ -98,39 +104,51 @@ def old_student(request, pk):
 
         # update student
         if 'courses' in request.POST:
-            # deleting previous course set
-            selected_student.course_set.clear()
-            # removing the current student from student sets of all courses
-            for course in all_courses:
-                course.student_set.remove(selected_student)
 
-            # update basic info
-            selected_student.name = request.POST['student_name']
-            selected_student.user_name = request.POST['student_user_name']
+            try:
+                Student.objects.get(user_name=request.POST['student_user_name'])
+                # getting new values
+                signed_courses = selected_student.course_set.all()
+                unsigned_courses = [course for course in all_courses if course not in signed_courses]
+                return render(request, 'special_admin/student_crud/old_student.html', {'student': selected_student,
+                                                                                       'signed_courses': signed_courses,
+                                                                                       'unsigned_courses': unsigned_courses,
+                                                                                       'all_courses': all_courses,
+                                                                                       'message': 'User Name Already Exists'})
+            except ObjectDoesNotExist:
+                # deleting previous course set
+                selected_student.course_set.clear()
+                # removing the current student from student sets of all courses
+                for course in all_courses:
+                    course.student_set.remove(selected_student)
 
-            # update course set
-            courses_pks_str = request.POST['courses']
-            courses_pks = courses_pks_str.split(',')
-            selected_student.course_set.clear()
+                # update basic info
+                selected_student.name = request.POST['student_name']
+                selected_student.user_name = request.POST['student_user_name']
 
-            # only needed if course set is non empty
-            if not courses_pks_str == '':
-                for course_pk in courses_pks:
-                    course = Course.objects.get(pk=course_pk)
-                    selected_student.course_set.add(course)
-                    course.student_set.add(selected_student)
-                    course.save()
+                # update course set
+                courses_pks_str = request.POST['courses']
+                courses_pks = courses_pks_str.split(',')
+                selected_student.course_set.clear()
 
-            selected_student.save()
+                # only needed if course set is non empty
+                if not courses_pks_str == '':
+                    for course_pk in courses_pks:
+                        course = Course.objects.get(pk=course_pk)
+                        selected_student.course_set.add(course)
+                        course.student_set.add(selected_student)
+                        course.save()
 
-            # getting new values
-            signed_courses = selected_student.course_set.all()
-            unsigned_courses = [course for course in all_courses if course not in signed_courses]
-            return render(request, 'special_admin/student_crud/old_student.html', {'student': selected_student,
-                                                                                   'signed_courses': signed_courses,
-                                                                                   'unsigned_courses': unsigned_courses,
-                                                                                   'all_courses': all_courses,
-                                                                                   'message': 'updated'})
+                selected_student.save()
+
+                # getting new values
+                signed_courses = selected_student.course_set.all()
+                unsigned_courses = [course for course in all_courses if course not in signed_courses]
+                return render(request, 'special_admin/student_crud/old_student.html', {'student': selected_student,
+                                                                                       'signed_courses': signed_courses,
+                                                                                       'unsigned_courses': unsigned_courses,
+                                                                                       'all_courses': all_courses,
+                                                                                       'message': 'updated'})
 
     if request.method == 'GET':
         # special admin logged in
@@ -170,20 +188,25 @@ def new_course(request):
 
     if request.method == 'POST':
         if 'students' in request.POST:
-            # adding new course
-            _new_course = Course(code=request.POST['course_code'], name=request.POST['course_name'])
-            _new_course.save()
+            try:
+                Course.objects.get(code=request.POST['course_code'])
+                return render(request, 'special_admin/course_crud/new_course.html', {'all_students': all_students,
+                                                                                     'message': 'Course with same Code already Exists'})
+            except ObjectDoesNotExist:
+                # adding new course
+                _new_course = Course(code=request.POST['course_code'], name=request.POST['course_name'])
+                _new_course.save()
 
-            students_pks_str = request.POST['students']
-            students_pks = students_pks_str.split(',')
+                students_pks_str = request.POST['students']
+                students_pks = students_pks_str.split(',')
 
-            if not students_pks_str == '':
-                for student_pk in students_pks:
-                    student = Student.objects.get(pk=student_pk)
-                    _new_course.student_set.add(student)
-                    student.course_set.add(_new_course)
+                if not students_pks_str == '':
+                    for student_pk in students_pks:
+                        student = Student.objects.get(pk=student_pk)
+                        _new_course.student_set.add(student)
+                        student.course_set.add(_new_course)
 
-        return PerRedirect(reverse('special_admin:courses'))
+                return PerRedirect(reverse('special_admin:courses'))
 
     elif request.method == 'GET':
         # special admin logged in
@@ -206,39 +229,50 @@ def old_course(request, pk):
 
         # update student
         if 'students' in request.POST:
-            # clearing previous student set
-            selected_course.student_set.clear()
-            # removing the current course from course sets of all students
-            for student in all_students:
-                student.course_set.remove(selected_course)
+            try:
+                Course.objects.get(code=request.POST['course_code'])
+                # getting student sets
+                signed_students = selected_course.student_set.all()
+                unsigned_students = [student for student in all_students if student not in signed_students]
+                return render(request, 'special_admin/course_crud/old_course.html', {'course': selected_course,
+                                                                                     'signed_students': signed_students,
+                                                                                     'unsigned_students': unsigned_students,
+                                                                                     'all_students': all_students,
+                                                                                     'message': 'Course with same Code already Exists'})
+            except ObjectDoesNotExist:
+                # clearing previous student set
+                selected_course.student_set.clear()
+                # removing the current course from course sets of all students
+                for student in all_students:
+                    student.course_set.remove(selected_course)
 
-            # update basic info
-            selected_course.name = request.POST['course_name']
-            selected_course.code = request.POST['course_code']
+                # update basic info
+                selected_course.name = request.POST['course_name']
+                selected_course.code = request.POST['course_code']
 
-            # update student set
-            students_pks_str = request.POST['students']
-            students_pks = students_pks_str.split(',')
+                # update student set
+                students_pks_str = request.POST['students']
+                students_pks = students_pks_str.split(',')
 
-            # only needed if student set is non empty
-            if not students_pks_str == '':
-                for student_pk in students_pks:
-                    student = Student.objects.get(pk=student_pk)
-                    selected_course.student_set.add(student)
-                    student.course_set.add(selected_course)
-                    student.save()
+                # only needed if student set is non empty
+                if not students_pks_str == '':
+                    for student_pk in students_pks:
+                        student = Student.objects.get(pk=student_pk)
+                        selected_course.student_set.add(student)
+                        student.course_set.add(selected_course)
+                        student.save()
 
-            # saving the entry
-            selected_course.save()
+                # saving the entry
+                selected_course.save()
 
-            # getting new values
-            signed_students = selected_course.student_set.all()
-            unsigned_students = [student for student in all_students if student not in signed_students]
-            return render(request, 'special_admin/course_crud/old_course.html', {'course': selected_course,
-                                                                                 'signed_students': signed_students,
-                                                                                 'unsigned_students': unsigned_students,
-                                                                                 'all_students': all_students,
-                                                                                 'message': 'updated'})
+                # getting new values
+                signed_students = selected_course.student_set.all()
+                unsigned_students = [student for student in all_students if student not in signed_students]
+                return render(request, 'special_admin/course_crud/old_course.html', {'course': selected_course,
+                                                                                     'signed_students': signed_students,
+                                                                                     'unsigned_students': unsigned_students,
+                                                                                     'all_students': all_students,
+                                                                                     'message': 'updated'})
 
     elif request.method == 'GET':
         # special admin logged in
@@ -286,27 +320,31 @@ def new_task(request, pk):
 
     if request.method == 'POST':
         if 'task_tag' in request.POST:
+            try:
+                Task.objects.get(tag=request.POST['task_tag'])
+                return render(request, 'special_admin/task_crud/new_task.html', {'course': course,
+                                                                                 'message': 'Task with same Tag already exists'})
             # adding new task
+            except ObjectDoesNotExist:
+                # changing formats
+                date_deadline_str = request.POST['task_deadline_date']
+                date_deadline_parts = date_deadline_str.split("-")
+                date_deadline = date_deadline_parts[2] + "/" + date_deadline_parts[1] + "/" + date_deadline_parts[0]
+                # now date is of format dd/mm/yyyy
+                time_deadline_str = request.POST['task_deadline_time']
+                time_deadline = time_deadline_str + ":00"
+                # now time is of format hh:mm:ss
+                date_time_deadline = date_deadline + " " + time_deadline
 
-            # changing formats
-            date_deadline_str = request.POST['task_deadline_date']
-            date_deadline_parts = date_deadline_str.split("-")
-            date_deadline = date_deadline_parts[2] + "/" + date_deadline_parts[1] + "/" + date_deadline_parts[0]
-            # now date is of format dd/mm/yyyy
-            time_deadline_str = request.POST['task_deadline_time']
-            time_deadline = time_deadline_str + ":00"
-            # now time is of format hh:mm:ss
-            date_time_deadline = date_deadline + " " + time_deadline
+                _new_task = Task(tag=request.POST['task_tag'], detail=request.POST['task_detail'],
+                                 deadline=date_time_deadline)
+                # saving task
+                _new_task.save()
 
-            _new_task = Task(tag=request.POST['task_tag'], detail=request.POST['task_detail'],
-                             deadline=date_time_deadline)
-            # saving task
-            _new_task.save()
+                # adding to task set of course
+                course.task_set.add(_new_task)
 
-            # adding to task set of course
-            course.task_set.add(_new_task)
-
-        return PerRedirect(reverse('special_admin:tasks', kwargs={'pk': course.pk}))
+                return PerRedirect(reverse('special_admin:tasks', kwargs={'pk': course.pk}))
 
     elif request.method == 'GET':
         # special admin logged in
@@ -328,39 +366,51 @@ def old_task(request, pk):
         # delete student
         if 'delete_course' in request.POST:
             selected_task.delete()
-            return PerRedirect(reverse('special_admin:tasks',kwargs={'pk':selected_course.pk}))
+            return PerRedirect(reverse('special_admin:tasks', kwargs={'pk': selected_course.pk}))
 
         if 'task_tag' in request.POST:
-            # updating old task
+            try:
+                Task.objects.get(tag=request.POST['task_tag'])
+                # special admin logged in
+                if request.session.get(sk.special_admin_logged, False):
+                    return render(request, 'special_admin/task_crud/old_task.html', {'task': selected_task,
+                                                                                     'year': date[2],
+                                                                                     'month': date[1],
+                                                                                     'day': date[0],
+                                                                                     'hour': time[0],
+                                                                                     'minute': time[1],
+                                                                                     'course': selected_course,
+                                                                                     'message': 'Task with same Tag already exists'})
+            except ObjectDoesNotExist:
+                # updating old task
+                # changing formats
+                date_deadline_str = request.POST['task_deadline_date']
+                date_deadline_parts = date_deadline_str.split("-")
+                date_deadline = date_deadline_parts[2] + "/" + date_deadline_parts[1] + "/" + date_deadline_parts[0]
+                # now date is of format dd/mm/yyyy
+                time_deadline_str = request.POST['task_deadline_time']
+                time_deadline = time_deadline_str + ":00"
+                # now time is of format hh:mm:ss
+                date_time_deadline = date_deadline + " " + time_deadline
 
-            # changing formats
-            date_deadline_str = request.POST['task_deadline_date']
-            date_deadline_parts = date_deadline_str.split("-")
-            date_deadline = date_deadline_parts[2] + "/" + date_deadline_parts[1] + "/" + date_deadline_parts[0]
-            # now date is of format dd/mm/yyyy
-            time_deadline_str = request.POST['task_deadline_time']
-            time_deadline = time_deadline_str + ":00"
-            # now time is of format hh:mm:ss
-            date_time_deadline = date_deadline + " " + time_deadline
+                selected_task.tag = request.POST['task_tag']
+                selected_task.detail = request.POST['task_detail']
+                selected_task.deadline = date_time_deadline
+                # saving task
+                selected_task.save()
 
-            selected_task.tag = request.POST['task_tag']
-            selected_task.detail = request.POST['task_detail']
-            selected_task.deadline = date_time_deadline
-            # saving task
-            selected_task.save()
+                date_time_parts = selected_task.deadline.split(" ")
+                date = date_time_parts[0].split("/")
+                time = date_time_parts[1].split(":")
 
-            date_time_parts = selected_task.deadline.split(" ")
-            date = date_time_parts[0].split("/")
-            time = date_time_parts[1].split(":")
-
-            return render(request, 'special_admin/task_crud/old_task.html', {'task': selected_task,
-                                                                             'year': date[2],
-                                                                             'month': date[1],
-                                                                             'day': date[0],
-                                                                             'hour': time[0],
-                                                                             'minute': time[1],
-                                                                             'course': selected_course,
-                                                                             'message': 'updated'})
+                return render(request, 'special_admin/task_crud/old_task.html', {'task': selected_task,
+                                                                                 'year': date[2],
+                                                                                 'month': date[1],
+                                                                                 'day': date[0],
+                                                                                 'hour': time[0],
+                                                                                 'minute': time[1],
+                                                                                 'course': selected_course,
+                                                                                 'message': 'updated'})
 
     elif request.method == 'GET':
         # special admin logged in

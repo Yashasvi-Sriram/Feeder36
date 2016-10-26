@@ -1,15 +1,6 @@
 {% extends 'special_admin/base.html' %}
 {% block body %}
-    {% if message %}
-        <div id="message" style="position: fixed;top: 500px;left: 50px;font-size: 50px">
-            {{ message }}
-            <script>
-                $(document).ready(function () {
-                    $('#message').delay(3000).fadeOut();
-                });
-            </script>
-        </div>
-    {% endif %}
+
     <div class="container-fluid">
         <h1 style="text-align: center;margin: 0;font-size: 50px">{{ student.name }}..</h1>
         <hr>

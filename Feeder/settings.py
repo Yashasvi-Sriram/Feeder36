@@ -20,6 +20,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'special_admin',
+    'android',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
