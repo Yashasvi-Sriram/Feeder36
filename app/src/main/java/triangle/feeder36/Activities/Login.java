@@ -106,8 +106,8 @@ public class Login extends AppCompatActivity {
             }
             catch (IOException e) {
                 e.printStackTrace();
-                return "-1";
             }
+            return "-1";
         }
 
         @Override
@@ -135,6 +135,11 @@ public class Login extends AppCompatActivity {
             Log.i(TLog.TAG, "login cancelled ");
         }
 
+        @Override
+        protected void onProgressUpdate(String[] values) {
+            Log.i(TLog.TAG, values[0]);
+            Toast.makeText(Login.this, values[0], Toast.LENGTH_SHORT).show();
+        }
     }
 
 
