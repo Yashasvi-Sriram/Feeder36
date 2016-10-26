@@ -1,6 +1,7 @@
 package triangle.feeder36.Activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,6 +21,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import triangle.feeder36.DB.Def.UserInfo;
+import triangle.feeder36.DB.Helpers.db;
 import triangle.feeder36.Log.TLog;
 import triangle.feeder36.R;
 import triangle.feeder36.ServerTalk.IPSource;
@@ -29,6 +32,8 @@ public class Login extends AppCompatActivity {
     ScrollView login;
     EditText user_name,password;
     Button submit;
+    db myDBHelper;
+    String USER_INFO_TABLE = "user_info";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +46,23 @@ public class Login extends AppCompatActivity {
         password = (EditText) login.findViewById(R.id.password);
         submit = (Button) login.findViewById(R.id.submit);
 
+        myDBHelper = new db(this,db.DB_NAME,null,db.DB_VERSION);
+
+        if(myDBHelper.isEmpty(USER_INFO_TABLE)) {
+            /* Create a new blank entry */
+            UserInfo myUser = new UserInfo("","");
+            myDBHelper.insert(myUser,USER_INFO_TABLE);
+        }
+
+        else {
+            /* Take to home screen if user_name is not "" */
+
+            if(!myDBHelper.existsEntry("user_name","",USER_INFO_TABLE)) {
+                Intent changeActivity = new Intent(Login.this,home_screen.class);
+                startActivity(changeActivity);
+            }
+        }
+
         /* Submit listener */
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,7 +72,7 @@ public class Login extends AppCompatActivity {
                     return;
                 }
                 HTTPLoginRequest loginRequest = new HTTPLoginRequest();
-                loginRequest.execute(user_name.getText().toString(),password.getText().toString(), IPSource.getLoginURL());
+                loginRequest.execute(user_name.getText().toString(),password.getText().toString(),IPSource.getLoginURL());
             }
         });
     }
@@ -87,7 +109,7 @@ public class Login extends AppCompatActivity {
 
                 // POST credentials to server
                 OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-                wr.write( credentials );
+                wr.write(credentials );
                 wr.flush();
 
                 // get the response from the server
@@ -119,7 +141,13 @@ public class Login extends AppCompatActivity {
             // TODO : implement code here
             switch (result) {
                 case "1":
+                    UserInfo myUser = new UserInfo(user_name.getText().toString(),password.getText().toString());
                     Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                    myDBHelper.updateEntryWithKeyValue(myUser,USER_INFO_TABLE,"user_name","");
+
+                    /* Take to home screen */
+                    Intent changeActivity = new Intent(Login.this,home_screen.class);
+                    startActivity(changeActivity);
                     break;
                 case "0":
                     Toast.makeText(Login.this, "Credentials Invalid", Toast.LENGTH_SHORT).show();
@@ -141,6 +169,5 @@ public class Login extends AppCompatActivity {
             Toast.makeText(Login.this, values[0], Toast.LENGTH_SHORT).show();
         }
     }
-
 
 }
