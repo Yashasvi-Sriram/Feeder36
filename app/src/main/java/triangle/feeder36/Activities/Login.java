@@ -20,6 +20,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Vector;
 
 import triangle.feeder36.DB.Def.UserInfo;
 import triangle.feeder36.DB.Helpers.db;
@@ -30,49 +31,53 @@ import triangle.feeder36.ServerTalk.IPSource;
 public class Login extends AppCompatActivity {
 
     ScrollView login;
-    EditText user_name,password;
+    EditText user_name, password;
     Button submit;
-    db myDBHelper;
-    String USER_INFO_TABLE = "user_info";
+
+    String try_user_name;
+    String try_password;
+
+    db dbManager;
+    Vector<UserInfo> users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
 
+        /* Checking for stored users */
+        dbManager = new db(this, db.DB_NAME, null, db.DB_VERSION);
+        users = dbManager.getAllUsers();
+
+        /* At least One User stored */
+        if (users.size() > 0) {
+            // We are assuming one user per device TODO: Maybe implement multiple users
+            /* HTTPLoginRequest if a PROPER user_name exists */
+            if (!users.get(0).USER_NAME.equals("")) {
+                try_user_name = users.get(0).USER_NAME;
+                try_password = users.get(0).PASSWORD;
+                new HTTPLoginRequest().execute(try_user_name, try_password, IPSource.getLoginURL());
+            }
+        }
+
+        /* If no Users stored */
+        setContentView(R.layout.login);
         /* Getting references */
         login = (ScrollView) findViewById(R.id.login);
         user_name = (EditText) login.findViewById(R.id.user_name);
         password = (EditText) login.findViewById(R.id.password);
         submit = (Button) login.findViewById(R.id.submit);
 
-        myDBHelper = new db(this,db.DB_NAME,null,db.DB_VERSION);
-
-        if(myDBHelper.isEmpty(USER_INFO_TABLE)) {
-            /* Create a new blank entry */
-            UserInfo myUser = new UserInfo("","");
-            myDBHelper.insert(myUser,USER_INFO_TABLE);
-        }
-
-        else {
-            /* Take to home screen if user_name is not "" */
-
-            if(!myDBHelper.existsEntry("user_name","",USER_INFO_TABLE)) {
-                Intent changeActivity = new Intent(Login.this,home_screen.class);
-                startActivity(changeActivity);
-            }
-        }
-
         /* Submit listener */
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!connectedToNetwork()){
+                if (!connectedToNetwork()) {
                     Toast.makeText(Login.this, "Network Needed", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                HTTPLoginRequest loginRequest = new HTTPLoginRequest();
-                loginRequest.execute(user_name.getText().toString(),password.getText().toString(),IPSource.getLoginURL());
+                try_user_name = user_name.getText().toString();
+                try_password = password.getText().toString();
+                new HTTPLoginRequest().execute(try_user_name, try_password, IPSource.getLoginURL());
             }
         });
     }
@@ -82,21 +87,20 @@ public class Login extends AppCompatActivity {
         return cm.getActiveNetworkInfo() != null;
     }
 
-    private class HTTPLoginRequest extends AsyncTask<String,String,String>{
+    private class HTTPLoginRequest extends AsyncTask<String, String, String> {
 
         @Override
         protected String doInBackground(String[] params) {
-
             try {
                 // Prepare POST variables containing credentials
                 String credentials =
                         URLEncoder.encode("user_name", "UTF-8")
-                        + "="
-                        + URLEncoder.encode(params[0], "UTF-8")
-                        + "&"
-                        + URLEncoder.encode("password", "UTF-8")
-                        + "="
-                        + URLEncoder.encode(params[1], "UTF-8");
+                                + "="
+                                + URLEncoder.encode(params[0], "UTF-8")
+                                + "&"
+                                + URLEncoder.encode("password", "UTF-8")
+                                + "="
+                                + URLEncoder.encode(params[1], "UTF-8");
 
                 // Prepare URL
                 URL login_request_page = new URL(params[2]);
@@ -109,7 +113,7 @@ public class Login extends AppCompatActivity {
 
                 // POST credentials to server
                 OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-                wr.write(credentials );
+                wr.write(credentials);
                 wr.flush();
 
                 // get the response from the server
@@ -125,8 +129,7 @@ public class Login extends AppCompatActivity {
                 // return the response to onPostExecute
                 return string_response.toString();
 
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
             return "-1";
@@ -138,19 +141,24 @@ public class Login extends AppCompatActivity {
             // 1 if user exists
             // 0 if not
             // -1 if some other error occurred
-            // TODO : implement code here
             switch (result) {
                 case "1":
-                    UserInfo myUser = new UserInfo(user_name.getText().toString(),password.getText().toString());
                     Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                    myDBHelper.updateEntryWithKeyValue(myUser,USER_INFO_TABLE,"user_name","");
 
+                    if(users.size() == 0){
+                        UserInfo newUser = new UserInfo(try_user_name, try_password);
+                        dbManager.insert(newUser);
+                    }
+                    else if(!users.get(0).USER_NAME.matches(try_user_name) || !users.get(0).PASSWORD.matches(try_password)) {
+                        UserInfo newUser = new UserInfo(try_user_name, try_password);
+                        dbManager.updateEntryWithKeyValue(newUser, db.TABLES.USER_INFO.USER_NAME, users.get(0).USER_NAME);
+                    }
                     /* Take to home screen */
-                    Intent changeActivity = new Intent(Login.this,home_screen.class);
-                    startActivity(changeActivity);
+                    Intent homeScreen = new Intent(Login.this, Home.class);
+                    startActivity(homeScreen);
                     break;
                 case "0":
-                    Toast.makeText(Login.this, "Credentials Invalid", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login.this, "No User Detected", Toast.LENGTH_SHORT).show();
                     break;
                 case "-1":
                     Toast.makeText(Login.this, "Login Failed", Toast.LENGTH_SHORT).show();
@@ -163,11 +171,6 @@ public class Login extends AppCompatActivity {
             Log.i(TLog.TAG, "login cancelled ");
         }
 
-        @Override
-        protected void onProgressUpdate(String[] values) {
-            Log.i(TLog.TAG, values[0]);
-            Toast.makeText(Login.this, values[0], Toast.LENGTH_SHORT).show();
-        }
     }
 
 }

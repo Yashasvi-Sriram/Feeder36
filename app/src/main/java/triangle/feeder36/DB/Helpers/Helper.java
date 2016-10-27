@@ -71,7 +71,6 @@ public class Helper extends SQLiteOpenHelper {
     }
 
     public boolean isEmpty(String TABLE_NAME) {
-        if(numberOfEntries(TABLE_NAME) == 0) return true;
-        else return false;
+        return numberOfEntries(TABLE_NAME) == 0;
     }
 }

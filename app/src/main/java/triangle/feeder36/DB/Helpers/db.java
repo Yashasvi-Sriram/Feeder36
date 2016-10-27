@@ -2,11 +2,16 @@ package triangle.feeder36.DB.Helpers;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.util.Vector;
+
 import triangle.feeder36.DB.Def.UserInfo;
 import triangle.feeder36.Log.TLog;
+
+import static triangle.feeder36.DB.Helpers.db.TABLES.USER_INFO.USER_NAME;
 
 public class db extends Helper {
     /**
@@ -42,9 +47,9 @@ public class db extends Helper {
         /**
          * user info table
          */
-        public static final class USER_INFO_TABLE {
+        public static final class USER_INFO {
             /* user info table - name*/
-            public static final String USER_INFO_TABLE_NAME = "user_info";
+            public static final String TABLE_NAME = "user_info";
 
             /* user info table - columns*/
             // PRIMARY KEY
@@ -54,12 +59,35 @@ public class db extends Helper {
             /* create table query */
             private static final String CREATE_TABLE_QUERY =
                     "CREATE TABLE "
-                            + USER_INFO_TABLE_NAME
+                            + TABLE_NAME
                             + "("
                             + PRIMARY_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                             + USER_NAME + " VARCHAR(255) NOT NULL,"
                             + PASSWORD + " VARCHAR(255) NOT NULL"
                             + ")";
+        }
+
+        /**
+         * Courses table
+         */
+        public static final class COURSES {
+            /* courses table - name*/
+            public static final String TABLE_NAME = "courses";
+
+            /* courses table - columns*/
+            // PRIMARY KEY
+            public static final String CODE = "code";
+            public static final String NAME = "name";
+
+            /* create table query */
+            private static final String CREATE_TABLE_QUERY =
+                    "CREATE TABLE "
+                            + TABLE_NAME
+                            + "("
+                            + PRIMARY_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                            + CODE + " VARCHAR(255) NOT NULL,"
+                            + NAME + " VARCHAR(255) NOT NULL"
+                            + ");";
         }
     }
 
@@ -71,54 +99,64 @@ public class db extends Helper {
     public void onCreate(SQLiteDatabase db) {
         super.onCreate(db);
         // create tables
-        TABLES.createTable(db, TABLES.USER_INFO_TABLE.CREATE_TABLE_QUERY);
+        TABLES.createTable(db, TABLES.USER_INFO.CREATE_TABLE_QUERY);
+        TABLES.createTable(db, TABLES.COURSES.CREATE_TABLE_QUERY);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         super.onUpgrade(db, oldVersion, newVersion);
         // drop tables
-        TABLES.dropTable(db, TABLES.USER_INFO_TABLE.USER_INFO_TABLE_NAME);
+        TABLES.dropTable(db, TABLES.USER_INFO.TABLE_NAME);
+        TABLES.dropTable(db, TABLES.COURSES.TABLE_NAME);
         // create new ones
         onCreate(db);
     }
 
-    public void insert(UserInfo userInfo,String table) {
-        switch (table) {
-            case TABLES.USER_INFO_TABLE.USER_INFO_TABLE_NAME :
-                /* user info table */
-                ContentValues values = new ContentValues();
+    public void insert(UserInfo userInfo) {
+        /* user info table */
+        ContentValues values = new ContentValues();
 
-                values.put(TABLES.USER_INFO_TABLE.USER_NAME, userInfo.getUserName());
-                values.put(TABLES.USER_INFO_TABLE.PASSWORD, userInfo.getPASSWORD());
+        values.put(USER_NAME, userInfo.getUserName());
+        values.put(TABLES.USER_INFO.PASSWORD, userInfo.getPASSWORD());
 
-                SQLiteDatabase db = getWritableDatabase();
-                db.insert(table, null, values);
-                db.close();
-
-                break;
-            default:
-                break;
-        }
+        SQLiteDatabase db = getWritableDatabase();
+        db.insert(TABLES.USER_INFO.TABLE_NAME, null, values);
+        db.close();
     }
 
-    public void updateEntryWithKeyValue(UserInfo userInfo,String table,String key,String value) {
-        switch (table) {
-            case TABLES.USER_INFO_TABLE.USER_INFO_TABLE_NAME:
-                /* user info table */
-                ContentValues values = new ContentValues();
+    public void updateEntryWithKeyValue(UserInfo userInfo, String key, String value) {
+        /* user info table */
+        ContentValues values = new ContentValues();
 
-                values.put(TABLES.USER_INFO_TABLE.USER_NAME, userInfo.getUserName());
-                values.put(TABLES.USER_INFO_TABLE.PASSWORD, userInfo.getPASSWORD());
+        values.put(USER_NAME, userInfo.getUserName());
+        values.put(TABLES.USER_INFO.PASSWORD, userInfo.getPASSWORD());
 
-                SQLiteDatabase db = getWritableDatabase();
-                String where = key + " = '" + value + "' ";
-                db.update(table, values, where, null);
-                db.close();
-
-                break;
-            default:
-                break;
-        }
+        SQLiteDatabase db = getWritableDatabase();
+        String where = key + " = '" + value + "' ";
+        db.update(TABLES.USER_INFO.TABLE_NAME, values, where, null);
+        db.close();
     }
+
+    public Vector<UserInfo> getAllUsers() {
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLES.USER_INFO.TABLE_NAME + ";";
+
+        Vector<UserInfo> retVector = new Vector<>();
+
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+
+        while (!c.isAfterLast()) {
+            UserInfo row = new UserInfo(c);
+            retVector.add(row);
+            c.moveToNext();
+        }
+
+        c.close();
+        db.close();
+        return retVector;
+    }
+
+
 }
