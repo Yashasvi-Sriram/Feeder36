@@ -1,8 +1,6 @@
 package triangle.feeder36.Activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -28,66 +26,45 @@ import triangle.feeder36.Log.TLog;
 import triangle.feeder36.R;
 import triangle.feeder36.ServerTalk.IPSource;
 
-public class Login extends AppCompatActivity {
-
-    ScrollView login;
-    EditText user_name, password;
-    Button submit;
-
-    String post_user_name;
-    String post_password;
+public class ChangePassword extends AppCompatActivity {
 
     db dbManager;
     Vector<UserInfo> users;
+    ScrollView change_password;
+    EditText user_name, old_password, new_password, confirm_new_password;
+    String post_user_name, post_old_password, post_new_password;
+    Button submit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.change_password);
 
-        /* Checking for stored users */
-        dbManager = new db(this, db.DB_NAME, null, db.DB_VERSION);
-        users = dbManager.getAllUsers();
-
-        /* At least One User stored */
-        if (users.size() > 0) {
-            // We are assuming one user per device TODO: Maybe implement multiple users
-            /* HTTPLoginRequest if a PROPER user_name exists */
-            if (!users.get(0).USER_NAME.equals("")) {
-                post_user_name = users.get(0).USER_NAME;
-                post_password = users.get(0).PASSWORD;
-                new HTTPLoginRequest().execute(post_user_name, post_password, IPSource.loginURL());
-            }
-        }
-
-        /* If no Users stored */
-        setContentView(R.layout.login);
         /* Getting references */
-        login = (ScrollView) findViewById(R.id.login);
-        user_name = (EditText) login.findViewById(R.id.user_name);
-        password = (EditText) login.findViewById(R.id.password);
-        submit = (Button) login.findViewById(R.id.submit);
-
-        /* Submit listener */
+        change_password = (ScrollView) findViewById(R.id.change_password);
+        user_name = (EditText) change_password.findViewById(R.id.user_name);
+        old_password = (EditText) change_password.findViewById(R.id.old_password);
+        new_password = (EditText) change_password.findViewById(R.id.new_password);
+        confirm_new_password = (EditText) change_password.findViewById(R.id.confirm_new_password);
+        submit = (Button) change_password.findViewById(R.id.submit);
+        /* submit listener */
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!connectedToNetwork()) {
-                    Toast.makeText(Login.this, "Network Needed", Toast.LENGTH_SHORT).show();
+                if (!new_password.getText().toString().equals(confirm_new_password.getText().toString())) {
+                    Toast.makeText(ChangePassword.this, "Passwords don't match", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 post_user_name = user_name.getText().toString();
-                post_password = password.getText().toString();
-                new HTTPLoginRequest().execute(post_user_name, post_password, IPSource.loginURL());
+                post_old_password = old_password.getText().toString();
+                post_new_password = new_password.getText().toString();
+                new HTTPChangePasswordRequest().execute(post_user_name, post_old_password, post_new_password, IPSource.changePasswordURL());
             }
         });
     }
 
-    private boolean connectedToNetwork() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        return cm.getActiveNetworkInfo() != null;
-    }
 
-    private class HTTPLoginRequest extends AsyncTask<String, String, String> {
+    private class HTTPChangePasswordRequest extends AsyncTask<String, String, String> {
 
         @Override
         protected String doInBackground(String[] params) {
@@ -98,12 +75,16 @@ public class Login extends AppCompatActivity {
                                 + "="
                                 + URLEncoder.encode(params[0], "UTF-8")
                                 + "&"
-                                + URLEncoder.encode("password", "UTF-8")
+                                + URLEncoder.encode("old_password", "UTF-8")
                                 + "="
-                                + URLEncoder.encode(params[1], "UTF-8");
+                                + URLEncoder.encode(params[1], "UTF-8")
+                                + "&"
+                                + URLEncoder.encode("new_password", "UTF-8")
+                                + "="
+                                + URLEncoder.encode(params[2], "UTF-8");
 
                 // Prepare URL
-                URL login_request_page = new URL(params[2]);
+                URL login_request_page = new URL(params[3]);
                 // Open Connection
                 HttpURLConnection conn = (HttpURLConnection) login_request_page.openConnection();
                 // This connection can send data to server
@@ -143,34 +124,39 @@ public class Login extends AppCompatActivity {
             // -1 if some other error occurred
             switch (result) {
                 case "1":
-                    Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChangePassword.this, "Change Successful", Toast.LENGTH_SHORT).show();
 
-                    if(users.size() == 0){
-                        UserInfo newUser = new UserInfo(post_user_name, post_password);
+                    dbManager = new db(ChangePassword.this, db.DB_NAME, null, db.DB_VERSION);
+                    users = dbManager.getAllUsers();
+
+                    if (users.size() == 0) {
+                        UserInfo newUser = new UserInfo(post_user_name, post_new_password);
                         dbManager.insert(newUser);
                     }
-                    else if(!users.get(0).USER_NAME.matches(post_user_name) || !users.get(0).PASSWORD.matches(post_password)) {
-                        UserInfo newUser = new UserInfo(post_user_name, post_password);
+                    else if (!users.get(0).USER_NAME.matches(post_user_name) || !users.get(0).PASSWORD.matches(post_new_password)) {
+                        UserInfo newUser = new UserInfo(post_user_name, post_new_password);
                         dbManager.updateEntryWithKeyValue(newUser, db.TABLES.USER_INFO.USER_NAME, users.get(0).USER_NAME);
                     }
+
                     /* Take to home screen */
-                    Intent homeScreen = new Intent(Login.this, Home.class);
+                    Intent homeScreen = new Intent(ChangePassword.this, Home.class);
                     startActivity(homeScreen);
                     break;
                 case "0":
-                    Toast.makeText(Login.this, "No User Detected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChangePassword.this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
                     break;
                 case "-1":
-                    Toast.makeText(Login.this, "Login Failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChangePassword.this, "Password Change Failed", Toast.LENGTH_SHORT).show();
                     break;
             }
         }
 
         @Override
         protected void onCancelled() {
-            Log.i(TLog.TAG, "login cancelled ");
+            Log.i(TLog.TAG, "change_password cancelled ");
         }
 
     }
+
 
 }
