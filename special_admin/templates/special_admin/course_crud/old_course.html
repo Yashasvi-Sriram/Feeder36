@@ -27,7 +27,7 @@
                 <form method="post" action="{% url 'special_admin:old_course' course.pk %}" id="update_course_form">
                     {% csrf_token %}
                     <br>
-                    <input style='width: 100%' type='text' name='course_code' value='{{ course.code }}'
+                    <input style='width: 100%' type='text' id='course_code' name='course_code' value='{{ course.code }}'
                            placeholder='code'><br><br>
                     <input style='width: 100%' type='text' name='course_name' value='{{ course.name }}'
                            placeholder='name'><br><br>
@@ -46,6 +46,10 @@
 
                         $(document).ready(function () {
                             $('#validate').click(function () {
+                                if ($('#course_code').val() == "") {
+                                    alert('Empty Course Code!');
+                                    return;
+                                }
                                 signed_students = [];
                                 $('#students_signed').find('.' + signed_class_name).each(function () {
                                     signed_students.push($(this).attr('id'));

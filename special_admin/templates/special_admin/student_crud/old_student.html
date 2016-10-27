@@ -16,7 +16,7 @@
                     <br>
                     <input style='width: 100%' type='text' name='student_name' value='{{ student.name }}'
                            placeholder='name'><br><br>
-                    <input style='width: 100%' type='email' name='student_user_name' value='{{ student.user_name }}'
+                    <input style='width: 100%' type='email' id='student_user_name' name='student_user_name' value='{{ student.user_name }}'
                            placeholder='user name'><br><br>
                     <input type="hidden" value="" id="courses_input" name="courses">
                     <input id="validate" type='button' name='update_student' value='Update' class='btn-info'>
@@ -33,6 +33,10 @@
 
                         $(document).ready(function () {
                             $('#validate').click(function () {
+                                if ($('#student_user_name').val() == ""){
+                                    alert('Empty User Name!');
+                                    return;
+                                }
                                 signed_courses = [];
                                 $('#courses_signed').find('.' + signed_class_name).each(function () {
                                     signed_courses.push($(this).attr('id'));
