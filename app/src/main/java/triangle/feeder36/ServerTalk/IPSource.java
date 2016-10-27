@@ -8,9 +8,17 @@ public class IPSource {
         public static final String CHANGE_PASSWORD = "student/password_change/";
     }
 
+    public class DataBase {
+        public static final String SYNC = "student/sync/";
+    }
+
     public static String loginURL(){
         return BASE + Account.LOGIN;
     }
 
     public static String changePasswordURL(){return BASE + Account.CHANGE_PASSWORD;}
+
+    public static String syncURL(){
+        return BASE + DataBase.SYNC;
+    }
 }

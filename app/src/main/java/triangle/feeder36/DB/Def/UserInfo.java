@@ -12,7 +12,9 @@ public class UserInfo {
     public String USER_NAME;
     public String PASSWORD;
 
-    public UserInfo(String user_name,String pwd) {
+    public UserInfo() {}
+
+    public UserInfo(String user_name, String pwd) {
         USER_NAME = user_name;
         PASSWORD = pwd;
     }
@@ -24,7 +26,7 @@ public class UserInfo {
             this.PASSWORD = cursor.getString(cursor.getColumnIndex(db.TABLES.USER_INFO.PASSWORD));
         }
         else {
-            Log.i(TLog.TAG, "UserInfo: Tried to initialize user Info instance with null cursor");
+            Log.i(TLog.TAG, "UserInfo: Tried to initialize instance with null cursor");
         }
     }
 

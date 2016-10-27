@@ -8,10 +8,10 @@ import android.util.Log;
 
 import java.util.Vector;
 
+import triangle.feeder36.DB.Def.CourseDef;
+import triangle.feeder36.DB.Def.TaskDef;
 import triangle.feeder36.DB.Def.UserInfo;
 import triangle.feeder36.Log.TLog;
-
-import static triangle.feeder36.DB.Helpers.db.TABLES.USER_INFO.USER_NAME;
 
 public class db extends Helper {
     /**
@@ -48,10 +48,10 @@ public class db extends Helper {
          * user info table
          */
         public static final class USER_INFO {
-            /* user info table - name*/
+            /* table - name */
             public static final String TABLE_NAME = "user_info";
 
-            /* user info table - columns*/
+            /* table - columns */
             // PRIMARY KEY
             public static final String USER_NAME = "user_name";
             public static final String PASSWORD = "password";
@@ -71,13 +71,14 @@ public class db extends Helper {
          * Courses table
          */
         public static final class COURSES {
-            /* courses table - name*/
+            /* table - name */
             public static final String TABLE_NAME = "courses";
 
-            /* courses table - columns*/
+            /* table - columns */
             // PRIMARY KEY
             public static final String CODE = "code";
             public static final String NAME = "name";
+            public static final String DJANGO_PK = "django_pk";
 
             /* create table query */
             private static final String CREATE_TABLE_QUERY =
@@ -85,10 +86,39 @@ public class db extends Helper {
                             + TABLE_NAME
                             + "("
                             + PRIMARY_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                            + DJANGO_PK + " INTEGER ,"
                             + CODE + " VARCHAR(255) NOT NULL,"
                             + NAME + " VARCHAR(255) NOT NULL"
                             + ");";
         }
+
+        /**
+         * Tasks table
+         */
+        public static final class TASKS {
+            /* table - name */
+            public static final String TABLE_NAME = "tasks";
+
+            /* table - columns */
+            // PRIMARY KEY
+            public static final String TAG = "tag";
+            public static final String DEADLINE = "deadline";
+            public static final String DETAIL = "detail";
+            public static final String COURSE_PK = "course_pk";
+
+            /* table query */
+            private static final String CREATE_TABLE_QUERY =
+                    "CREATE TABLE "
+                            + TABLE_NAME
+                            + "("
+                            + PRIMARY_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                            + TAG + " VARCHAR(50) NOT NULL,"
+                            + DEADLINE + " VARCHAR(20) NOT NULL,"
+                            + DETAIL + " VARCHAR(400) NOT NULL,"
+                            + COURSE_PK + " INTEGER "
+                            + ");";
+        }
+
     }
 
     public db(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -101,6 +131,7 @@ public class db extends Helper {
         // create tables
         TABLES.createTable(db, TABLES.USER_INFO.CREATE_TABLE_QUERY);
         TABLES.createTable(db, TABLES.COURSES.CREATE_TABLE_QUERY);
+        TABLES.createTable(db, TABLES.TASKS.CREATE_TABLE_QUERY);
     }
 
     @Override
@@ -109,15 +140,16 @@ public class db extends Helper {
         // drop tables
         TABLES.dropTable(db, TABLES.USER_INFO.TABLE_NAME);
         TABLES.dropTable(db, TABLES.COURSES.TABLE_NAME);
+        TABLES.dropTable(db, TABLES.TASKS.TABLE_NAME);
         // create new ones
         onCreate(db);
     }
 
+    /* User Info  */
     public void insert(UserInfo userInfo) {
-        /* user info table */
         ContentValues values = new ContentValues();
 
-        values.put(USER_NAME, userInfo.getUserName());
+        values.put(TABLES.USER_INFO.USER_NAME, userInfo.getUserName());
         values.put(TABLES.USER_INFO.PASSWORD, userInfo.getPASSWORD());
 
         SQLiteDatabase db = getWritableDatabase();
@@ -126,10 +158,9 @@ public class db extends Helper {
     }
 
     public void updateEntryWithKeyValue(UserInfo userInfo, String key, String value) {
-        /* user info table */
         ContentValues values = new ContentValues();
 
-        values.put(USER_NAME, userInfo.getUserName());
+        values.put(TABLES.USER_INFO.USER_NAME, userInfo.getUserName());
         values.put(TABLES.USER_INFO.PASSWORD, userInfo.getPASSWORD());
 
         SQLiteDatabase db = getWritableDatabase();
@@ -157,6 +188,101 @@ public class db extends Helper {
         db.close();
         return retVector;
     }
+    /* User Info  */
 
+    /* Courses */
+    public void insert(CourseDef courseDef) {
+        ContentValues values = new ContentValues();
 
+        values.put(TABLES.COURSES.DJANGO_PK , courseDef.DJANGO_PK);
+        values.put(TABLES.COURSES.CODE , courseDef.CODE);
+        values.put(TABLES.COURSES.NAME , courseDef.NAME);
+
+        SQLiteDatabase db = getWritableDatabase();
+        db.insert(TABLES.COURSES.TABLE_NAME, null, values);
+        db.close();
+    }
+
+    public void updateEntryWithKeyValue(CourseDef courseDef, String key, String value) {
+        ContentValues values = new ContentValues();
+
+        values.put(TABLES.COURSES.DJANGO_PK, courseDef.DJANGO_PK);
+        values.put(TABLES.COURSES.CODE, courseDef.CODE);
+        values.put(TABLES.COURSES.NAME, courseDef.NAME);
+
+        SQLiteDatabase db = getWritableDatabase();
+        String where = key + " = '" + value + "' ";
+        db.update(TABLES.COURSES.TABLE_NAME, values, where, null);
+        db.close();
+    }
+
+    public Vector<CourseDef> getAllCourses() {
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLES.COURSES.TABLE_NAME + ";";
+
+        Vector<CourseDef> retVector = new Vector<>();
+
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+
+        while (!c.isAfterLast()) {
+            CourseDef row = new CourseDef(c);
+            retVector.add(row);
+            c.moveToNext();
+        }
+
+        c.close();
+        db.close();
+        return retVector;
+    }
+    /* Courses */
+
+    /* Tasks */
+    public void insert(TaskDef taskDef) {
+        ContentValues values = new ContentValues();
+
+        values.put(TABLES.TASKS.COURSE_PK , Integer.parseInt(taskDef.COURSE_PK));
+        values.put(TABLES.TASKS.TAG , taskDef.TAG);
+        values.put(TABLES.TASKS.DEADLINE , taskDef.DEADLINE);
+        values.put(TABLES.TASKS.DETAIL , taskDef.DETAIL);
+
+        SQLiteDatabase db = getWritableDatabase();
+        db.insert(TABLES.TASKS.TABLE_NAME, null, values);
+        db.close();
+    }
+
+    public void updateEntryWithKeyValue(TaskDef taskDef, String key, String value) {
+        ContentValues values = new ContentValues();
+
+        values.put(TABLES.TASKS.COURSE_PK , Integer.parseInt(taskDef.COURSE_PK));
+        values.put(TABLES.TASKS.TAG , taskDef.TAG);
+        values.put(TABLES.TASKS.DEADLINE , taskDef.DEADLINE);
+        values.put(TABLES.TASKS.DETAIL , taskDef.DETAIL);
+
+        SQLiteDatabase db = getWritableDatabase();
+        String where = key + " = '" + value + "' ";
+        db.update(TABLES.TASKS.TABLE_NAME, values, where, null);
+        db.close();
+    }
+
+    public Vector<TaskDef> getAllTasks() {
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLES.TASKS.TABLE_NAME + ";";
+
+        Vector<TaskDef> retVector = new Vector<>();
+
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+
+        while (!c.isAfterLast()) {
+            TaskDef row = new TaskDef(c);
+            retVector.add(row);
+            c.moveToNext();
+        }
+
+        c.close();
+        db.close();
+        return retVector;
+    }
+    /* Tasks */
 }
