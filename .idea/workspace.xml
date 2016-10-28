@@ -3,15 +3,13 @@
   <component name="ChangeListManager">
     <list default="true" id="e4f5f38a-25e6-4896-993c-82d5a21a48c8" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Feeder/settings.py" afterPath="$PROJECT_DIR$/Feeder/settings.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android/urls.py" afterPath="$PROJECT_DIR$/android/urls.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android/views.py" afterPath="$PROJECT_DIR$/android/views.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/db.sqlite3" afterPath="$PROJECT_DIR$/db.sqlite3" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/special_admin/models.py" afterPath="$PROJECT_DIR$/special_admin/models.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/special_admin/templates/special_admin/base.html" afterPath="$PROJECT_DIR$/special_admin/templates/special_admin/base.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/new_course.html" afterPath="$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/new_course.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/old_course.html" afterPath="$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/old_course.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/special_admin/templates/special_admin/student_crud/new_student.html" afterPath="$PROJECT_DIR$/special_admin/templates/special_admin/student_crud/new_student.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/special_admin/templates/special_admin/student_crud/old_student.html" afterPath="$PROJECT_DIR$/special_admin/templates/special_admin/student_crud/old_student.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/new_task.html" afterPath="$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/new_task.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/old_task.html" afterPath="$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/old_task.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/special_admin/views.py" afterPath="$PROJECT_DIR$/special_admin/views.py" />
     </list>
     <ignored path="Feeder.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -34,75 +32,48 @@
     <favorites_list name="Feeder" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/special_admin/models.py">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="450">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/special_admin/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="312">
-              <caret line="14" column="23" selection-start-line="14" selection-start-column="23" selection-end-line="14" selection-end-column="23" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="new_course.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/new_course.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="260">
-              <caret line="10" column="55" selection-start-line="10" selection-start-column="55" selection-end-line="10" selection-end-column="71" />
+            <state relative-caret-position="1638">
+              <caret line="461" column="0" selection-start-line="461" selection-start-column="0" selection-end-line="461" selection-end-column="0" />
               <folding>
-                <element signature="e#401#420#0#HTML" expanded="true" />
+                <element signature="e#0#53#0" expanded="true" />
+                <element signature="e#360#1741#0" expanded="false" />
+                <element signature="e#1771#2509#0" expanded="false" />
+                <element signature="e#2542#3998#0" expanded="false" />
+                <element signature="e#4035#10392#0" expanded="false" />
+                <element signature="e#10421#11144#0" expanded="false" />
+                <element signature="e#11176#12664#0" expanded="false" />
+                <element signature="e#12700#19016#0" expanded="false" />
+                <element signature="e#19047#20344#0" expanded="false" />
+                <element signature="e#20378#22206#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="old_course.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/old_course.html">
+      <file leaf-file-name="urls.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/android/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2701">
-              <caret line="29" column="75" selection-start-line="29" selection-start-column="75" selection-end-line="29" selection-end-column="75" />
+            <state relative-caret-position="234">
+              <caret line="10" column="42" selection-start-line="10" selection-start-column="29" selection-end-line="10" selection-end-column="42" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="new_student.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/student_crud/new_student.html">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/android/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="806">
-              <caret line="31" column="54" selection-start-line="31" selection-start-column="54" selection-end-line="31" selection-end-column="54" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="old_student.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/student_crud/old_student.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="338">
-              <caret line="13" column="16" selection-start-line="36" selection-start-column="36" selection-end-line="36" selection-end-column="62" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="new_task.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/new_task.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
-              <caret line="12" column="68" selection-start-line="12" selection-start-column="55" selection-end-line="12" selection-end-column="68" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="old_task.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/old_task.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="26">
-              <caret line="11" column="19" selection-start-line="11" selection-start-column="19" selection-end-line="11" selection-end-column="19" />
-              <folding />
+            <state relative-caret-position="296">
+              <caret line="46" column="23" selection-start-line="46" selection-start-column="23" selection-end-line="46" selection-end-column="23" />
+              <folding>
+                <element signature="e#0#53#0" expanded="true" />
+                <element signature="e#280#719#0" expanded="false" />
+                <element signature="e#777#1410#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -140,23 +111,24 @@
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/student_crud/student.html" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/login.html" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/home.html" />
-        <option value="$PROJECT_DIR$/special_admin/models.py" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/tasks.html" />
         <option value="$PROJECT_DIR$/special_admin/urls.py" />
         <option value="$PROJECT_DIR$/Feeder/urls.py" />
-        <option value="$PROJECT_DIR$/special_admin/views.py" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/student_crud/students.html" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/courses.html" />
-        <option value="$PROJECT_DIR$/android/views.py" />
-        <option value="$PROJECT_DIR$/Feeder/settings.py" />
-        <option value="$PROJECT_DIR$/android/urls.py" />
-        <option value="$PROJECT_DIR$/special_admin/templates/special_admin/base.html" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/student_crud/old_student.html" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/student_crud/new_student.html" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/new_course.html" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/old_course.html" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/new_task.html" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/old_task.html" />
+        <option value="$PROJECT_DIR$/TODO.md" />
+        <option value="$PROJECT_DIR$/Feeder/settings.py" />
+        <option value="$PROJECT_DIR$/special_admin/templates/special_admin/base.html" />
+        <option value="$PROJECT_DIR$/special_admin/models.py" />
+        <option value="$PROJECT_DIR$/android/urls.py" />
+        <option value="$PROJECT_DIR$/android/views.py" />
+        <option value="$PROJECT_DIR$/special_admin/views.py" />
       </list>
     </option>
   </component>
@@ -258,93 +230,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="special_admin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="templates" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="special_admin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Feeder" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Feeder" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="special_admin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="templates" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="special_admin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="task_crud" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Feeder" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Feeder" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="special_admin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="templates" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="special_admin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="student_crud" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Feeder" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Feeder" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="special_admin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="templates" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="special_admin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="course_crud" />
+              <option name="myItemId" value="android" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -638,9 +524,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18867925" sideWeight="0.4964249" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19784367" sideWeight="0.4964249" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3210913" sideWeight="0.5018868" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -678,20 +564,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Feeder/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="104">
-          <caret line="5" column="42" selection-start-line="5" selection-start-column="42" selection-end-line="5" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/special_admin/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="130">
-          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/special_admin/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="130">
@@ -936,14 +808,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Feeder/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="22" column="12" selection-start-line="22" selection-start-column="12" selection-end-line="22" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/android/tests.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -951,79 +815,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/android/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="364">
-          <caret line="18" column="9" selection-start-line="18" selection-start-column="9" selection-end-line="18" selection-end-column="9" />
-          <folding>
-            <element signature="e#0#53#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/android/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/special_admin/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="624">
           <caret line="25" column="72" selection-start-line="25" selection-start-column="72" selection-end-line="25" selection-end-column="72" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/special_admin/views.py">
+    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/old_task.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-7005">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/special_admin/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="14" column="23" selection-start-line="14" selection-start-column="23" selection-end-line="14" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/new_course.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="10" column="55" selection-start-line="10" selection-start-column="55" selection-end-line="10" selection-end-column="71" />
-          <folding>
-            <element signature="e#401#420#0#HTML" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/old_course.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2701">
-          <caret line="29" column="75" selection-start-line="29" selection-start-column="75" selection-end-line="29" selection-end-column="75" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/student_crud/new_student.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="806">
-          <caret line="31" column="54" selection-start-line="31" selection-start-column="54" selection-end-line="31" selection-end-column="54" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/student_crud/old_student.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="338">
-          <caret line="13" column="16" selection-start-line="36" selection-start-column="36" selection-end-line="36" selection-end-column="62" />
-          <folding />
+        <state relative-caret-position="572">
+          <caret line="22" column="25" selection-start-line="22" selection-start-column="25" selection-end-line="22" selection-end-column="25" />
         </state>
       </provider>
     </entry>
@@ -1031,22 +833,114 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="133">
           <caret line="12" column="68" selection-start-line="12" selection-start-column="55" selection-end-line="12" selection-end-column="68" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2">
-          <caret line="51" column="21" selection-start-line="51" selection-start-column="21" selection-end-line="51" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/old_task.html">
+    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/student_crud/old_student.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="26">
-          <caret line="11" column="19" selection-start-line="11" selection-start-column="19" selection-end-line="11" selection-end-column="19" />
+          <caret line="13" column="16" selection-start-line="36" selection-start-column="36" selection-end-line="36" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/student_crud/new_student.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="26">
+          <caret line="31" column="54" selection-start-line="31" selection-start-column="54" selection-end-line="31" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/old_course.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="26">
+          <caret line="29" column="75" selection-start-line="29" selection-start-column="75" selection-end-line="29" selection-end-column="75" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/new_course.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="26">
+          <caret line="10" column="55" selection-start-line="10" selection-start-column="55" selection-end-line="10" selection-end-column="71" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TODO.md">
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="52">
+          <caret line="2" column="45" selection-start-line="2" selection-start-column="45" selection-end-line="2" selection-end-column="45" />
+        </state>
+      </provider>
+      <provider editor-type-id="MarkdownFxPreviewEditor">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+        <state split_layout="FIRST">
+          <first_editor relative-caret-position="52">
+            <caret line="2" column="45" selection-start-line="2" selection-start-column="45" selection-end-line="2" selection-end-column="45" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/special_admin/static/special_admin/logo.svg" />
+    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="312">
+          <caret line="12" column="60" selection-start-line="12" selection-start-column="60" selection-end-line="12" selection-end-column="60" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/special_admin/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="530">
+          <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/special_admin/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1638">
+          <caret line="461" column="0" selection-start-line="461" selection-start-column="0" selection-end-line="461" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#53#0" expanded="true" />
+            <element signature="e#360#1741#0" expanded="false" />
+            <element signature="e#1771#2509#0" expanded="false" />
+            <element signature="e#2542#3998#0" expanded="false" />
+            <element signature="e#4035#10392#0" expanded="false" />
+            <element signature="e#10421#11144#0" expanded="false" />
+            <element signature="e#11176#12664#0" expanded="false" />
+            <element signature="e#12700#19016#0" expanded="false" />
+            <element signature="e#19047#20344#0" expanded="false" />
+            <element signature="e#20378#22206#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Feeder/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="348">
+          <caret line="96" column="0" selection-start-line="96" selection-start-column="0" selection-end-line="96" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/android/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="296">
+          <caret line="46" column="23" selection-start-line="46" selection-start-column="23" selection-end-line="46" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#53#0" expanded="true" />
+            <element signature="e#280#719#0" expanded="false" />
+            <element signature="e#777#1410#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/android/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="10" column="42" selection-start-line="10" selection-start-column="29" selection-end-line="10" selection-end-column="42" />
           <folding />
         </state>
       </provider>

@@ -28,7 +28,7 @@ class Course(models.Model):
 
 
 class Task(models.Model):
-    tag = models.CharField(max_length=20)
+    tag = models.CharField(max_length=50)
     detail = models.CharField(max_length=400)
     deadline = models.CharField(max_length=20)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True)
