@@ -73,4 +73,11 @@ public class Helper extends SQLiteOpenHelper {
     public boolean isEmpty(String TABLE_NAME) {
         return numberOfEntries(TABLE_NAME) == 0;
     }
+
+    public void deleteEntryWithKeyValue(String table, String key, String value){
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DELETE FROM " + table + " WHERE " + key + " = '" + value + "' ;");
+        db.close();
+    }
+
 }

@@ -10,6 +10,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -17,8 +21,12 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
+import triangle.feeder36.DB.Def.CourseDef;
+import triangle.feeder36.DB.Def.TaskDef;
 import triangle.feeder36.DB.Def.UserInfo;
 import triangle.feeder36.DB.Helpers.Helper;
 import triangle.feeder36.DB.Helpers.db;
@@ -41,7 +49,8 @@ public class Home extends AppCompatActivity {
 
     /* Back button disabled */
     @Override
-    public void onBackPressed() {}
+    public void onBackPressed() {
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -58,8 +67,10 @@ public class Home extends AppCompatActivity {
                 break;
             case R.id.home_menu_logout:
                 account.onOptionsItemSelected(item);
+                break;
             case R.id.home_menu_synchronize:
                 new SyncDataBases().execute(IPSource.syncURL());
+                break;
             default:
                 break;
         }
@@ -102,9 +113,14 @@ public class Home extends AppCompatActivity {
 
     private class SyncDataBases extends AsyncTask<String, String, String> {
 
+        db dbManager;
+
+        public SyncDataBases() {
+            dbManager = new db(Home.this, db.DB_NAME, null, db.DB_VERSION);
+        }
+
         @Override
         protected String doInBackground(String[] params) {
-            db dbManager = new db(Home.this, db.DB_NAME, null, db.DB_VERSION);
             Vector<UserInfo> users = dbManager.getAllUsers();
 
             String post_user_name = users.get(0).USER_NAME;
@@ -138,15 +154,19 @@ public class Home extends AppCompatActivity {
                 // get the response from the server
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 // using a StringBuilder
-                StringBuilder string_response = new StringBuilder();
+                StringBuilder json_string_builder = new StringBuilder();
                 String buffer_line;
                 while ((buffer_line = reader.readLine()) != null) {
-                    string_response.append(buffer_line);
+                    json_string_builder.append(buffer_line);
                 }
                 reader.close();
+                // json response string
+                String json_string = json_string_builder.toString();
+
+                this.startSync(json_string);
 
                 // return the response to onPostExecute
-                return string_response.toString();
+                return json_string_builder.toString();
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -154,12 +174,151 @@ public class Home extends AppCompatActivity {
             return "-1";
         }
 
+        private void startSync(String json_string) {
+            try {
+
+                JSONObject courses_tasks = new JSONObject(json_string);
+                JSONArray courses = (JSONArray) courses_tasks.get(CourseDef.JSONResponseKeys.COURSES_DICT);
+                JSONArray tasks = (JSONArray) courses_tasks.get(TaskDef.JSONResponseKeys.TASKS_DICT);
+                this.syncCourses(this.prepareCoursesHashMap(courses), dbManager.prepareCoursesHashMap());
+                this.syncTasks(this.prepareTasksHashMap(tasks), dbManager.prepareTasksHashMap());
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.i(TLog.TAG, "not a valid json string to parse Courses and Tasks " + json_string);
+            }
+
+        }
+
+        private void syncCourses(HashMap<Integer, CourseDef> remote, HashMap<Integer, CourseDef> local) {
+            // going through local table
+            for (Map.Entry local_entry : local.entrySet()) {
+
+                // current key
+                int key = (int) local_entry.getKey();
+                CourseDef local_value = (CourseDef) local_entry.getValue();
+
+                // remote has that entry
+                if (remote.get(key) != null) {
+
+                    CourseDef remote_value = remote.get(key);
+                    // with same fields => no change
+                    if (local_value.identical(remote_value)){
+                        // remove from remote hash
+                        remote.remove(key);
+                    }
+                    // with different fields => updated at django
+                    else {
+                        // TODO: issue update notification
+                        // update local db
+                        Log.i(TLog.TAG, "syncCourses: update with name (previously) " + local_value.NAME );
+                        dbManager.updateEntryWithKeyValue(remote_value, db.TABLES.COURSES.DJANGO_PK, String.valueOf(key));
+                        // remove from remote hash
+                        remote.remove(key);
+                    }
+                }
+                // remote has no such entry => deleted at django
+                else {
+                    // TODO: issue delete notification
+                    Log.i(TLog.TAG, "syncCourses: delete with name " + local_value.NAME );
+                    dbManager.deleteEntryWithKeyValue(db.TABLES.COURSES.TABLE_NAME, db.TABLES.COURSES.DJANGO_PK, String.valueOf(key));
+                }
+
+            }
+            // now going through remote table
+            // now it has only new
+            for (Map.Entry remote_entry : remote.entrySet()) {
+                int key = (int) remote_entry.getKey();
+                CourseDef new_value = (CourseDef) remote_entry.getValue();
+                // TODO: issue create notification
+                Log.i(TLog.TAG, "syncCourses: create with name " + new_value.NAME );
+                dbManager.insert(new_value);
+            }
+
+        }
+
+        private void syncTasks(HashMap<Integer, TaskDef> remote, HashMap<Integer, TaskDef> local) {
+            // going through local table
+            for (Map.Entry local_entry : local.entrySet()) {
+
+                // current key
+                int key = (int) local_entry.getKey();
+                TaskDef local_value = (TaskDef) local_entry.getValue();
+
+                // remote has that entry
+                if (remote.get(key) != null) {
+
+                    TaskDef remote_value = remote.get(key);
+                    // with same fields => no change
+                    if (local_value.identical(remote_value)){
+                        // remove from remote hash
+                        remote.remove(key);
+                    }
+                    // with different fields => updated at django
+                    else {
+                        // TODO: issue update notification
+                        // update local db
+                        Log.i(TLog.TAG, "syncTasks: update in with tag (previously) " + local_value.TAG );
+                        dbManager.updateEntryWithKeyValue(remote_value, db.TABLES.TASKS.DJANGO_PK, String.valueOf(key));
+                        // remove from remote hash
+                        remote.remove(key);
+                    }
+                }
+                // remote has no such entry => deleted at django
+                else {
+                    // TODO: issue delete notification
+                    Log.i(TLog.TAG, "syncTasks: delete with tag " + local_value.TAG );
+                    dbManager.deleteEntryWithKeyValue(db.TABLES.TASKS.TABLE_NAME, db.TABLES.TASKS.DJANGO_PK, String.valueOf(key));
+                }
+
+            }
+            // now going through remote table
+            // now it has only new
+            for (Map.Entry remote_entry : remote.entrySet()) {
+                int key = (int) remote_entry.getKey();
+                TaskDef new_value = (TaskDef) remote_entry.getValue();
+                // TODO: issue create notification
+                Log.i(TLog.TAG, "syncTasks: create with tag " + new_value.TAG );
+                dbManager.insert(new_value);
+            }
+
+
+        }
+
+        HashMap<Integer, CourseDef> prepareCoursesHashMap(JSONArray courses) {
+            HashMap<Integer, CourseDef> remote = new HashMap<>();
+            try {
+                for (int i = 0; i < courses.length(); i++) {
+                    CourseDef courseDef = new CourseDef((JSONObject) courses.get(i));
+                    remote.put(courseDef.DJANGO_PK, courseDef);
+                }
+            } catch (JSONException e) {
+                Log.i(TLog.TAG, "not a valid json string to parse Courses " + courses.toString());
+                e.printStackTrace();
+            }
+            return remote;
+        }
+
+        HashMap<Integer, TaskDef> prepareTasksHashMap(JSONArray tasks) {
+            HashMap<Integer, TaskDef> remote = new HashMap<>();
+            try {
+                for (int i = 0; i < tasks.length(); i++) {
+                    TaskDef taskDef = new TaskDef((JSONObject) tasks.get(i));
+                    remote.put(taskDef.DJANGO_PK, taskDef);
+                }
+            } catch (JSONException e) {
+                Log.i(TLog.TAG, "not a valid json string to parse Tasks " + tasks.toString());
+                e.printStackTrace();
+            }
+            return remote;
+        }
+
         @Override
         protected void onPostExecute(String result) {
             Log.i(TLog.TAG, result);
             // The result is
-            // 1 if user exists
-            // 0 if not
+            // json string if everything is OK
+            // 0 if user does not exist
             // -1 if some other error occurred
             switch (result) {
                 case "0":
@@ -169,14 +328,19 @@ public class Home extends AppCompatActivity {
                     Toast.makeText(Home.this, "Sync Failed", Toast.LENGTH_SHORT).show();
                     break;
                 default:
-                    Toast.makeText(Home.this, "Connected to DB", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Home.this, "Sync Completed", Toast.LENGTH_SHORT).show();
                     break;
             }
         }
 
         @Override
         protected void onCancelled() {
-            Log.i(TLog.TAG, "login cancelled ");
+            Log.i(TLog.TAG, "Sync cancelled ");
+        }
+
+        @Override
+        protected void onProgressUpdate(String[] values) {
+            Toast.makeText(Home.this, values[0], Toast.LENGTH_SHORT).show();
         }
 
     }

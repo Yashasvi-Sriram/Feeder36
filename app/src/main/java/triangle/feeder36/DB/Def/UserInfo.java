@@ -8,7 +8,7 @@ import triangle.feeder36.DB.Helpers.db;
 import triangle.feeder36.Log.TLog;
 
 public class UserInfo {
-    public String PK;
+    public int PK;
     public String USER_NAME;
     public String PASSWORD;
 
@@ -21,7 +21,7 @@ public class UserInfo {
 
     public UserInfo(Cursor cursor){
         if(cursor != null){
-            this.PK = cursor.getString(cursor.getColumnIndex(Helper.PRIMARY_KEY));
+            this.PK = Integer.parseInt(cursor.getString(cursor.getColumnIndex(Helper.PRIMARY_KEY)));
             this.USER_NAME = cursor.getString(cursor.getColumnIndex(db.TABLES.USER_INFO.USER_NAME));
             this.PASSWORD = cursor.getString(cursor.getColumnIndex(db.TABLES.USER_INFO.PASSWORD));
         }
@@ -45,4 +45,6 @@ public class UserInfo {
     public void setPASSWORD(String PASSWORD) {
         this.PASSWORD = PASSWORD;
     }
+
+
 }

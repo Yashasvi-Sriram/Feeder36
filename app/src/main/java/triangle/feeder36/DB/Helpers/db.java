@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.util.HashMap;
 import java.util.Vector;
 
 import triangle.feeder36.DB.Def.CourseDef;
@@ -101,6 +102,7 @@ public class db extends Helper {
 
             /* table - columns */
             // PRIMARY KEY
+            public static final String DJANGO_PK = "django_pk";
             public static final String TAG = "tag";
             public static final String DEADLINE = "deadline";
             public static final String DETAIL = "detail";
@@ -112,6 +114,7 @@ public class db extends Helper {
                             + TABLE_NAME
                             + "("
                             + PRIMARY_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                            + DJANGO_PK + " INTEGER ,"
                             + TAG + " VARCHAR(50) NOT NULL,"
                             + DEADLINE + " VARCHAR(20) NOT NULL,"
                             + DETAIL + " VARCHAR(400) NOT NULL,"
@@ -235,13 +238,34 @@ public class db extends Helper {
         db.close();
         return retVector;
     }
+
+    public HashMap<Integer, CourseDef> prepareCoursesHashMap() {
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLES.COURSES.TABLE_NAME + ";";
+
+        HashMap<Integer, CourseDef> local = new HashMap<>();
+
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+
+        while (!c.isAfterLast()) {
+            CourseDef row = new CourseDef(c);
+            local.put(row.DJANGO_PK, row);
+            c.moveToNext();
+        }
+
+        c.close();
+        db.close();
+        return local;
+    }
     /* Courses */
 
     /* Tasks */
     public void insert(TaskDef taskDef) {
         ContentValues values = new ContentValues();
 
-        values.put(TABLES.TASKS.COURSE_PK , Integer.parseInt(taskDef.COURSE_PK));
+        values.put(TABLES.TASKS.COURSE_PK , taskDef.COURSE_PK);
+        values.put(TABLES.TASKS.DJANGO_PK , taskDef.DJANGO_PK);
         values.put(TABLES.TASKS.TAG , taskDef.TAG);
         values.put(TABLES.TASKS.DEADLINE , taskDef.DEADLINE);
         values.put(TABLES.TASKS.DETAIL , taskDef.DETAIL);
@@ -254,7 +278,8 @@ public class db extends Helper {
     public void updateEntryWithKeyValue(TaskDef taskDef, String key, String value) {
         ContentValues values = new ContentValues();
 
-        values.put(TABLES.TASKS.COURSE_PK , Integer.parseInt(taskDef.COURSE_PK));
+        values.put(TABLES.TASKS.COURSE_PK , taskDef.COURSE_PK);
+        values.put(TABLES.TASKS.DJANGO_PK , taskDef.DJANGO_PK);
         values.put(TABLES.TASKS.TAG , taskDef.TAG);
         values.put(TABLES.TASKS.DEADLINE , taskDef.DEADLINE);
         values.put(TABLES.TASKS.DETAIL , taskDef.DETAIL);
@@ -283,6 +308,27 @@ public class db extends Helper {
         c.close();
         db.close();
         return retVector;
+    }
+
+
+    public HashMap<Integer, TaskDef> prepareTasksHashMap() {
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLES.TASKS.TABLE_NAME + ";";
+
+        HashMap<Integer, TaskDef> local = new HashMap<>();
+
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+
+        while (!c.isAfterLast()) {
+            TaskDef row = new TaskDef(c);
+            local.put(row.DJANGO_PK, row);
+            c.moveToNext();
+        }
+
+        c.close();
+        db.close();
+        return local;
     }
     /* Tasks */
 }
