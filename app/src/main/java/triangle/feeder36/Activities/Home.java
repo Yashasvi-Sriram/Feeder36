@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.roomorama.caldroid.CaldroidFragment;
@@ -34,6 +35,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
+import triangle.feeder36.CustomAdapters.tasks_short_adapter;
 import triangle.feeder36.DB.Def.CourseDef;
 import triangle.feeder36.DB.Def.TaskDef;
 import triangle.feeder36.DB.Def.UserInfo;
@@ -47,6 +49,7 @@ import triangle.feeder36.ServerTalk.IPSource;
 public class Home extends AppCompatActivity {
 
     AccountManager account;
+    ListView shortListViewTasks;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +61,13 @@ public class Home extends AppCompatActivity {
 
         /* Initializing Logout Manager */
         account = new AccountManager();
+
+        /* getting a reference to the ListView */
+        shortListViewTasks = (ListView) findViewById(R.id.shortListViewTasks);
+
+        String [] arr1 = {"This should work","yayy","may be","not sure"};
+        String [] arr2 = {"a","b","c","d"};
+        shortListViewTasks.setAdapter(new tasks_short_adapter(this,arr1,arr2));
     }
 
     /* Back button disabled */

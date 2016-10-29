@@ -9,6 +9,9 @@ import android.util.Log;
 import java.util.HashMap;
 import java.util.Vector;
 
+import triangle.feeder36.Calender.Date;
+import triangle.feeder36.Calender.DateTime;
+import triangle.feeder36.Calender.Time;
 import triangle.feeder36.DB.Def.CourseDef;
 import triangle.feeder36.DB.Def.TaskDef;
 import triangle.feeder36.DB.Def.UserInfo;
@@ -310,7 +313,6 @@ public class db extends Helper {
         return retVector;
     }
 
-
     public HashMap<Integer, TaskDef> prepareTasksHashMap() {
         SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT * FROM " + TABLES.TASKS.TABLE_NAME + ";";
@@ -329,6 +331,47 @@ public class db extends Helper {
         c.close();
         db.close();
         return local;
+    }
+
+    public Vector<TaskDef> getDayTasks(Date date) {
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLES.TASKS.TABLE_NAME + ";";
+
+        Vector<TaskDef> retVector = new Vector<>();
+
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+
+        while (!c.isAfterLast()) {
+            TaskDef row = new TaskDef(c);
+            DateTime row_deadline = new DateTime(row.DEADLINE,Date.SIMPLE_REPR_SEPARATOR, Time.SIMPLE_REPR_SEPARATOR,DateTime.SIMPLE_REPR_SEPARATOR);
+            if(date.isEqualTo(row_deadline.$DATE)){
+                retVector.add(row);
+            }
+            c.moveToNext();
+        }
+
+        c.close();
+        db.close();
+        return retVector;
+    }
+
+    public CourseDef getCourseOf(TaskDef taskDef){
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLES.COURSES.TABLE_NAME
+                + " WHERE "
+                + TABLES.COURSES.DJANGO_PK + " = " + taskDef.COURSE_PK + ";";
+
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+
+        if (!c.isAfterLast()) {
+            return new CourseDef(c);
+        }
+
+        c.close();
+        db.close();
+        return null;
     }
     /* Tasks */
 }
