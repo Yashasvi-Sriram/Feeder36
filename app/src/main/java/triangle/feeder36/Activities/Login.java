@@ -53,9 +53,13 @@ public class Login extends AppCompatActivity {
             // We are assuming one user per device TODO: Maybe implement multiple users
             /* HTTPLoginRequest if a PROPER user_name exists */
             if (!users.get(0).USER_NAME.equals("")) {
-                post_user_name = users.get(0).USER_NAME;
-                post_password = users.get(0).PASSWORD;
-                new HTTPLoginRequest().execute(post_user_name, post_password, IPSource.loginURL());
+                /* NOTE : We are assuming that the stored user is a valid account at this point of time
+                 TODO : Practically it may not be the case, So while sync-ing and sending response to feed back .
+                 TODO : Tally the credentials of the stored user */
+
+                /* Take to home screen */
+                Intent homeScreen = new Intent(Login.this, Home.class);
+                startActivity(homeScreen);
             }
         }
 
