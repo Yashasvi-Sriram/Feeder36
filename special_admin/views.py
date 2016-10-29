@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.http import HttpResponsePermanentRedirect as PerRedirect, HttpResponse
 
-from .models import Student, Course, Task, SpecialAdmin
+from .models import Student, Course, Task, FeedBackForm, SpecialAdmin
 from .session_keys import SessionKeys as sk
 
 
@@ -383,7 +383,6 @@ def tasks(request, pk):
     elif request.method == 'GET':
         # special admin logged in
         if request.session.get(sk.special_admin_logged, False):
-            # getting student sets
             return render(request, 'special_admin/task_crud/tasks.html', {'course': selected_course,
                                                                           'all_course': all_courses,
                                                                           'course_tasks': selected_course_tasks})
@@ -441,7 +440,7 @@ def old_task(request, pk):
 
     if request.method == 'POST':
         # delete student
-        if 'delete_course' in request.POST:
+        if 'delete_task' in request.POST:
             selected_task.delete()
             return PerRedirect(reverse('special_admin:tasks', kwargs={'pk': selected_course.pk}))
 
@@ -538,3 +537,124 @@ def old_task(request, pk):
         # NOT logged in
         else:
             return render(request, 'special_admin/login.html')
+
+
+def feedback_forms(request, pk):
+    all_courses = Course.objects.all()
+    selected_course = get_object_or_404(Course, pk=pk)
+    selected_course_fb_forms = selected_course.feedbackform_set.all()
+
+    if request.method == 'POST':
+        if 'delete' in request.POST:
+            delete_fb_form = get_object_or_404(FeedBackForm, pk=request.POST['delete'])
+            delete_fb_form.delete()
+            selected_course_fb_forms = selected_course.feedbackform_set.all()
+            return render(request, 'special_admin/fb_form_crud/fb_forms.html', {'course': selected_course,
+                                                                                'all_course': all_courses,
+                                                                                'course_fb_forms': selected_course_fb_forms})
+
+    elif request.method == 'GET':
+        # special admin logged in
+        if request.session.get(sk.special_admin_logged, False):
+            return render(request, 'special_admin/fb_form_crud/fb_forms.html', {'course': selected_course,
+                                                                                'all_course': all_courses,
+                                                                                'course_fb_forms': selected_course_fb_forms})
+        # NOT logged in
+        else:
+            return render(request, 'special_admin/login.html')
+
+
+def new_feedback_form(request, pk):
+    course = get_object_or_404(Course, pk=pk)
+
+    if request.method == 'POST':
+        if 'fb_form_name' in request.POST:
+            try:
+                FeedBackForm.objects.get(name=request.POST['fb_form_name'])
+                return render(request, 'special_admin/fb_form_crud/new_fb_form.html', {'course': course,
+                                                                                       'message': 'Feedback form with same Name already exists'})
+            # adding new fb form
+            except ObjectDoesNotExist:
+                # changing formats
+                date_deadline_str = request.POST['fb_form_deadline_date']
+                date_deadline_parts = date_deadline_str.split("-")
+                date_deadline = date_deadline_parts[2] + "/" + date_deadline_parts[1] + "/" + date_deadline_parts[0]
+                # now date is of format dd/mm/yyyy
+                time_deadline_str = request.POST['fb_form_deadline_time']
+                time_deadline = time_deadline_str + ":00"
+                # now time is of format hh:mm:ss
+                date_time_deadline = date_deadline + " " + time_deadline
+
+                _new_fb_form = FeedBackForm(name=request.POST['fb_form_name'],
+                                            question_set=request.POST['question_set'], deadline=date_time_deadline)
+                # saving task
+                _new_fb_form.save()
+
+                # adding to task set of course
+                course.feedbackform_set.add(_new_fb_form)
+
+                return PerRedirect(reverse('special_admin:feedback_forms', kwargs={'pk': course.pk}))
+
+    elif request.method == 'GET':
+        # special admin logged in
+        if request.session.get(sk.special_admin_logged, False):
+            return render(request, 'special_admin/fb_form_crud/new_fb_form.html', {'course': course})
+        # NOT logged in
+        else:
+            return render(request, 'special_admin/login.html')
+
+
+def old_feedback_form(request, pk):
+    selected_fb_form = get_object_or_404(FeedBackForm, pk=pk)
+    selected_course = Course.objects.get(pk=selected_fb_form.course_id)
+    date_time_parts = selected_fb_form.deadline.split(" ")
+    date = date_time_parts[0].split("/")
+    time = date_time_parts[1].split(":")
+    question_set = selected_fb_form.question_set.split("`")
+
+    if request.method == 'POST':
+        # delete student
+        if 'delete_fb_form' in request.POST:
+            selected_fb_form.delete()
+            return PerRedirect(reverse('special_admin:feedback_forms', kwargs={'pk': selected_course.pk}))
+
+    elif request.method == 'GET':
+        # special admin logged in
+        if request.session.get(sk.special_admin_logged, False):
+            return render(request, 'special_admin/fb_form_crud/old_fb_form.html', {'fb_form': selected_fb_form,
+                                                                                   'year': date[2],
+                                                                                   'month': date[1],
+                                                                                   'day': date[0],
+                                                                                   'hour': time[0],
+                                                                                   'minute': time[1],
+                                                                                   'course': selected_course,
+                                                                                   'question_set': question_set})
+        # NOT logged in
+        else:
+            return render(request, 'special_admin/login.html')
+
+
+def tasks_redirect(request):
+    # special admin logged in
+    if request.session.get(sk.special_admin_logged, False):
+        all_courses = Course.objects.all()
+        if all_courses:
+            return PerRedirect(reverse('special_admin:tasks', kwargs={'pk': all_courses[0].pk}))
+        else:
+            return render(request, 'special_admin/home.html')
+    # NOT logged in
+    else:
+        return render(request, 'special_admin/login.html')
+
+
+def fb_forms_redirect(request):
+    # special admin logged in
+    if request.session.get(sk.special_admin_logged, False):
+        all_courses = Course.objects.all()
+        if all_courses:
+            return PerRedirect(reverse('special_admin:feedback_forms', kwargs={'pk': all_courses[0].pk}))
+        else:
+            return render(request, 'special_admin/home.html')
+    # NOT logged in
+    else:
+        return render(request, 'special_admin/login.html')

@@ -8,7 +8,7 @@
         <div class='col-xs-8'>
             <form method="post" action="{% url 'special_admin:old_task' task.pk %}" class="form-horizontal">
                 {% csrf_token %}
-                <input type="submit" name="delete_course" value="Delete" class="btn-danger">
+                <input type="submit" name="delete_task" value="Delete" class="btn-danger">
             </form>
             <form method='post' action='{% url 'special_admin:old_task' task.pk %}' id='update_task_form'>
                 {% csrf_token %}

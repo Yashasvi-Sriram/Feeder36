@@ -1,19 +1,21 @@
 {% extends 'special_admin/base.html' %}
 {% block body %}
     <div class="container-fluid">
+
         <div class="row">
             <div class="col-xs-2"></div>
             <div class="col-xs-8">
-                <h1 style="text-align: center;margin: 0;font-size: 50px">{{ course.name }}'s Tasks</h1>
+                <h1 style="text-align: center;margin: 0;font-size: 50px">{{ course.name }}'s Feedback </h1>
             </div>
             <div class="col-xs-2">
-                <a href="{% url 'special_admin:feedback_forms' course.pk %}">
-                    <button class="btn-default" style="width: 200px;height: 50px;font-size: xx-large">
-                        Feedback
+                <a href="{% url 'special_admin:tasks' course.pk %}">
+                    <button class="btn-info" style="width: 100px;height: 50px;font-size: xx-large">
+                        Tasks
                     </button>
                 </a>
             </div>
         </div>
+
 
         <hr>
         <div class="row">
@@ -36,17 +38,17 @@
                     {% for course in all_course %}
                         <tr>
                             <td>
-                                <a href="{% url 'special_admin:tasks' course.pk %}">
+                                <a href="{% url 'special_admin:feedback_forms' course.pk %}">
                                     {{ course.code }}
                                 </a>
                             </td>
                             <td>
-                                <a href="{% url 'special_admin:tasks' course.pk %}">
+                                <a href="{% url 'special_admin:feedback_forms' course.pk %}">
                                     {{ course.name }}
                                 </a>
                             </td>
                             <td>
-                                <a href="{% url 'special_admin:new_task' course.pk %}">
+                                <a href="{% url 'special_admin:new_feedback_form' course.pk %}">
                                     <button class="btn-success">Create</button>
                                 </a>
                             </td>
@@ -57,8 +59,8 @@
             </div>
             <div class="col-xs-9">
                 <blockquote>
-                    {{ course_tasks|length }} tasks available for {{ course.name }}
-                    <a href="{% url 'special_admin:new_task' course.pk %}">
+                    {{ course_fb_forms|length }} Feedback available for {{ course.name }}
+                    <a href="{% url 'special_admin:new_feedback_form' course.pk %}">
                         <button class="btn-success">Create</button>
                     </a>
                 </blockquote>
@@ -76,22 +78,22 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for task in course_tasks %}
+                    {% for fb_form in course_fb_forms %}
                         <tr>
                             <td>
-                                <a href="{% url 'special_admin:old_task' task.pk %}">
-                                    {{ task.tag }}
+                                <a href="{% url 'special_admin:old_feedback_form' fb_form.pk %}">
+                                    {{ fb_form.name }}
                                 </a>
                             </td>
                             <td>
-                                <a href="{% url 'special_admin:old_task' task.pk %}">
-                                    {{ task.deadline }}
+                                <a href="{% url 'special_admin:old_feedback_form' fb_form.pk %}">
+                                    {{ fb_form.deadline }}
                                 </a>
                             </td>
                             <td>
-                                <form action="{% url 'special_admin:tasks' course.pk %}" method="post">
+                                <form action="{% url 'special_admin:feedback_forms' course.pk %}" method="post">
                                     {% csrf_token %}
-                                    <input type="hidden" name="delete" value="{{ task.pk }}">
+                                    <input type="hidden" name="delete" value="{{ fb_form.pk }}">
                                     <input type="submit" value="Delete" class="btn-danger">
                                 </form>
                             </td>

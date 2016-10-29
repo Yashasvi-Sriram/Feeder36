@@ -34,4 +34,14 @@ class Task(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.tag + " " + self.detail + " " + self.deadline
+        return self.tag + "-" + self.deadline + " of " + self.course
+
+
+class FeedBackForm(models.Model):
+    name = models.CharField(max_length=50)
+    question_set = models.TextField()
+    deadline = models.CharField(max_length=20)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return self.name + "-" + self.deadline + " of " + self.course

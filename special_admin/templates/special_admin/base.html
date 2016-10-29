@@ -29,6 +29,7 @@
             color: darkgreen;
         }
     </style>
+    {% block specific_css %}{% endblock %}
 </head>
 <body>
 
@@ -43,6 +44,8 @@
                 <li><a href="{% url 'special_admin:home' %}">Home</a></li>
                 <li><a href="{% url 'special_admin:courses' %}">Courses</a></li>
                 <li><a href="{% url 'special_admin:students' %}">Students</a></li>
+                <li><a href="{% url 'special_admin:tasks_redirect' %}">Tasks</a></li>
+                <li><a href="{% url 'special_admin:fb_forms_redirect' %}">Feedback</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <form action="{% url 'special_admin:home' %}" method="post">
