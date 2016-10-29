@@ -1,14 +1,20 @@
 package triangle.feeder36.Activities;
 
+import android.accounts.AccountManager;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
+
+import com.roomorama.caldroid.CaldroidFragment;
+import com.roomorama.caldroid.CaldroidListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,6 +27,9 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -41,6 +50,10 @@ public class Home extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        /* initialises CalView using Caldroid */
+        initialiseCalView();
+
         setContentView(R.layout.home);
 
         /* Initializing Logout Manager */
@@ -342,8 +355,51 @@ public class Home extends AppCompatActivity {
         protected void onProgressUpdate(String[] values) {
             Toast.makeText(Home.this, values[0], Toast.LENGTH_SHORT).show();
         }
-
     }
 
+    public void initialiseCalView() {
+        CaldroidFragment caldroidFragment = new CaldroidFragment();
+        Bundle args = new Bundle();
+        Calendar cal = Calendar.getInstance();
+        args.putInt(CaldroidFragment.MONTH,cal.get(Calendar.MONTH) + 1);
+        args.putInt(CaldroidFragment.YEAR,cal.get(Calendar.YEAR));
+        args.putInt(CaldroidFragment.START_DAY_OF_WEEK,CaldroidFragment.MONDAY);
+        args.putInt(CaldroidFragment.THEME_RESOURCE, com.caldroid.R.style.CaldroidDefaultDark);
+        caldroidFragment.setArguments(args);
 
+        FragmentTransaction t = getSupportFragmentManager().beginTransaction();
+        t.replace(R.id.calendarLayout,caldroidFragment);
+        t.commit();
+
+        final CaldroidListener listener = new CaldroidListener() {
+
+            @Override
+            public void onSelectDate(Date date, View view) {
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date);
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH) + 1;
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                String clickedDate = String.valueOf(day) + "/" + String.valueOf(month) + "/" + String.valueOf(year);
+                Toast.makeText(getApplicationContext(),clickedDate,Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onChangeMonth(int month, int year) {
+
+            }
+
+            @Override
+            public void onLongClickDate(Date date, View view) {
+
+            }
+
+            @Override
+            public void onCaldroidViewCreated() {
+
+            }
+        };
+        caldroidFragment.setCaldroidListener(listener);
+    }
 }
