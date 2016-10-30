@@ -37,6 +37,7 @@ import java.util.Vector;
 import triangle.feeder36.Calender.DateTime;
 import triangle.feeder36.CustomAdapters.TaskItem;
 import triangle.feeder36.DB.Def.CourseDef;
+import triangle.feeder36.DB.Def.FeedbackFormDef;
 import triangle.feeder36.DB.Def.TaskDef;
 import triangle.feeder36.DB.Def.UserInfo;
 import triangle.feeder36.DB.Helpers.Helper;
@@ -201,17 +202,20 @@ public class Home extends AppCompatActivity {
         }
 
         private void startSync(String json_string) {
+            Log.i(TLog.TAG, json_string);
             try {
 
-                JSONObject courses_tasks = new JSONObject(json_string);
-                JSONArray courses = (JSONArray) courses_tasks.get(CourseDef.JSONResponseKeys.COURSES_DICT);
-                JSONArray tasks = (JSONArray) courses_tasks.get(TaskDef.JSONResponseKeys.TASKS_DICT);
+                JSONObject courses_tasks_fb_forms = new JSONObject(json_string);
+                JSONArray courses = (JSONArray) courses_tasks_fb_forms.get(CourseDef.JSONResponseKeys.COURSES_DICT);
+                JSONArray tasks = (JSONArray) courses_tasks_fb_forms.get(TaskDef.JSONResponseKeys.TASKS_DICT);
+                JSONArray feedback_forms = (JSONArray) courses_tasks_fb_forms.get(FeedbackFormDef.JSONResponseKeys.FEEDBACK_FORM_DICT);
                 this.syncCourses(this.prepareCoursesHashMap(courses), dbManager.prepareCoursesHashMap());
                 this.syncTasks(this.prepareTasksHashMap(tasks), dbManager.prepareTasksHashMap());
+                this.syncFeedbackForms(this.prepareFeedbackFormsHashMap(feedback_forms), dbManager.prepareFeedbackFormsHashMap());
 
             } catch (JSONException e) {
                 e.printStackTrace();
-                Log.i(TLog.TAG, "not a valid json string to parse Courses and Tasks " + json_string);
+                Log.i(TLog.TAG, "not a valid json string to parse Courses, Tasks, Fb Forms " + json_string);
             }
 
         }
@@ -311,6 +315,54 @@ public class Home extends AppCompatActivity {
 
         }
 
+        private void syncFeedbackForms(HashMap<Integer, FeedbackFormDef> remote, HashMap<Integer, FeedbackFormDef> local) {
+            // going through local table
+            for (Map.Entry local_entry : local.entrySet()) {
+
+                // current key
+                int key = (int) local_entry.getKey();
+                FeedbackFormDef local_value = (FeedbackFormDef) local_entry.getValue();
+
+                // remote has that entry
+                if (remote.get(key) != null) {
+
+                    FeedbackFormDef remote_value = remote.get(key);
+                    // with same fields => no change
+                    if (local_value.identical(remote_value)){
+                        // remove from remote hash
+                        remote.remove(key);
+                    }
+                    // with different fields => updated at django
+                    else {
+                        // TODO: issue update notification
+                        // update local db
+                        Log.i(TLog.TAG, "syncFeedbackForms: update in with name (previously) " + local_value.NAME );
+                        dbManager.updateEntryWithKeyValue(remote_value, db.TABLES.FEEDBACK_FORMS.DJANGO_PK, String.valueOf(key));
+                        // remove from remote hash
+                        remote.remove(key);
+                    }
+                }
+                // remote has no such entry => deleted at django
+                else {
+                    // TODO: issue delete notification
+                    Log.i(TLog.TAG, "syncFeedbackForms: delete with name " + local_value.NAME );
+                    dbManager.deleteEntryWithKeyValue(db.TABLES.FEEDBACK_FORMS.TABLE_NAME, db.TABLES.FEEDBACK_FORMS.DJANGO_PK, String.valueOf(key));
+                }
+
+            }
+            // now going through remote table
+            // now it has only new
+            for (Map.Entry remote_entry : remote.entrySet()) {
+                int key = (int) remote_entry.getKey();
+                FeedbackFormDef new_value = (FeedbackFormDef) remote_entry.getValue();
+                // TODO: issue create notification
+                Log.i(TLog.TAG, "syncFeedbackForms: create with name " + new_value.NAME );
+                dbManager.insert(new_value);
+            }
+
+
+        }
+
         HashMap<Integer, CourseDef> prepareCoursesHashMap(JSONArray courses) {
             HashMap<Integer, CourseDef> remote = new HashMap<>();
             try {
@@ -339,9 +391,22 @@ public class Home extends AppCompatActivity {
             return remote;
         }
 
+        HashMap<Integer, FeedbackFormDef> prepareFeedbackFormsHashMap(JSONArray feedbackForms) {
+            HashMap<Integer, FeedbackFormDef> remote = new HashMap<>();
+            try {
+                for (int i = 0; i < feedbackForms.length(); i++) {
+                    FeedbackFormDef feedbackFormDef = new FeedbackFormDef((JSONObject) feedbackForms.get(i));
+                    remote.put(feedbackFormDef.DJANGO_PK, feedbackFormDef);
+                }
+            } catch (JSONException e) {
+                Log.i(TLog.TAG, "not a valid json string to parse FeedbackForms " + feedbackForms.toString());
+                e.printStackTrace();
+            }
+            return remote;
+        }
+
         @Override
         protected void onPostExecute(String result) {
-            Log.i(TLog.TAG, result);
             // The result is
             // json string if everything is OK
             // 0 if user does not exist
