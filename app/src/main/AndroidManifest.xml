@@ -20,7 +20,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activities.Home" />
-        <activity android:name=".Activities.ChangePassword"></activity>
+        <activity android:name=".Activities.ChangePassword" />
+        <activity android:name=".Activities.ReadTask"></activity>
     </application>
 
 </manifest>

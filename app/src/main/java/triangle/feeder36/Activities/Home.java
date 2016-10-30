@@ -1,6 +1,5 @@
 package triangle.feeder36.Activities;
 
-import android.accounts.AccountManager;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -28,14 +28,14 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
-import triangle.feeder36.CustomAdapters.tasks_short_adapter;
+import triangle.feeder36.Calender.DateTime;
+import triangle.feeder36.CustomAdapters.TaskItem;
 import triangle.feeder36.DB.Def.CourseDef;
 import triangle.feeder36.DB.Def.TaskDef;
 import triangle.feeder36.DB.Def.UserInfo;
@@ -45,29 +45,32 @@ import triangle.feeder36.Log.TLog;
 import triangle.feeder36.R;
 import triangle.feeder36.ServerTalk.IPSource;
 
-
 public class Home extends AppCompatActivity {
 
     AccountManager account;
-    ListView shortListViewTasks;
+    ListView short_list_view_tasks;
+    LinearLayout home,calendar_layout;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.home);
+
+        home = (LinearLayout) findViewById(R.id.home);
+        short_list_view_tasks = (ListView) home.findViewById(R.id.short_list_view_tasks);
+        calendar_layout = (LinearLayout) home.findViewById(R.id.calendar_layout);
 
         /* initialises CalView using Caldroid */
         initialiseCalView();
-
-        setContentView(R.layout.home);
 
         /* Initializing Logout Manager */
         account = new AccountManager();
 
         /* getting a reference to the ListView */
-        shortListViewTasks = (ListView) findViewById(R.id.shortListViewTasks);
+        short_list_view_tasks = (ListView) findViewById(R.id.short_list_view_tasks);
 
-        String [] arr1 = {"This should work","yayy","may be","not sure"};
-        String [] arr2 = {"a","b","c","d"};
-        shortListViewTasks.setAdapter(new tasks_short_adapter(this,arr1,arr2));
+        /* Initialises the list view below the CalView with present day tasks */
+        initialiseTasksWithPresentDate();
     }
 
     /* Back button disabled */
@@ -378,8 +381,10 @@ public class Home extends AppCompatActivity {
         caldroidFragment.setArguments(args);
 
         FragmentTransaction t = getSupportFragmentManager().beginTransaction();
-        t.replace(R.id.calendarLayout,caldroidFragment);
+        t.replace(R.id.calendar_layout,caldroidFragment);
         t.commit();
+
+        final db dbManager = new db(this,db.DB_NAME,null,db.DB_VERSION);
 
         final CaldroidListener listener = new CaldroidListener() {
 
@@ -392,7 +397,34 @@ public class Home extends AppCompatActivity {
                 int day = cal.get(Calendar.DAY_OF_MONTH);
 
                 String clickedDate = String.valueOf(day) + "/" + String.valueOf(month) + "/" + String.valueOf(year);
-                Toast.makeText(getApplicationContext(),clickedDate,Toast.LENGTH_SHORT).show();
+
+                Vector<TaskDef> tasksOnDay = dbManager.getDayTasks(new triangle.feeder36.Calender.Date(clickedDate,"/"));
+
+                int n = tasksOnDay.size();
+
+                String [] courseCode = new String[n];
+                String [] courseName = new String[n];
+                String [] taskTag = new String[n];
+                String [] taskDetail = new String[n];
+                String [] taskDeadline = new String[n];
+
+                for(int i=0;i<n;i++) {
+                    TaskDef task_i = tasksOnDay.elementAt(i);
+                    CourseDef course_i = dbManager.getCourseOf(task_i);
+
+                    courseCode[i] = course_i.CODE;
+                    courseName[i] = course_i.NAME;
+                    taskTag[i] = task_i.TAG;
+                    taskDetail[i] = task_i.DETAIL;
+
+                    String taskDeadlineStored = task_i.DEADLINE;
+
+                    /* Deadline converted to better forms of representation */
+                    DateTime deadlineDateTime = new DateTime(taskDeadlineStored,"/",":"," ");
+                    taskDeadline[i] = deadlineDateTime.formal12Representation();
+                }
+
+                short_list_view_tasks.setAdapter(new TaskItem(Home.this,courseCode,courseName,taskTag,taskDetail,taskDeadline));
             }
 
             @Override
@@ -411,5 +443,45 @@ public class Home extends AppCompatActivity {
             }
         };
         caldroidFragment.setCaldroidListener(listener);
+    }
+
+    public void initialiseTasksWithPresentDate() {
+        db dbManager = new db(this,db.DB_NAME,null,db.DB_VERSION);
+
+        Calendar cal = Calendar.getInstance();
+
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH) + 1;
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+
+        String presentDate = String.valueOf(day) + "/" + String.valueOf(month) + "/" + String.valueOf(year);
+
+        Vector<TaskDef> tasksOnDay = dbManager.getDayTasks(new triangle.feeder36.Calender.Date(presentDate,"/"));
+
+        int n = tasksOnDay.size();
+
+        String [] courseCode = new String[n];
+        String [] courseName = new String[n];
+        String [] taskTag = new String[n];
+        String [] taskDetail = new String[n];
+        String [] taskDeadline = new String[n];
+
+        for(int i=0;i<n;i++) {
+            TaskDef task_i = tasksOnDay.elementAt(i);
+            CourseDef course_i = dbManager.getCourseOf(task_i);
+
+            courseCode[i] = course_i.CODE;
+            courseName[i] = course_i.NAME;
+            taskTag[i] = task_i.TAG;
+            taskDetail[i] = task_i.DETAIL;
+
+            String taskDeadlineStored = task_i.DEADLINE;
+
+            /* Deadline converted to better forms of representation */
+            DateTime deadlineDateTime = new DateTime(taskDeadlineStored,"/",":"," ");
+            taskDeadline[i] = deadlineDateTime.formal12Representation();
+        }
+
+        short_list_view_tasks.setAdapter(new TaskItem(Home.this,courseCode,courseName,taskTag,taskDetail,taskDeadline));
     }
 }
