@@ -24,7 +24,31 @@
         <h1 style='text-align: center;margin: 0;font-size: 50px'>New Feedback for {{ course.name }}</h1>
         <hr>
 
-        <div class='col-xs-2'></div>
+        <div class='col-xs-3'>
+
+            <blockquote class="text-danger">
+                <h2>WARNING:</h2>
+                <h3>Feedback form once created <b>CANNOT</b> be edited.</h3>
+            </blockquote>
+
+            <blockquote class="text-primary">
+                <h3>NOTE: </h3>
+
+                <h3><small>Feeder asks Quantitative questions better...</small></h3>
+                <h4>How much do you like CS101?<span class="glyphicon glyphicon-ok"></span></h4>
+                <h4>What do you think about CS101?<span class="glyphicon glyphicon-remove"></span></h4>
+
+                <h3><small>It's always better to be time specific</small></h3>
+                <h4>How was Mid sem?<span class="glyphicon glyphicon-ok"></span></h4>
+                <h4>How was yesterday's class?<span class="glyphicon glyphicon-remove"></span></h4>
+                <h4>How was 24 Aug class?<span class="glyphicon glyphicon-ok"></span></h4>
+
+                <h3><small>You can ask propositional questions</small></h3>
+                <h4>Should we conduct exam on 15 Aug?<span class="glyphicon glyphicon-ok"></span></h4>
+                <h4>Should we conduct exam on Sunday?<span class="glyphicon glyphicon-remove"></span></h4>
+                <h4>Should we conduct exam on this Sunday?<span class="glyphicon glyphicon-remove"></span></h4>
+            </blockquote>
+        </div>
         <div class='col-xs-8'>
             <div>
                 <form method='post' action='{% url 'special_admin:new_feedback_form' course.pk %}'
@@ -42,7 +66,7 @@
                     <input type='hidden' id='question_set' name='question_set' value=''>
                     <script>
                         var questions_array = [];
-                        var delimiter = "`";
+                        var delimiter = "{{ delimiter }}";
 
                         $(document).ready(function () {
 
@@ -97,7 +121,7 @@
                 <script>
                     var new_question_input_html = '<li>' +
                             '<button class="btn-danger remove_question">X</button>' +
-                            '<input placeholder="Post a question..." class="question" type="text">' +
+                            '<input placeholder="Pose a question to the class..." class="question" type="text">' +
                             '</li>';
 
                     function add_question() {
@@ -121,9 +145,9 @@
 
                 </script>
                 <ul id='questions'></ul>
-                <button id='new_question_btn' class='btn-info' style='font-size: x-large;'>New Question</button>
+                <button id='new_question_btn' class='btn-primary' style='font-size: x-large;margin-left: 10px'>New Question</button>
             </div>
         </div>
-        <div class='col-xs-2'></div>
+        <div class='col-xs-1'></div>
     </div>
 {% endblock %}

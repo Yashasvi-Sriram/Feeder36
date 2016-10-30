@@ -2,18 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e4f5f38a-25e6-4896-993c-82d5a21a48c8" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/special_admin/templates/special_admin/fb_form_crud/fb_forms.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/pandu.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/pandu.xml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/special_admin/session_keys.py" afterPath="$PROJECT_DIR$/special_admin/static_strings.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/db.sqlite3" afterPath="$PROJECT_DIR$/db.sqlite3" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/special_admin/models.py" afterPath="$PROJECT_DIR$/special_admin/models.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/special_admin/templates/special_admin/base.html" afterPath="$PROJECT_DIR$/special_admin/templates/special_admin/base.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/courses.html" afterPath="$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/courses.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/old_course.html" afterPath="$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/old_course.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/special_admin/templates/special_admin/fb_form_crud/new_fb_form.html" afterPath="$PROJECT_DIR$/special_admin/templates/special_admin/fb_form_crud/new_fb_form.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/special_admin/templates/special_admin/home.html" afterPath="$PROJECT_DIR$/special_admin/templates/special_admin/home.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/old_task.html" afterPath="$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/old_task.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/tasks.html" afterPath="$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/tasks.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/special_admin/urls.py" afterPath="$PROJECT_DIR$/special_admin/urls.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/special_admin/views.py" afterPath="$PROJECT_DIR$/special_admin/views.py" />
     </list>
     <ignored path="Feeder.iws" />
@@ -41,8 +35,8 @@
       <file leaf-file-name="models.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/special_admin/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="32" column="9" selection-start-line="32" selection-start-column="9" selection-end-line="32" selection-end-column="9" />
+            <state relative-caret-position="660">
+              <caret line="43" column="10" selection-start-line="43" selection-start-column="10" selection-end-line="43" selection-end-column="10" />
               <folding />
             </state>
           </provider>
@@ -95,14 +89,15 @@
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/courses.html" />
         <option value="$PROJECT_DIR$/special_admin/models.py" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/old_task.html" />
-        <option value="$PROJECT_DIR$/special_admin/templates/special_admin/fb_form_crud/new_fb_form.html" />
         <option value="$PROJECT_DIR$/special_admin/urls.py" />
-        <option value="$PROJECT_DIR$/special_admin/views.py" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/fb_form_crud/old_fb_form.html" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/fb_form_crud/fb_forms.html" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/tasks.html" />
-        <option value="$PROJECT_DIR$/special_admin/templates/special_admin/base.html" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/home.html" />
+        <option value="$PROJECT_DIR$/special_admin/static_strings.py" />
+        <option value="$PROJECT_DIR$/special_admin/views.py" />
+        <option value="$PROJECT_DIR$/special_admin/templates/special_admin/base.html" />
+        <option value="$PROJECT_DIR$/special_admin/templates/special_admin/fb_form_crud/new_fb_form.html" />
       </list>
     </option>
   </component>
@@ -162,21 +157,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope">
-        <subPane subId="Problems" />
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="Feeder">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -219,8 +199,57 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="special_admin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="special_admin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Feeder" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="Feeder" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="special_admin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="special_admin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fb_form_crud" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope">
+        <subPane subId="Problems" />
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="Feeder">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -484,9 +513,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="24" width="1855" height="1056" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19137466" sideWeight="0.4964249" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19137466" sideWeight="0.4964249" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3210913" sideWeight="0.5018868" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -662,13 +691,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/special_admin/session_keys.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="52">
-          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/special_admin/apps.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -741,10 +763,8 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/TODO.md">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="52">
-          <caret line="2" column="45" selection-start-line="2" selection-start-column="45" selection-end-line="2" selection-end-column="45" />
-        </state>
+      <provider editor-type-id="MarkdownFxPreviewEditor">
+        <state />
       </provider>
       <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
         <state split_layout="FIRST">
@@ -754,8 +774,10 @@
           <second_editor />
         </state>
       </provider>
-      <provider editor-type-id="MarkdownFxPreviewEditor">
-        <state />
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="52">
+          <caret line="2" column="45" selection-start-line="2" selection-start-column="45" selection-end-line="2" selection-end-column="45" />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/special_admin/static/special_admin/logo.svg" />
@@ -786,20 +808,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/courses.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="728">
-          <caret line="42" column="33" selection-start-line="42" selection-start-column="33" selection-end-line="42" selection-end-column="33" />
-          <folding>
-            <element signature="e#692#711#0#HTML" expanded="false" />
-            <element signature="e#751#770#0#HTML" expanded="false" />
-            <element signature="e#810#829#0#HTML" expanded="false" />
-            <element signature="e#869#888#0#HTML" expanded="false" />
-            <element signature="e#928#947#0#HTML" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/new_task.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="312">
@@ -821,27 +829,8 @@
         <state relative-caret-position="78">
           <caret line="3" column="157" selection-start-line="3" selection-start-column="84" selection-end-line="3" selection-end-column="157" />
           <folding>
-            <element signature="e#103#155#0#HTML" expanded="true" />
+            <element signature="e#103#155#0#HTML" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/fb_form_crud/old_fb_form.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="9" column="32" selection-start-line="9" selection-start-column="32" selection-end-line="9" selection-end-column="32" />
-          <folding>
-            <element signature="e#1137#1176#0#HTML" expanded="true" />
-            <element signature="e#2691#2727#0#HTML" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/fb_form_crud/new_fb_form.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="21" column="26" selection-start-line="21" selection-start-column="26" selection-end-line="21" selection-end-column="26" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -861,49 +850,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/special_admin/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="738">
-          <caret line="649" column="31" selection-start-line="649" selection-start-column="31" selection-end-line="649" selection-end-column="31" />
-          <folding>
-            <element signature="e#0#53#0" expanded="true" />
-            <element signature="e#1785#2523#0" expanded="false" />
-            <element signature="e#2556#4012#0" expanded="false" />
-            <element signature="e#4049#10406#0" expanded="false" />
-            <element signature="e#10435#11158#0" expanded="false" />
-            <element signature="e#11190#12678#0" expanded="false" />
-            <element signature="e#12714#19030#0" expanded="false" />
-            <element signature="e#19061#20323#0" expanded="false" />
-            <element signature="e#20357#22185#0" expanded="false" />
-            <element signature="e#20866#21855#0" expanded="false" />
-            <element signature="e#22219#28830#0" expanded="false" />
-            <element signature="e#28870#30216#0" expanded="false" />
-            <element signature="e#30259#32198#0" expanded="false" />
-            <element signature="e#32241#33892#0" expanded="false" />
-            <element signature="e#33928#34342#0" expanded="false" />
-            <element signature="e#34381#34804#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/special_admin/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="11" column="86" selection-start-line="11" selection-start-column="69" selection-end-line="11" selection-end-column="86" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/tasks.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="26">
-          <caret line="10" column="63" selection-start-line="10" selection-start-column="63" selection-end-line="10" selection-end-column="63" />
-          <folding>
-            <element signature="e#213#265#0#HTML" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/old_course.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="26">
@@ -912,26 +858,102 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/courses.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1092">
+          <caret line="42" column="33" selection-start-line="42" selection-start-column="33" selection-end-line="42" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/tasks.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="15" column="14" selection-start-line="15" selection-start-column="14" selection-end-line="15" selection-end-column="14" />
+          <folding>
+            <element signature="e#477#530#0#HTML" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/special_admin/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="702">
+          <caret line="28" column="11" selection-start-line="28" selection-start-column="11" selection-end-line="28" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/home.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="130">
-          <caret line="5" column="9" selection-start-line="5" selection-start-column="9" selection-end-line="5" selection-end-column="9" />
+        <state relative-caret-position="0">
+          <caret line="0" column="39" selection-start-line="0" selection-start-column="39" selection-end-line="0" selection-end-column="39" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/base.html">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="388">
+          <caret line="18" column="77" selection-start-line="18" selection-start-column="77" selection-end-line="18" selection-end-column="77" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/special_admin/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="504">
+          <caret line="566" column="35" selection-start-line="566" selection-start-column="35" selection-end-line="566" selection-end-column="35" />
+          <folding>
+            <element signature="e#0#53#0" expanded="true" />
+            <element signature="e#400#1781#0" expanded="false" />
+            <element signature="e#1811#2549#0" expanded="false" />
+            <element signature="e#2582#4038#0" expanded="false" />
+            <element signature="e#4075#10432#0" expanded="false" />
+            <element signature="e#10461#11184#0" expanded="false" />
+            <element signature="e#11216#12704#0" expanded="false" />
+            <element signature="e#12740#19056#0" expanded="false" />
+            <element signature="e#19087#20349#0" expanded="false" />
+            <element signature="e#20383#22211#0" expanded="false" />
+            <element signature="e#20892#21881#0" expanded="false" />
+            <element signature="e#22245#28856#0" expanded="false" />
+            <element signature="e#28896#30242#0" expanded="false" />
+            <element signature="e#30285#32460#0" expanded="false" />
+            <element signature="e#32503#34169#0" expanded="false" />
+            <element signature="e#34205#34619#0" expanded="false" />
+            <element signature="e#34658#35081#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/fb_form_crud/new_fb_form.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="26">
+          <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/fb_form_crud/old_fb_form.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="59" column="8" selection-start-line="59" selection-start-column="8" selection-end-line="59" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/special_admin/static_strings.py">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="104">
-          <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+          <caret line="4" column="17" selection-start-line="4" selection-start-column="17" selection-end-line="4" selection-end-column="17" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/special_admin/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="32" column="9" selection-start-line="32" selection-start-column="9" selection-end-line="32" selection-end-column="9" />
+        <state relative-caret-position="660">
+          <caret line="43" column="10" selection-start-line="43" selection-start-column="10" selection-end-line="43" selection-end-column="10" />
           <folding />
         </state>
       </provider>

@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.http import HttpResponsePermanentRedirect as PerRedirect, HttpResponse
 
 from .models import Student, Course, Task, FeedBackForm, SpecialAdmin
-from .session_keys import SessionKeys as sk
+from .static_strings import SessionKeys as sk, FeedbackStrings as fbs
 
 
 def home(request):
@@ -572,6 +572,7 @@ def new_feedback_form(request, pk):
             try:
                 FeedBackForm.objects.get(name=request.POST['fb_form_name'])
                 return render(request, 'special_admin/fb_form_crud/new_fb_form.html', {'course': course,
+                                                                                       'delimiter': fbs.form_delimiter,
                                                                                        'message': 'Feedback form with same Name already exists'})
             # adding new fb form
             except ObjectDoesNotExist:
@@ -598,7 +599,8 @@ def new_feedback_form(request, pk):
     elif request.method == 'GET':
         # special admin logged in
         if request.session.get(sk.special_admin_logged, False):
-            return render(request, 'special_admin/fb_form_crud/new_fb_form.html', {'course': course})
+            return render(request, 'special_admin/fb_form_crud/new_fb_form.html', {'course': course,
+                                                                                   'delimiter': fbs.form_delimiter})
         # NOT logged in
         else:
             return render(request, 'special_admin/login.html')
@@ -610,7 +612,7 @@ def old_feedback_form(request, pk):
     date_time_parts = selected_fb_form.deadline.split(" ")
     date = date_time_parts[0].split("/")
     time = date_time_parts[1].split(":")
-    question_set = selected_fb_form.question_set.split("`")
+    question_set = selected_fb_form.question_set.split(fbs.form_delimiter)
 
     if request.method == 'POST':
         # delete student
