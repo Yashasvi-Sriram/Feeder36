@@ -14,6 +14,7 @@ import triangle.feeder36.Calender.DateTime;
 import triangle.feeder36.Calender.Time;
 import triangle.feeder36.DB.Def.CourseDef;
 import triangle.feeder36.DB.Def.FeedbackFormDef;
+import triangle.feeder36.DB.Def.FeedbackResponseDef;
 import triangle.feeder36.DB.Def.TaskDef;
 import triangle.feeder36.DB.Def.UserInfo;
 import triangle.feeder36.Log.TLog;
@@ -122,7 +123,7 @@ public class db extends Helper {
                             + TAG + " VARCHAR(50) NOT NULL,"
                             + DEADLINE + " VARCHAR(20) NOT NULL,"
                             + DETAIL + " VARCHAR(400) NOT NULL,"
-                            + COURSE_PK + " INTEGER "
+                            + COURSE_PK + " INTEGER " /* course's django pk */
                             + ");";
         }
 
@@ -151,7 +152,32 @@ public class db extends Helper {
                             + NAME + " VARCHAR(50) NOT NULL,"
                             + DEADLINE + " VARCHAR(20) NOT NULL,"
                             + QUESTION_SET + " TEXT NOT NULL,"
-                            + COURSE_PK + " INTEGER "
+                            + COURSE_PK + " INTEGER " /* course's django pk */
+                            + ");";
+        }
+
+        /**
+         * Feedback Responses table
+         */
+        public static final class FEEDBACK_RESPONSES {
+            /* table - name */
+            public static final String TABLE_NAME = "feedback_responses";
+
+            /* table - columns */
+            // PRIMARY KEY
+            public static final String FEEDBACK_FORM_PK = "feedback_form_pk"; /* feedback_form's django pk */
+            public static final String ANSWER_SET = "answer_set";
+            public static final String COMMENT = "comment";
+
+            /* table query */
+            private static final String CREATE_TABLE_QUERY =
+                    "CREATE TABLE "
+                            + TABLE_NAME
+                            + "("
+                            + PRIMARY_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                            + FEEDBACK_FORM_PK + " INTEGER ,"
+                            + COMMENT + " TEXT NOT NULL,"
+                            + ANSWER_SET + " TEXT NOT NULL,"
                             + ");";
         }
 
@@ -169,6 +195,7 @@ public class db extends Helper {
         TABLES.createTable(db, TABLES.COURSES.CREATE_TABLE_QUERY);
         TABLES.createTable(db, TABLES.TASKS.CREATE_TABLE_QUERY);
         TABLES.createTable(db, TABLES.FEEDBACK_FORMS.CREATE_TABLE_QUERY);
+        TABLES.createTable(db, TABLES.FEEDBACK_RESPONSES.CREATE_TABLE_QUERY);
     }
 
     @Override
@@ -179,6 +206,7 @@ public class db extends Helper {
         TABLES.dropTable(db, TABLES.COURSES.TABLE_NAME);
         TABLES.dropTable(db, TABLES.TASKS.TABLE_NAME);
         TABLES.dropTable(db, TABLES.FEEDBACK_FORMS.TABLE_NAME);
+        TABLES.dropTable(db, TABLES.FEEDBACK_RESPONSES.TABLE_NAME);
         // create new ones
         onCreate(db);
     }
@@ -517,5 +545,76 @@ public class db extends Helper {
         db.close();
         return null;
     }
+
+    public FeedbackResponseDef getResponseOf(FeedbackFormDef feedbackFormDef){
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLES.FEEDBACK_RESPONSES.TABLE_NAME
+                + " WHERE "
+                + TABLES.FEEDBACK_RESPONSES.FEEDBACK_FORM_PK + " = " + feedbackFormDef.DJANGO_PK + ";";
+
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+
+        if (!c.isAfterLast()) {
+            return new FeedbackResponseDef(c);
+        }
+
+        c.close();
+        db.close();
+        return null;
+    }
+    /* Feedback forms */
+
+    /* Feedback Responses */
+    public void insert(FeedbackResponseDef feedbackResponseDef) {
+        ContentValues values = new ContentValues();
+
+        values.put(TABLES.FEEDBACK_RESPONSES.FEEDBACK_FORM_PK , feedbackResponseDef.FEEDBACK_FORM_PK);
+        values.put(TABLES.FEEDBACK_RESPONSES.ANSWER_SET , feedbackResponseDef.ANSWER_SET);
+        values.put(TABLES.FEEDBACK_RESPONSES.COMMENT , feedbackResponseDef.COMMENT);
+
+        SQLiteDatabase db = getWritableDatabase();
+        db.insert(TABLES.FEEDBACK_RESPONSES.TABLE_NAME, null, values);
+        db.close();
+    }
+
+    public Vector<FeedbackResponseDef> getAllFeedbackResponses() {
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLES.FEEDBACK_RESPONSES.TABLE_NAME + ";";
+
+        Vector<FeedbackResponseDef> retVector = new Vector<>();
+
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+
+        while (!c.isAfterLast()) {
+            FeedbackResponseDef row = new FeedbackResponseDef(c);
+            retVector.add(row);
+            c.moveToNext();
+        }
+
+        c.close();
+        db.close();
+        return retVector;
+    }
+
+    public FeedbackFormDef getFormOf(FeedbackResponseDef feedbackResponseDef){
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLES.FEEDBACK_FORMS.TABLE_NAME
+                + " WHERE "
+                + TABLES.FEEDBACK_FORMS.DJANGO_PK + " = " + feedbackResponseDef.FEEDBACK_FORM_PK + ";";
+
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+
+        if (!c.isAfterLast()) {
+            return new FeedbackFormDef(c);
+        }
+
+        c.close();
+        db.close();
+        return null;
+    }
+    /* Feedback Responses */
 
 }
