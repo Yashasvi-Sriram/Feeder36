@@ -13,6 +13,7 @@ import triangle.feeder36.Calender.Date;
 import triangle.feeder36.Calender.DateTime;
 import triangle.feeder36.Calender.Time;
 import triangle.feeder36.DB.Def.CourseDef;
+import triangle.feeder36.DB.Def.FeedbackFormDef;
 import triangle.feeder36.DB.Def.TaskDef;
 import triangle.feeder36.DB.Def.UserInfo;
 import triangle.feeder36.Log.TLog;
@@ -125,6 +126,35 @@ public class db extends Helper {
                             + ");";
         }
 
+        /**
+         * Feedback Forms table
+         */
+        public static final class FEEDBACK_FORMS {
+            /* table - name */
+            public static final String TABLE_NAME = "feedback_forms";
+
+            /* table - columns */
+            // PRIMARY KEY
+            public static final String DJANGO_PK = "django_pk";
+            public static final String NAME = "name";
+            public static final String DEADLINE = "deadline";
+            public static final String QUESTION_SET = "question_set";
+            public static final String COURSE_PK = "course_pk";
+
+            /* table query */
+            private static final String CREATE_TABLE_QUERY =
+                    "CREATE TABLE "
+                            + TABLE_NAME
+                            + "("
+                            + PRIMARY_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                            + DJANGO_PK + " INTEGER ,"
+                            + NAME + " VARCHAR(50) NOT NULL,"
+                            + DEADLINE + " VARCHAR(20) NOT NULL,"
+                            + QUESTION_SET + " TEXT NOT NULL,"
+                            + COURSE_PK + " INTEGER "
+                            + ");";
+        }
+
     }
 
     public db(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -138,6 +168,7 @@ public class db extends Helper {
         TABLES.createTable(db, TABLES.USER_INFO.CREATE_TABLE_QUERY);
         TABLES.createTable(db, TABLES.COURSES.CREATE_TABLE_QUERY);
         TABLES.createTable(db, TABLES.TASKS.CREATE_TABLE_QUERY);
+        TABLES.createTable(db, TABLES.FEEDBACK_FORMS.CREATE_TABLE_QUERY);
     }
 
     @Override
@@ -147,6 +178,7 @@ public class db extends Helper {
         TABLES.dropTable(db, TABLES.USER_INFO.TABLE_NAME);
         TABLES.dropTable(db, TABLES.COURSES.TABLE_NAME);
         TABLES.dropTable(db, TABLES.TASKS.TABLE_NAME);
+        TABLES.dropTable(db, TABLES.FEEDBACK_FORMS.TABLE_NAME);
         // create new ones
         onCreate(db);
     }
@@ -374,4 +406,116 @@ public class db extends Helper {
         return null;
     }
     /* Tasks */
+
+    /* Feedback forms */
+    public void insert(FeedbackFormDef feedbackFormDef) {
+        ContentValues values = new ContentValues();
+
+        values.put(TABLES.FEEDBACK_FORMS.COURSE_PK , feedbackFormDef.COURSE_PK);
+        values.put(TABLES.FEEDBACK_FORMS.DJANGO_PK , feedbackFormDef.DJANGO_PK);
+        values.put(TABLES.FEEDBACK_FORMS.NAME , feedbackFormDef.NAME);
+        values.put(TABLES.FEEDBACK_FORMS.DEADLINE , feedbackFormDef.DEADLINE);
+        values.put(TABLES.FEEDBACK_FORMS.QUESTION_SET , feedbackFormDef.QUESTION_SET);
+
+        SQLiteDatabase db = getWritableDatabase();
+        db.insert(TABLES.FEEDBACK_FORMS.TABLE_NAME, null, values);
+        db.close();
+    }
+
+    public void updateEntryWithKeyValue(FeedbackFormDef feedbackFormDef, String key, String value) {
+        ContentValues values = new ContentValues();
+
+        values.put(TABLES.FEEDBACK_FORMS.COURSE_PK , feedbackFormDef.COURSE_PK);
+        values.put(TABLES.FEEDBACK_FORMS.DJANGO_PK , feedbackFormDef.DJANGO_PK);
+        values.put(TABLES.FEEDBACK_FORMS.NAME , feedbackFormDef.NAME);
+        values.put(TABLES.FEEDBACK_FORMS.DEADLINE , feedbackFormDef.DEADLINE);
+        values.put(TABLES.FEEDBACK_FORMS.QUESTION_SET , feedbackFormDef.QUESTION_SET);
+
+        SQLiteDatabase db = getWritableDatabase();
+        String where = key + " = '" + value + "' ";
+        db.update(TABLES.FEEDBACK_FORMS.TABLE_NAME, values, where, null);
+        db.close();
+    }
+
+    public Vector<FeedbackFormDef> getAllFeedbackForms() {
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLES.FEEDBACK_FORMS.TABLE_NAME + ";";
+
+        Vector<FeedbackFormDef> retVector = new Vector<>();
+
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+
+        while (!c.isAfterLast()) {
+            FeedbackFormDef row = new FeedbackFormDef(c);
+            retVector.add(row);
+            c.moveToNext();
+        }
+
+        c.close();
+        db.close();
+        return retVector;
+    }
+
+    public HashMap<Integer, FeedbackFormDef> prepareFeedbackFormsHashMap() {
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLES.FEEDBACK_FORMS.TABLE_NAME + ";";
+
+        HashMap<Integer, FeedbackFormDef> local = new HashMap<>();
+
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+
+        while (!c.isAfterLast()) {
+            FeedbackFormDef row = new FeedbackFormDef(c);
+            local.put(row.DJANGO_PK, row);
+            c.moveToNext();
+        }
+
+        c.close();
+        db.close();
+        return local;
+    }
+
+    public Vector<FeedbackFormDef> getDayFeedbackForms(Date date) {
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLES.FEEDBACK_FORMS.TABLE_NAME + ";";
+
+        Vector<FeedbackFormDef> retVector = new Vector<>();
+
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+
+        while (!c.isAfterLast()) {
+            FeedbackFormDef row = new FeedbackFormDef(c);
+            DateTime row_deadline = new DateTime(row.DEADLINE,Date.SIMPLE_REPR_SEPARATOR, Time.SIMPLE_REPR_SEPARATOR,DateTime.SIMPLE_REPR_SEPARATOR);
+            if(date.isEqualTo(row_deadline.$DATE)){
+                retVector.add(row);
+            }
+            c.moveToNext();
+        }
+
+        c.close();
+        db.close();
+        return retVector;
+    }
+
+    public CourseDef getCourseOf(FeedbackFormDef feedbackFormDef){
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLES.COURSES.TABLE_NAME
+                + " WHERE "
+                + TABLES.COURSES.DJANGO_PK + " = " + feedbackFormDef.COURSE_PK + ";";
+
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+
+        if (!c.isAfterLast()) {
+            return new CourseDef(c);
+        }
+
+        c.close();
+        db.close();
+        return null;
+    }
+
 }
