@@ -50,11 +50,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/special_admin/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="234">
-              <caret line="225" column="24" selection-start-line="225" selection-start-column="24" selection-end-line="225" selection-end-column="24" />
+            <state relative-caret-position="26">
+              <caret line="279" column="40" selection-start-line="279" selection-start-column="40" selection-end-line="279" selection-end-column="40" />
               <folding>
                 <element signature="e#0#53#0" expanded="true" />
                 <element signature="e#471#1852#0" expanded="false" />
@@ -62,30 +62,29 @@
                 <element signature="e#2653#4109#0" expanded="false" />
                 <element signature="e#4146#10503#0" expanded="false" />
                 <element signature="e#10532#11255#0" expanded="false" />
-                <element signature="e#11287#16165#0" expanded="false" />
-                <element signature="e#16201#22517#0" expanded="false" />
-                <element signature="e#22548#24803#0" expanded="false" />
-                <element signature="e#24837#26665#0" expanded="false" />
-                <element signature="e#26699#33310#0" expanded="false" />
-                <element signature="e#33350#35778#0" expanded="false" />
-                <element signature="e#35821#37996#0" expanded="false" />
-                <element signature="e#38039#39705#0" expanded="false" />
-                <element signature="e#39741#40155#0" expanded="false" />
-                <element signature="e#40194#40617#0" expanded="false" />
+                <element signature="e#17631#23947#0" expanded="false" />
+                <element signature="e#23978#26233#0" expanded="false" />
+                <element signature="e#26267#28095#0" expanded="false" />
+                <element signature="e#28129#34740#0" expanded="false" />
+                <element signature="e#34780#37208#0" expanded="false" />
+                <element signature="e#37251#39426#0" expanded="false" />
+                <element signature="e#39469#41135#0" expanded="false" />
+                <element signature="e#41171#41585#0" expanded="false" />
+                <element signature="e#41624#42047#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TODO.md" pinned="false" current-in-tab="true">
+      <file leaf-file-name="TODO.md" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/TODO.md">
           <provider editor-type-id="MarkdownFxPreviewEditor">
             <state />
           </provider>
           <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
             <state split_layout="FIRST">
-              <first_editor relative-caret-position="156">
-                <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+              <first_editor relative-caret-position="234">
+                <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
                 <folding />
               </first_editor>
               <second_editor />
@@ -149,9 +148,9 @@
         <option value="$PROJECT_DIR$/special_admin/datetime_helper.py" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/fb_form_crud/fb_forms.html" />
         <option value="$PROJECT_DIR$/special_admin/models.py" />
-        <option value="$PROJECT_DIR$/special_admin/views.py" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/new_course.html" />
         <option value="$PROJECT_DIR$/TODO.md" />
+        <option value="$PROJECT_DIR$/special_admin/views.py" />
       </list>
     </option>
   </component>
@@ -211,6 +210,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches">
+        <subPane />
+      </pane>
       <pane id="Scope">
         <subPane subId="Problems" />
         <subPane subId="Project Files">
@@ -225,9 +227,6 @@
             </PATH_ELEMENT>
           </PATH>
         </subPane>
-      </pane>
-      <pane id="Scratches">
-        <subPane />
       </pane>
       <pane id="ProjectPane">
         <subPane>
@@ -880,7 +879,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="76">
           <caret line="123" column="56" selection-start-line="123" selection-start-column="56" selection-end-line="123" selection-end-column="56" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -906,8 +904,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/special_admin/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="225" column="24" selection-start-line="225" selection-start-column="24" selection-end-line="225" selection-end-column="24" />
+        <state relative-caret-position="26">
+          <caret line="279" column="40" selection-start-line="279" selection-start-column="40" selection-end-line="279" selection-end-column="40" />
           <folding>
             <element signature="e#0#53#0" expanded="true" />
             <element signature="e#471#1852#0" expanded="false" />
@@ -915,36 +913,35 @@
             <element signature="e#2653#4109#0" expanded="false" />
             <element signature="e#4146#10503#0" expanded="false" />
             <element signature="e#10532#11255#0" expanded="false" />
-            <element signature="e#11287#16165#0" expanded="false" />
-            <element signature="e#16201#22517#0" expanded="false" />
-            <element signature="e#22548#24803#0" expanded="false" />
-            <element signature="e#24837#26665#0" expanded="false" />
-            <element signature="e#26699#33310#0" expanded="false" />
-            <element signature="e#33350#35778#0" expanded="false" />
-            <element signature="e#35821#37996#0" expanded="false" />
-            <element signature="e#38039#39705#0" expanded="false" />
-            <element signature="e#39741#40155#0" expanded="false" />
-            <element signature="e#40194#40617#0" expanded="false" />
+            <element signature="e#17631#23947#0" expanded="false" />
+            <element signature="e#23978#26233#0" expanded="false" />
+            <element signature="e#26267#28095#0" expanded="false" />
+            <element signature="e#28129#34740#0" expanded="false" />
+            <element signature="e#34780#37208#0" expanded="false" />
+            <element signature="e#37251#39426#0" expanded="false" />
+            <element signature="e#39469#41135#0" expanded="false" />
+            <element signature="e#41171#41585#0" expanded="false" />
+            <element signature="e#41624#42047#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/TODO.md">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="52">
-          <caret line="2" column="45" selection-start-line="2" selection-start-column="45" selection-end-line="2" selection-end-column="45" />
-        </state>
-      </provider>
       <provider editor-type-id="MarkdownFxPreviewEditor">
         <state />
       </provider>
       <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
         <state split_layout="FIRST">
-          <first_editor relative-caret-position="156">
-            <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <first_editor relative-caret-position="234">
+            <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
             <folding />
           </first_editor>
           <second_editor />
+        </state>
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="52">
+          <caret line="2" column="45" selection-start-line="2" selection-start-column="45" selection-end-line="2" selection-end-column="45" />
         </state>
       </provider>
     </entry>

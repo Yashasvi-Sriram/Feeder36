@@ -228,12 +228,12 @@ def new_course(request):
 
     if request.method == 'POST':
         if 'students' in request.POST:
-            try:
+            if Course.objects.filter(code=request.POST['course_code']).count() > 0:
                 Course.objects.get(code=request.POST['course_code'])
                 return render(request, 'special_admin/course_crud/new_course.html', {'all_students': all_students,
                                                                                      'message': 'Course with same Code already Exists',
                                                                                      'delimiter': fbs.form_delimiter})
-            except ObjectDoesNotExist:
+            else:
                 # adding new course
                 _new_course = Course(code=request.POST['course_code'], name=request.POST['course_name'])
                 _new_course.save()
@@ -250,44 +250,56 @@ def new_course(request):
                 # Adding feedback forms
 
                 # MIDSEM
-                # changing formats
-                date_deadline_str = request.POST['midsem_fb_form_deadline_date']
-                date_deadline_parts = date_deadline_str.split("-")
-                date_deadline = date_deadline_parts[2] + "/" + date_deadline_parts[1] + "/" + date_deadline_parts[0]
-                # now date is of format dd/mm/yyyy
-                time_deadline_str = request.POST['midsem_fb_form_deadline_time']
-                time_deadline = time_deadline_str + ":00"
-                # now time is of format hh:mm:ss
-                date_time_deadline = date_deadline + " " + time_deadline
+                if FeedBackForm.objects.filter(name=request.POST['midsem_fb_form_name'] + " - " + _new_course.code).count() > 0:
+                    _new_course.delete()
+                    return render(request, 'special_admin/course_crud/new_course.html', {'all_students': all_students,
+                                                                                         'message': 'Midsem form with same Name already Exists',
+                                                                                         'delimiter': fbs.form_delimiter})
+                else:
+                    # changing formats
+                    date_deadline_str = request.POST['midsem_fb_form_deadline_date']
+                    date_deadline_parts = date_deadline_str.split("-")
+                    date_deadline = date_deadline_parts[2] + "/" + date_deadline_parts[1] + "/" + date_deadline_parts[0]
+                    # now date is of format dd/mm/yyyy
+                    time_deadline_str = request.POST['midsem_fb_form_deadline_time']
+                    time_deadline = time_deadline_str + ":00"
+                    # now time is of format hh:mm:ss
+                    date_time_deadline = date_deadline + " " + time_deadline
 
-                _new_fb_form_midsem = FeedBackForm(name=request.POST['midsem_fb_form_name'],
-                                                   question_set=request.POST['midsem_question_set'],
-                                                   deadline=date_time_deadline)
-                # saving task
-                _new_fb_form_midsem.save()
+                    _new_fb_form_midsem = FeedBackForm(name=request.POST['midsem_fb_form_name'] + " - " + _new_course.code,
+                                                       question_set=request.POST['midsem_question_set'],
+                                                       deadline=date_time_deadline)
+                    # saving task
+                    _new_fb_form_midsem.save()
 
-                # adding to task set of course
-                _new_course.feedbackform_set.add(_new_fb_form_midsem)
+                    # adding to task set of course
+                    _new_course.feedbackform_set.add(_new_fb_form_midsem)
 
                 # ENDSEM
-                # changing formats
-                date_deadline_str = request.POST['endsem_fb_form_deadline_date']
-                date_deadline_parts = date_deadline_str.split("-")
-                date_deadline = date_deadline_parts[2] + "/" + date_deadline_parts[1] + "/" + date_deadline_parts[0]
-                # now date is of format dd/mm/yyyy
-                time_deadline_str = request.POST['endsem_fb_form_deadline_time']
-                time_deadline = time_deadline_str + ":00"
-                # now time is of format hh:mm:ss
-                date_time_deadline = date_deadline + " " + time_deadline
+                if FeedBackForm.objects.filter(name=request.POST['endsem_fb_form_name'] + " - " + _new_course.code).count() > 0:
+                    _new_course.delete()
+                    return render(request, 'special_admin/course_crud/new_course.html', {'all_students': all_students,
+                                                                                         'message': 'Endsem form with same Name already Exists',
+                                                                                         'delimiter': fbs.form_delimiter})
+                else:
+                    # changing formats
+                    date_deadline_str = request.POST['endsem_fb_form_deadline_date']
+                    date_deadline_parts = date_deadline_str.split("-")
+                    date_deadline = date_deadline_parts[2] + "/" + date_deadline_parts[1] + "/" + date_deadline_parts[0]
+                    # now date is of format dd/mm/yyyy
+                    time_deadline_str = request.POST['endsem_fb_form_deadline_time']
+                    time_deadline = time_deadline_str + ":00"
+                    # now time is of format hh:mm:ss
+                    date_time_deadline = date_deadline + " " + time_deadline
 
-                _new_fb_form_endsem = FeedBackForm(name=request.POST['endsem_fb_form_name'],
-                                                   question_set=request.POST['endsem_question_set'],
-                                                   deadline=date_time_deadline)
-                # saving task
-                _new_fb_form_endsem.save()
+                    _new_fb_form_endsem = FeedBackForm(name=request.POST['endsem_fb_form_name'] + " - " + _new_course.code,
+                                                       question_set=request.POST['endsem_question_set'],
+                                                       deadline=date_time_deadline)
+                    # saving task
+                    _new_fb_form_endsem.save()
 
-                # adding to task set of course
-                _new_course.feedbackform_set.add(_new_fb_form_endsem)
+                    # adding to task set of course
+                    _new_course.feedbackform_set.add(_new_fb_form_endsem)
 
                 # deadline midsem + 60 days from present date time
                 # deadline endsem + 120 days from present date time
@@ -295,9 +307,9 @@ def new_course(request):
                 plus_two_months = present_time + timedelta(days=60)
                 plus_four_months = present_time + timedelta(days=120)
 
-                midsem = Task(tag='Mid semester Exam', detail='',
+                midsem = Task(tag='Mid semester Exam - ' + _new_course.code, detail='',
                               deadline=datetime_helper.simple_representation(plus_two_months))
-                endsem = Task(tag='End semester Exam', detail='',
+                endsem = Task(tag='End semester Exam - ' + _new_course.code, detail='',
                               deadline=datetime_helper.simple_representation(plus_four_months))
                 # saving task
                 midsem.save()
