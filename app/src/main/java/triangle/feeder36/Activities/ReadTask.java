@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import triangle.feeder36.Calender.DateTime;
 import triangle.feeder36.R;
 
 public class ReadTask extends AppCompatActivity {
@@ -17,15 +18,21 @@ public class ReadTask extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.read_task);
 
-        Bundle dataFromHome = getIntent().getExtras();
-        String courseCode = dataFromHome.getString("courseCode");
-        String courseName = dataFromHome.getString("courseName");
-        String taskTag = dataFromHome.getString("taskTag");
-        String taskDetail = dataFromHome.getString("taskDetail");
-        String taskDeadline = dataFromHome.getString("taskDeadline");
+        Bundle dataFromTaskItem = getIntent().getExtras();
+        String courseCode = dataFromTaskItem.getString("courseCode");
+        String courseName = dataFromTaskItem.getString("courseName");
+        String taskTag = dataFromTaskItem.getString("taskTag");
+        String taskDetail = dataFromTaskItem.getString("taskDetail");
+        String taskDeadlineStored = dataFromTaskItem.getString("taskDeadline");
+        String taskDeadlineFormatted;
+
+        /* Deadline converted to better forms of representation */
+
+        DateTime deadlineDateTime = new DateTime(taskDeadlineStored,"/",":"," ");
+        taskDeadlineFormatted = deadlineDateTime.formal12Representation();
 
         long_view_tasks = (RelativeLayout) findViewById(R.id.long_view_tasks);
-        course_code = (TextView) long_view_tasks.findViewById(R.id.course_code);
+        course_code = (TextView) long_view_tasks.findViewById(R.id.task_course_code);
         course_name = (TextView) long_view_tasks.findViewById(R.id.course_name);
         task_tag = (TextView) long_view_tasks.findViewById(R.id.task_tag);
         task_detail = (TextView) long_view_tasks.findViewById(R.id.task_detail);
@@ -35,6 +42,6 @@ public class ReadTask extends AppCompatActivity {
         course_name.setText(courseName);
         task_tag.setText(taskTag);
         task_detail.setText(taskDetail);
-        task_deadline.setText(taskDeadline);
+        task_deadline.setText(taskDeadlineFormatted);
     }
 }

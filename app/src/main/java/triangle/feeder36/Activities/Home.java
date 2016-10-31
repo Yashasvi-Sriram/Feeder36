@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import triangle.feeder36.Calender.DateTime;
+import triangle.feeder36.CustomAdapters.FeedbackItem;
 import triangle.feeder36.CustomAdapters.TaskItem;
 import triangle.feeder36.DB.Def.CourseDef;
 import triangle.feeder36.DB.Def.FeedbackFormDef;
@@ -49,16 +50,16 @@ import triangle.feeder36.ServerTalk.IPSource;
 public class Home extends AppCompatActivity {
 
     AccountManager account;
-    ListView short_list_view_tasks;
+    ListView list_view_tasks,list_view_feedback;
     LinearLayout home,calendar_layout;
-
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
 
         home = (LinearLayout) findViewById(R.id.home);
-        short_list_view_tasks = (ListView) home.findViewById(R.id.short_list_view_tasks);
+        list_view_tasks = (ListView) home.findViewById(R.id.list_view_tasks);
+        list_view_feedback = (ListView) home.findViewById(R.id.list_view_feedback);
         calendar_layout = (LinearLayout) home.findViewById(R.id.calendar_layout);
 
         /* initialises CalView using Caldroid */
@@ -66,9 +67,6 @@ public class Home extends AppCompatActivity {
 
         /* Initializing Logout Manager */
         account = new AccountManager();
-
-        /* getting a reference to the ListView */
-        short_list_view_tasks = (ListView) findViewById(R.id.short_list_view_tasks);
 
         /* Initialises the list view below the CalView with present day tasks */
         initialiseTasksWithPresentDate();
@@ -467,8 +465,8 @@ public class Home extends AppCompatActivity {
 
                 int n = tasksOnDay.size();
 
-                String [] courseCode = new String[n];
-                String [] courseName = new String[n];
+                String [] taskCourseCode = new String[n];
+                String [] taskCourseName = new String[n];
                 String [] taskTag = new String[n];
                 String [] taskDetail = new String[n];
                 String [] taskDeadline = new String[n];
@@ -477,19 +475,37 @@ public class Home extends AppCompatActivity {
                     TaskDef task_i = tasksOnDay.elementAt(i);
                     CourseDef course_i = dbManager.getCourseOf(task_i);
 
-                    courseCode[i] = course_i.CODE;
-                    courseName[i] = course_i.NAME;
+                    taskCourseCode[i] = course_i.CODE;
+                    taskCourseName[i] = course_i.NAME;
                     taskTag[i] = task_i.TAG;
                     taskDetail[i] = task_i.DETAIL;
-
-                    String taskDeadlineStored = task_i.DEADLINE;
-
-                    /* Deadline converted to better forms of representation */
-                    DateTime deadlineDateTime = new DateTime(taskDeadlineStored,"/",":"," ");
-                    taskDeadline[i] = deadlineDateTime.formal12Representation();
+                    taskDeadline[i] = task_i.DEADLINE;
                 }
 
-                short_list_view_tasks.setAdapter(new TaskItem(Home.this,courseCode,courseName,taskTag,taskDetail,taskDeadline));
+                Vector<FeedbackFormDef> feedbacksOnDay = dbManager.getDayFeedbackForms(new triangle.feeder36.Calender.Date(clickedDate,"/"));
+
+                int m = feedbacksOnDay.size();
+
+                String [] feedbackCourseCode = new String[m];
+                String [] feedbackCourseName = new String[m];
+                String [] feedbackName = new String[m];
+                String [] feedbackQuestionSet = new String[m];
+                String [] feedbackDeadline = new String[m];
+
+                for(int i=0;i<m;i++) {
+                    FeedbackFormDef feedback_i = feedbacksOnDay.elementAt(i);
+                    CourseDef course_i = dbManager.getCourseOf(feedback_i);
+
+                    feedbackCourseCode[i] = course_i.CODE;
+                    feedbackCourseName[i] = course_i.NAME;
+
+                    feedbackName[i] = feedback_i.NAME;
+                    feedbackQuestionSet[i] = feedback_i.QUESTION_SET;
+                    feedbackDeadline[i] = feedback_i.DEADLINE;
+                }
+
+                list_view_tasks.setAdapter(new TaskItem(Home.this,taskCourseCode,taskCourseName,taskTag,taskDetail,taskDeadline));
+                list_view_feedback.setAdapter(new FeedbackItem(Home.this,feedbackCourseCode,feedbackCourseName,feedbackName,feedbackQuestionSet,feedbackDeadline));
             }
 
             @Override
@@ -520,13 +536,12 @@ public class Home extends AppCompatActivity {
         int day = cal.get(Calendar.DAY_OF_MONTH);
 
         String presentDate = String.valueOf(day) + "/" + String.valueOf(month) + "/" + String.valueOf(year);
-
         Vector<TaskDef> tasksOnDay = dbManager.getDayTasks(new triangle.feeder36.Calender.Date(presentDate,"/"));
 
         int n = tasksOnDay.size();
 
-        String [] courseCode = new String[n];
-        String [] courseName = new String[n];
+        String [] taskCourseCode = new String[n];
+        String [] taskCourseName = new String[n];
         String [] taskTag = new String[n];
         String [] taskDetail = new String[n];
         String [] taskDeadline = new String[n];
@@ -535,18 +550,36 @@ public class Home extends AppCompatActivity {
             TaskDef task_i = tasksOnDay.elementAt(i);
             CourseDef course_i = dbManager.getCourseOf(task_i);
 
-            courseCode[i] = course_i.CODE;
-            courseName[i] = course_i.NAME;
+            taskCourseCode[i] = course_i.CODE;
+            taskCourseName[i] = course_i.NAME;
             taskTag[i] = task_i.TAG;
             taskDetail[i] = task_i.DETAIL;
-
-            String taskDeadlineStored = task_i.DEADLINE;
-
-            /* Deadline converted to better forms of representation */
-            DateTime deadlineDateTime = new DateTime(taskDeadlineStored,"/",":"," ");
-            taskDeadline[i] = deadlineDateTime.formal12Representation();
+            taskDeadline[i] = task_i.DEADLINE;
         }
 
-        short_list_view_tasks.setAdapter(new TaskItem(Home.this,courseCode,courseName,taskTag,taskDetail,taskDeadline));
+        Vector<FeedbackFormDef> feedbacksOnDay = dbManager.getDayFeedbackForms(new triangle.feeder36.Calender.Date(presentDate,"/"));
+
+        int m = feedbacksOnDay.size();
+
+        String [] feedbackCourseCode = new String[m];
+        String [] feedbackCourseName = new String[m];
+        String [] feedbackName = new String[m];
+        String [] feedbackQuestionSet = new String[m];
+        String [] feedbackDeadline = new String[m];
+
+        for(int i=0;i<m;i++) {
+            FeedbackFormDef feedback_i = feedbacksOnDay.elementAt(i);
+            CourseDef course_i = dbManager.getCourseOf(feedback_i);
+
+            feedbackCourseCode[i] = course_i.CODE;
+            feedbackCourseName[i] = course_i.NAME;
+
+            feedbackName[i] = feedback_i.NAME;
+            feedbackQuestionSet[i] = feedback_i.QUESTION_SET;
+            feedbackDeadline[i] = feedback_i.DEADLINE;
+        }
+
+        list_view_tasks.setAdapter(new TaskItem(Home.this,taskCourseCode,taskCourseName,taskTag,taskDetail,taskDeadline));
+        list_view_feedback.setAdapter(new FeedbackItem(Home.this,feedbackCourseCode,feedbackCourseName,feedbackName,feedbackQuestionSet,feedbackDeadline));
     }
 }

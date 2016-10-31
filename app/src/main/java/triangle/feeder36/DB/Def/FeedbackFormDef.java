@@ -14,6 +14,8 @@ public class FeedbackFormDef {
 
     public class JSONResponseKeys {
         public static final String FEEDBACK_FORM_DICT = "feedback_forms";
+        public static final String SEP_QUESTION_SET = "`";
+        public static final String SEP_ANSWER_SET = "`";
 
         public static final String DJANGO_PK = "django_pk";
         public static final String NAME = "name";

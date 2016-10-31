@@ -13,8 +13,6 @@ import triangle.feeder36.Activities.Home;
 import triangle.feeder36.Activities.ReadTask;
 import triangle.feeder36.R;
 
-import static triangle.feeder36.R.id.course_code;
-
 public class TaskItem extends BaseAdapter{
 
     Context context;
@@ -53,8 +51,8 @@ public class TaskItem extends BaseAdapter{
     }
 
     public class Holder {
-        RelativeLayout short_view_tasks;
-        TextView course_code;
+        RelativeLayout task_item_layout;
+        TextView task_course_code;
         TextView task_tag;
     }
 
@@ -63,10 +61,10 @@ public class TaskItem extends BaseAdapter{
         Holder holder=new Holder();
         View rowView;
         rowView = inflater.inflate(R.layout.task_item,null);
-        holder.short_view_tasks = (RelativeLayout) rowView.findViewById(R.id.short_view_tasks);
-        holder.course_code = (TextView) holder.short_view_tasks.findViewById(course_code);
-        holder.task_tag = (TextView) holder.short_view_tasks.findViewById(R.id.task_tag);
-        holder.course_code.setText(courseCodeCop[position]);
+        holder.task_item_layout= (RelativeLayout) rowView.findViewById(R.id.task_item_layout);
+        holder.task_course_code = (TextView) holder.task_item_layout.findViewById(R.id.task_course_code);
+        holder.task_tag = (TextView) holder.task_item_layout.findViewById(R.id.task_tag);
+        holder.task_course_code.setText(courseCodeCop[position]);
         holder.task_tag.setText(taskTagCop[position]);
 
         rowView.setOnClickListener(new View.OnClickListener() {

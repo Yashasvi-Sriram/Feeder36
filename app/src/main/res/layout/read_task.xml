@@ -15,10 +15,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/course_name"
-        android:layout_alignBaseline="@+id/course_code"
-        android:layout_alignBottom="@+id/course_code"
-        android:layout_toRightOf="@+id/course_code"
-        android:layout_toEndOf="@+id/course_code"
+        android:layout_alignBaseline="@+id/task_course_code"
+        android:layout_alignBottom="@+id/task_course_code"
+        android:layout_toRightOf="@+id/task_course_code"
+        android:layout_toEndOf="@+id/task_course_code"
         android:layout_marginLeft="29dp"
         android:layout_marginStart="29dp" />
 
@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:id="@+id/course_code"
+        android:id="@+id/task_course_code"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="29dp"
         android:id="@+id/task_tag"
-        android:layout_below="@+id/course_code"
+        android:layout_below="@+id/task_course_code"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 

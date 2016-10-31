@@ -177,7 +177,7 @@ public class db extends Helper {
                             + PRIMARY_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                             + FEEDBACK_FORM_PK + " INTEGER ,"
                             + COMMENT + " TEXT NOT NULL,"
-                            + ANSWER_SET + " TEXT NOT NULL,"
+                            + ANSWER_SET + " TEXT NOT NULL"
                             + ");";
         }
 
