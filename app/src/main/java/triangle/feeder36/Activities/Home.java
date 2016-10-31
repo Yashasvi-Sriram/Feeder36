@@ -34,7 +34,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
-import triangle.feeder36.Calender.DateTime;
 import triangle.feeder36.CustomAdapters.FeedbackItem;
 import triangle.feeder36.CustomAdapters.TaskItem;
 import triangle.feeder36.DB.Def.CourseDef;
@@ -50,26 +49,17 @@ import triangle.feeder36.ServerTalk.IPSource;
 public class Home extends AppCompatActivity {
 
     AccountManager account;
-    ListView list_view_tasks,list_view_feedback;
-    LinearLayout home,calendar_layout;
+    CaldroidView caldroidView;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
 
-        home = (LinearLayout) findViewById(R.id.home);
-        list_view_tasks = (ListView) home.findViewById(R.id.list_view_tasks);
-        list_view_feedback = (ListView) home.findViewById(R.id.list_view_feedback);
-        calendar_layout = (LinearLayout) home.findViewById(R.id.calendar_layout);
-
-        /* initialises CalView using Caldroid */
-        initialiseCalView();
-
-        /* Initializing Logout Manager */
+        /* Initializes Logout Manager */
         account = new AccountManager();
 
-        /* Initialises the list view below the CalView with present day tasks */
-        initialiseTasksWithPresentDate();
+        /* Initializes Caldroid View */
+        caldroidView = new CaldroidView();
     }
 
     /* Back button disabled */
@@ -231,7 +221,7 @@ public class Home extends AppCompatActivity {
 
                     CourseDef remote_value = remote.get(key);
                     // with same fields => no change
-                    if (local_value.identical(remote_value)){
+                    if (local_value.identical(remote_value)) {
                         // remove from remote hash
                         remote.remove(key);
                     }
@@ -239,7 +229,7 @@ public class Home extends AppCompatActivity {
                     else {
                         // TODO: issue update notification
                         // update local db
-                        Log.i(TLog.TAG, "syncCourses: update with name (previously) " + local_value.NAME );
+                        Log.i(TLog.TAG, "syncCourses: update with name (previously) " + local_value.NAME);
                         dbManager.updateEntryWithKeyValue(remote_value, db.TABLES.COURSES.DJANGO_PK, String.valueOf(key));
                         // remove from remote hash
                         remote.remove(key);
@@ -248,7 +238,7 @@ public class Home extends AppCompatActivity {
                 // remote has no such entry => deleted at django
                 else {
                     // TODO: issue delete notification
-                    Log.i(TLog.TAG, "syncCourses: delete with name " + local_value.NAME );
+                    Log.i(TLog.TAG, "syncCourses: delete with name " + local_value.NAME);
                     dbManager.deleteEntryWithKeyValue(db.TABLES.COURSES.TABLE_NAME, db.TABLES.COURSES.DJANGO_PK, String.valueOf(key));
                 }
 
@@ -259,7 +249,7 @@ public class Home extends AppCompatActivity {
                 int key = (int) remote_entry.getKey();
                 CourseDef new_value = (CourseDef) remote_entry.getValue();
                 // TODO: issue create notification
-                Log.i(TLog.TAG, "syncCourses: create with name " + new_value.NAME );
+                Log.i(TLog.TAG, "syncCourses: create with name " + new_value.NAME);
                 dbManager.insert(new_value);
             }
 
@@ -278,7 +268,7 @@ public class Home extends AppCompatActivity {
 
                     TaskDef remote_value = remote.get(key);
                     // with same fields => no change
-                    if (local_value.identical(remote_value)){
+                    if (local_value.identical(remote_value)) {
                         // remove from remote hash
                         remote.remove(key);
                     }
@@ -286,7 +276,7 @@ public class Home extends AppCompatActivity {
                     else {
                         // TODO: issue update notification
                         // update local db
-                        Log.i(TLog.TAG, "syncTasks: update in with tag (previously) " + local_value.TAG );
+                        Log.i(TLog.TAG, "syncTasks: update in with tag (previously) " + local_value.TAG);
                         dbManager.updateEntryWithKeyValue(remote_value, db.TABLES.TASKS.DJANGO_PK, String.valueOf(key));
                         // remove from remote hash
                         remote.remove(key);
@@ -295,7 +285,7 @@ public class Home extends AppCompatActivity {
                 // remote has no such entry => deleted at django
                 else {
                     // TODO: issue delete notification
-                    Log.i(TLog.TAG, "syncTasks: delete with tag " + local_value.TAG );
+                    Log.i(TLog.TAG, "syncTasks: delete with tag " + local_value.TAG);
                     dbManager.deleteEntryWithKeyValue(db.TABLES.TASKS.TABLE_NAME, db.TABLES.TASKS.DJANGO_PK, String.valueOf(key));
                 }
 
@@ -306,7 +296,7 @@ public class Home extends AppCompatActivity {
                 int key = (int) remote_entry.getKey();
                 TaskDef new_value = (TaskDef) remote_entry.getValue();
                 // TODO: issue create notification
-                Log.i(TLog.TAG, "syncTasks: create with tag " + new_value.TAG );
+                Log.i(TLog.TAG, "syncTasks: create with tag " + new_value.TAG);
                 dbManager.insert(new_value);
             }
 
@@ -326,7 +316,7 @@ public class Home extends AppCompatActivity {
 
                     FeedbackFormDef remote_value = remote.get(key);
                     // with same fields => no change
-                    if (local_value.identical(remote_value)){
+                    if (local_value.identical(remote_value)) {
                         // remove from remote hash
                         remote.remove(key);
                     }
@@ -334,7 +324,7 @@ public class Home extends AppCompatActivity {
                     else {
                         // TODO: issue update notification
                         // update local db
-                        Log.i(TLog.TAG, "syncFeedbackForms: update in with name (previously) " + local_value.NAME );
+                        Log.i(TLog.TAG, "syncFeedbackForms: update in with name (previously) " + local_value.NAME);
                         dbManager.updateEntryWithKeyValue(remote_value, db.TABLES.FEEDBACK_FORMS.DJANGO_PK, String.valueOf(key));
                         // remove from remote hash
                         remote.remove(key);
@@ -343,7 +333,7 @@ public class Home extends AppCompatActivity {
                 // remote has no such entry => deleted at django
                 else {
                     // TODO: issue delete notification
-                    Log.i(TLog.TAG, "syncFeedbackForms: delete with name " + local_value.NAME );
+                    Log.i(TLog.TAG, "syncFeedbackForms: delete with name " + local_value.NAME);
                     dbManager.deleteEntryWithKeyValue(db.TABLES.FEEDBACK_FORMS.TABLE_NAME, db.TABLES.FEEDBACK_FORMS.DJANGO_PK, String.valueOf(key));
                 }
 
@@ -354,7 +344,7 @@ public class Home extends AppCompatActivity {
                 int key = (int) remote_entry.getKey();
                 FeedbackFormDef new_value = (FeedbackFormDef) remote_entry.getValue();
                 // TODO: issue create notification
-                Log.i(TLog.TAG, "syncFeedbackForms: create with name " + new_value.NAME );
+                Log.i(TLog.TAG, "syncFeedbackForms: create with name " + new_value.NAME);
                 dbManager.insert(new_value);
             }
 
@@ -433,153 +423,90 @@ public class Home extends AppCompatActivity {
         }
     }
 
-    public void initialiseCalView() {
-        CaldroidFragment caldroidFragment = new CaldroidFragment();
-        Bundle args = new Bundle();
-        Calendar cal = Calendar.getInstance();
-        args.putInt(CaldroidFragment.MONTH,cal.get(Calendar.MONTH) + 1);
-        args.putInt(CaldroidFragment.YEAR,cal.get(Calendar.YEAR));
-        args.putInt(CaldroidFragment.START_DAY_OF_WEEK,CaldroidFragment.MONDAY);
-        args.putInt(CaldroidFragment.THEME_RESOURCE, com.caldroid.R.style.CaldroidDefaultDark);
-        caldroidFragment.setArguments(args);
+    class CaldroidView {
+        ListView list_view_tasks, list_view_feedback;
+        LinearLayout home, calendar_layout;
+        db dbManager;
 
-        FragmentTransaction t = getSupportFragmentManager().beginTransaction();
-        t.replace(R.id.calendar_layout,caldroidFragment);
-        t.commit();
-
-        final db dbManager = new db(this,db.DB_NAME,null,db.DB_VERSION);
-
-        final CaldroidListener listener = new CaldroidListener() {
-
-            @Override
-            public void onSelectDate(Date date, View view) {
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(date);
-                int year = cal.get(Calendar.YEAR);
-                int month = cal.get(Calendar.MONTH) + 1;
-                int day = cal.get(Calendar.DAY_OF_MONTH);
-
-                String clickedDate = String.valueOf(day) + "/" + String.valueOf(month) + "/" + String.valueOf(year);
-
-                Vector<TaskDef> tasksOnDay = dbManager.getDayTasks(new triangle.feeder36.Calender.Date(clickedDate,"/"));
-
-                int n = tasksOnDay.size();
-
-                String [] taskCourseCode = new String[n];
-                String [] taskCourseName = new String[n];
-                String [] taskTag = new String[n];
-                String [] taskDetail = new String[n];
-                String [] taskDeadline = new String[n];
-
-                for(int i=0;i<n;i++) {
-                    TaskDef task_i = tasksOnDay.elementAt(i);
-                    CourseDef course_i = dbManager.getCourseOf(task_i);
-
-                    taskCourseCode[i] = course_i.CODE;
-                    taskCourseName[i] = course_i.NAME;
-                    taskTag[i] = task_i.TAG;
-                    taskDetail[i] = task_i.DETAIL;
-                    taskDeadline[i] = task_i.DEADLINE;
-                }
-
-                Vector<FeedbackFormDef> feedbacksOnDay = dbManager.getDayFeedbackForms(new triangle.feeder36.Calender.Date(clickedDate,"/"));
-
-                int m = feedbacksOnDay.size();
-
-                String [] feedbackCourseCode = new String[m];
-                String [] feedbackCourseName = new String[m];
-                String [] feedbackName = new String[m];
-                String [] feedbackQuestionSet = new String[m];
-                String [] feedbackDeadline = new String[m];
-
-                for(int i=0;i<m;i++) {
-                    FeedbackFormDef feedback_i = feedbacksOnDay.elementAt(i);
-                    CourseDef course_i = dbManager.getCourseOf(feedback_i);
-
-                    feedbackCourseCode[i] = course_i.CODE;
-                    feedbackCourseName[i] = course_i.NAME;
-
-                    feedbackName[i] = feedback_i.NAME;
-                    feedbackQuestionSet[i] = feedback_i.QUESTION_SET;
-                    feedbackDeadline[i] = feedback_i.DEADLINE;
-                }
-
-                list_view_tasks.setAdapter(new TaskItem(Home.this,taskCourseCode,taskCourseName,taskTag,taskDetail,taskDeadline));
-                list_view_feedback.setAdapter(new FeedbackItem(Home.this,feedbackCourseCode,feedbackCourseName,feedbackName,feedbackQuestionSet,feedbackDeadline));
-            }
-
-            @Override
-            public void onChangeMonth(int month, int year) {
-
-            }
-
-            @Override
-            public void onLongClickDate(Date date, View view) {
-
-            }
-
-            @Override
-            public void onCaldroidViewCreated() {
-
-            }
-        };
-        caldroidFragment.setCaldroidListener(listener);
-    }
-
-    public void initialiseTasksWithPresentDate() {
-        db dbManager = new db(this,db.DB_NAME,null,db.DB_VERSION);
-
-        Calendar cal = Calendar.getInstance();
-
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH) + 1;
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-
-        String presentDate = String.valueOf(day) + "/" + String.valueOf(month) + "/" + String.valueOf(year);
-        Vector<TaskDef> tasksOnDay = dbManager.getDayTasks(new triangle.feeder36.Calender.Date(presentDate,"/"));
-
-        int n = tasksOnDay.size();
-
-        String [] taskCourseCode = new String[n];
-        String [] taskCourseName = new String[n];
-        String [] taskTag = new String[n];
-        String [] taskDetail = new String[n];
-        String [] taskDeadline = new String[n];
-
-        for(int i=0;i<n;i++) {
-            TaskDef task_i = tasksOnDay.elementAt(i);
-            CourseDef course_i = dbManager.getCourseOf(task_i);
-
-            taskCourseCode[i] = course_i.CODE;
-            taskCourseName[i] = course_i.NAME;
-            taskTag[i] = task_i.TAG;
-            taskDetail[i] = task_i.DETAIL;
-            taskDeadline[i] = task_i.DEADLINE;
+        public CaldroidView() {
+            this.initCaldroid();
         }
 
-        Vector<FeedbackFormDef> feedbacksOnDay = dbManager.getDayFeedbackForms(new triangle.feeder36.Calender.Date(presentDate,"/"));
+        public void initCaldroid() {
+            home = (LinearLayout) findViewById(R.id.home);
+            list_view_tasks = (ListView) home.findViewById(R.id.list_view_tasks);
+            list_view_feedback = (ListView) home.findViewById(R.id.list_view_feedback);
+            calendar_layout = (LinearLayout) home.findViewById(R.id.calendar_layout);
+            dbManager = new db(Home.this, db.DB_NAME, null, db.DB_VERSION);
 
-        int m = feedbacksOnDay.size();
-
-        String [] feedbackCourseCode = new String[m];
-        String [] feedbackCourseName = new String[m];
-        String [] feedbackName = new String[m];
-        String [] feedbackQuestionSet = new String[m];
-        String [] feedbackDeadline = new String[m];
-
-        for(int i=0;i<m;i++) {
-            FeedbackFormDef feedback_i = feedbacksOnDay.elementAt(i);
-            CourseDef course_i = dbManager.getCourseOf(feedback_i);
-
-            feedbackCourseCode[i] = course_i.CODE;
-            feedbackCourseName[i] = course_i.NAME;
-
-            feedbackName[i] = feedback_i.NAME;
-            feedbackQuestionSet[i] = feedback_i.QUESTION_SET;
-            feedbackDeadline[i] = feedback_i.DEADLINE;
+            /* initialises CaldroidView View */
+            this.initialiseCaldroidView();
         }
 
-        list_view_tasks.setAdapter(new TaskItem(Home.this,taskCourseCode,taskCourseName,taskTag,taskDetail,taskDeadline));
-        list_view_feedback.setAdapter(new FeedbackItem(Home.this,feedbackCourseCode,feedbackCourseName,feedbackName,feedbackQuestionSet,feedbackDeadline));
+        public void initialiseCaldroidView() {
+            CaldroidFragment caldroidFragment = new CaldroidFragment();
+            Bundle args = new Bundle();
+            Calendar cal = Calendar.getInstance();
+            args.putInt(CaldroidFragment.MONTH, cal.get(Calendar.MONTH) + 1);
+            args.putInt(CaldroidFragment.YEAR, cal.get(Calendar.YEAR));
+            args.putInt(CaldroidFragment.START_DAY_OF_WEEK, CaldroidFragment.MONDAY);
+            args.putInt(CaldroidFragment.THEME_RESOURCE, com.caldroid.R.style.CaldroidDefaultDark);
+            caldroidFragment.setArguments(args);
+
+            FragmentTransaction t = getSupportFragmentManager().beginTransaction();
+            t.replace(R.id.calendar_layout, caldroidFragment);
+            t.commit();
+
+            caldroidFragment.setCaldroidListener(new CaldroidListener() {
+
+                @Override
+                public void onSelectDate(Date date, View view) {
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(date);
+                    int year = cal.get(Calendar.YEAR);
+                    int month = cal.get(Calendar.MONTH) + 1;
+                    int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                    onCaldroidSelectDate(new triangle.feeder36.Calender.Date(year, month, day));
+                }
+
+                @Override
+                public void onChangeMonth(int month, int year) {
+
+                }
+
+                @Override
+                public void onLongClickDate(Date date, View view) {
+
+                }
+
+                @Override
+                public void onCaldroidViewCreated() {
+                    /* Initialises the list view below the CalView with present day tasks */
+                    onCaldroidSelectDate(new triangle.feeder36.Calender.Date(true));
+                }
+            });
+
+        }
+
+        private void onCaldroidSelectDate(triangle.feeder36.Calender.Date date) {
+            Vector<TaskDef> tasksOnDay = dbManager.getDayTasks(date);
+            Vector<CourseDef> coursesOfTasks = new Vector<>();
+            for (int i = 0; i < tasksOnDay.size(); i++) {
+                coursesOfTasks.add(dbManager.getCourseOf(tasksOnDay.get(i)));
+            }
+            Vector<FeedbackFormDef> feedbackFormsOnDay = dbManager.getDayFeedbackForms(date);
+            Vector<CourseDef> coursesOfFbForms = new Vector<>();
+            for (int i = 0; i < feedbackFormsOnDay.size(); i++) {
+                coursesOfFbForms.add(dbManager.getCourseOf(feedbackFormsOnDay.get(i)));
+            }
+
+            list_view_tasks.setAdapter(new TaskItem(Home.this, tasksOnDay, coursesOfTasks));
+            list_view_feedback.setAdapter(new FeedbackItem(Home.this, feedbackFormsOnDay, coursesOfFbForms));
+        }
+
+
     }
+
+
 }
