@@ -1,6 +1,40 @@
 {% extends 'special_admin/base.html' %}
+{% block specific_css %}
+    <style>
+        .question {
+            width: 90%;
+            margin-bottom: 10px;
+            margin-top: 10px;
+        }
+
+        #questions li {
+            list-style: decimal;
+            margin-bottom: 10px;
+            margin-top: 10px;
+        }
+
+        .remove_question {
+            margin-right: 10px;
+        }
+    </style>
+{% endblock %}
 {% block body %}
-    <div class='container-fluid'>
+    <script>
+        function submit_new_course() {
+            $('#_midsem_fb_form_name').val($('#midsem_fb_form_name').val());
+            $('#_midsem_fb_form_deadline_date').val($('#midsem_fb_form_deadline_date').val());
+            $('#_midsem_fb_form_deadline_time').val($('#midsem_fb_form_deadline_time').val());
+            $('#_midsem_question_set').val($('#midsem_question_set').val());
+
+            $('#_endsem_fb_form_name').val($('#endsem_fb_form_name').val());
+            $('#_endsem_fb_form_deadline_date').val($('#endsem_fb_form_deadline_date').val());
+            $('#_endsem_fb_form_deadline_time').val($('#endsem_fb_form_deadline_time').val());
+            $('#_endsem_question_set').val($('#endsem_question_set').val());
+
+            $('#create_course_form').submit();
+        }
+    </script>
+    <div id="new_course" class='container-fluid'>
 
         <h1 style="text-align: center;margin: 0;font-size: 50px">Another One !!</h1>
         <hr>
@@ -8,11 +42,23 @@
             <form method='post' action='{% url 'special_admin:new_course' %}' id="create_course_form">
                 {% csrf_token %}
                 <br>
-                <input style='width: 100%' type='text' id='course_code' name='course_code' value='' placeholder='code'><br><br>
+                <input style='width: 100%' type='text' id='course_code' name='course_code' value=''
+                       placeholder='code'><br><br>
                 <input style='width: 100%' type='text' name='course_name' value=''
                        placeholder='name'><br><br>
                 <input type="hidden" value="" id="students_input" name="students">
-                <input id="validate" type='button' name='create_course' value='Create' class='btn-success'>
+                <input id="validate" type='button' name='create_course' value='Next' class='btn-success'>
+
+                <input type='hidden' id='_endsem_fb_form_name' name='endsem_fb_form_name' value=''><br>
+                <input style='display: none' type='date' id="_endsem_fb_form_deadline_date" name='endsem_fb_form_deadline_date'>
+                <input style='display: none' type='time' id="_endsem_fb_form_deadline_time" name='endsem_fb_form_deadline_time'><br><br>
+                <input type='hidden' id='_endsem_question_set' name='endsem_question_set' value=''>
+
+                <input type='hidden' id='_midsem_fb_form_name' name='midsem_fb_form_name' value=''><br>
+                <input style='display: none' type='date' id="_midsem_fb_form_deadline_date" name='midsem_fb_form_deadline_date'>
+                <input style='display: none' type='time' id="_midsem_fb_form_deadline_time" name='midsem_fb_form_deadline_time'><br><br>
+                <input type='hidden' id='_midsem_question_set' name='midsem_question_set' value=''>
+
             </form>
             <script type="text/javascript">
                 var signed_students = [];
@@ -27,7 +73,7 @@
 
                 $(document).ready(function () {
                     $('#validate').click(function () {
-                        if($('#course_code').val() == ""){
+                        if ($('#course_code').val() == "") {
                             alert('Empty Course Code!');
                             return;
                         }
@@ -36,7 +82,8 @@
                             signed_students.push($(this).attr('id'));
                         });
                         $('#students_input').val(signed_students.join(","));
-                        $('#create_course_form').submit();
+                        $('#new_course').fadeOut(0);
+                        $('#midsem').fadeIn(0);
                     });
                 });
             </script>
@@ -126,4 +173,314 @@
             </table>
         </div>
     </div>
+
+    <div id="midsem" class='container-fluid' style="display: none">
+
+        <h1 style='text-align: center;margin: 0;font-size: 50px'>Midsem Feedback form for this course</h1>
+        <hr>
+
+        <div class='col-xs-3'>
+
+            <blockquote class="text-danger">
+                <h2>WARNING:</h2>
+                <h3>Feedback form once created <b>CANNOT</b> be edited.</h3>
+            </blockquote>
+
+            <blockquote class="text-primary">
+                <h3>NOTE: </h3>
+
+                <h3>
+                    <small>Feeder asks Quantitative questions better...</small>
+                </h3>
+                <h4>How much do you like CS101?<span class="glyphicon glyphicon-ok"></span></h4>
+                <h4>What do you think about CS101?<span class="glyphicon glyphicon-remove"></span></h4>
+
+                <h3>
+                    <small>It's always better to be time specific</small>
+                </h3>
+                <h4>How was Mid sem?<span class="glyphicon glyphicon-ok"></span></h4>
+                <h4>How was yesterday's class?<span class="glyphicon glyphicon-remove"></span></h4>
+                <h4>How was 24 Aug class?<span class="glyphicon glyphicon-ok"></span></h4>
+
+                <h3>
+                    <small>You can ask propositional questions</small>
+                </h3>
+                <h4>Should we conduct exam on 15 Aug?<span class="glyphicon glyphicon-ok"></span></h4>
+                <h4>Should we conduct exam on Sunday?<span class="glyphicon glyphicon-remove"></span></h4>
+                <h4>Should we conduct exam on this Sunday?<span class="glyphicon glyphicon-remove"></span></h4>
+            </blockquote>
+        </div>
+        <div class='col-xs-8'>
+            <div>
+                <form id='create_midsem_fb_form_form'>
+                    {% csrf_token %}
+                    <input id='to_new_course' type='button' value='Prev' class='btn-default'>
+                    <script>
+                        $(document).ready(function () {
+                            $('#to_new_course').click(function () {
+                                $("#new_course").fadeIn(0);
+                                $("#midsem").fadeOut(0);
+                            });
+                        });
+                    </script>
+                    <input id='validate_midsem' type='button' name='create_midsem_fb_form' value='Next'
+                           class='btn-success'>
+                    <br><br>
+                    <input style='width: 100%' type='text' id='midsem_fb_form_name' name='midsem_fb_form_name' value=''
+                           placeholder='Give it a name'><br>
+                    <h3>DeadLine</h3>
+                    <span style='font-size: x-large'>Date : </span> <input style='width: 30%' type='date'
+                                                                           id="midsem_fb_form_deadline_date"
+                                                                           name='midsem_fb_form_deadline_date'>
+                    <span style='font-size: x-large'>Time : 24hrs</span> <input style='width: 30%' type='time'
+                                                                                id="midsem_fb_form_deadline_time"
+                                                                                name='midsem_fb_form_deadline_time'><br><br>
+                    <input type='hidden' id='midsem_question_set' name='midsem_question_set' value=''>
+                    <script>
+                        var midsem_questions_array = [];
+                        var delimiter = "{{ delimiter }}";
+
+                        $(document).ready(function () {
+
+                            $('#validate_midsem').click(function () {
+                                {#     validate_midsem form here    #}
+                                // empty name
+                                if ($('#midsem_fb_form_name').val() == '') {
+                                    alert('No Name!');
+                                    return;
+                                }
+                                // empty question set
+                                var all_question_inputs = $('#midsem_questions').find('input');
+                                if ($(all_question_inputs).length <= 0) {
+                                    alert('No Questions!');
+                                    return;
+                                }
+
+                                midsem_questions_array = [];
+                                var midsem_invalid_question_format = false;
+                                // invalid question format
+                                $(all_question_inputs).each(function () {
+                                    var question_str = $(this).val();
+                                    if (question_str.length > 0) {
+                                        for (var i = 0; i < question_str.length; ++i) {
+                                            if (question_str.charAt(i) == delimiter) {
+                                                alert('Question cannot contain ' + delimiter);
+                                                midsem_invalid_question_format = true;
+                                                return;
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        alert('Empty Question(s)');
+                                        midsem_invalid_question_format = true;
+                                        return;
+                                    }
+                                    midsem_questions_array.push($(this).val());
+                                });
+
+                                // If everything is okay then prepare the midsem_question_set and submit
+                                if (!midsem_invalid_question_format) {
+                                    $('#midsem_question_set').val(midsem_questions_array.join(delimiter));
+                                    $('#endsem').fadeIn(0);
+                                    $('#midsem').fadeOut(0);
+                                }
+                            });
+                        });
+                    </script>
+                </form>
+            </div>
+
+            <div style='background: rgba(1, 1, 1, 0.05);overflow: auto;height: 500px' class='row'>
+                <script>
+                    var midsem_new_question_input_html = '<li>' +
+                            '<button class="btn-danger remove_question">X</button>' +
+                            '<input placeholder="Pose a question to the class..." class="question" type="text">' +
+                            '</li>';
+
+                    function midsem_add_question() {
+                        $('#midsem_questions').append(midsem_new_question_input_html);
+                    }
+
+                    $(document).ready(function () {
+                        {# At least one question #}
+                        midsem_add_question();
+
+                        $('#midsem_new_question_btn').click(function () {
+                            midsem_add_question();
+                        });
+
+                        var midsem_questions = $('#midsem_questions');
+
+                        $(midsem_questions).on('click', 'button', function () {
+                            $(this).parent().remove();
+                        });
+                    });
+
+                </script>
+                <ul id="midsem_questions"></ul>
+                <button id='midsem_new_question_btn' class='btn-primary' style='font-size: x-large;margin-left: 10px'>
+                    New
+                    Question
+                </button>
+            </div>
+        </div>
+        <div class='col-xs-1'></div>
+    </div>
+
+    <div id="endsem" class='container-fluid' style="display: none">
+
+        <h1 style='text-align: center;margin: 0;font-size: 50px'>Endsem Feedback form for this course</h1>
+        <hr>
+
+        <div class='col-xs-3'>
+
+            <blockquote class="text-danger">
+                <h2>WARNING:</h2>
+                <h3>Feedback form once created <b>CANNOT</b> be edited.</h3>
+            </blockquote>
+
+            <blockquote class="text-primary">
+                <h3>NOTE: </h3>
+
+                <h3>
+                    <small>Feeder asks Quantitative questions better...</small>
+                </h3>
+                <h4>How much do you like CS101?<span class="glyphicon glyphicon-ok"></span></h4>
+                <h4>What do you think about CS101?<span class="glyphicon glyphicon-remove"></span></h4>
+
+                <h3>
+                    <small>It's always better to be time specific</small>
+                </h3>
+                <h4>How was end sem?<span class="glyphicon glyphicon-ok"></span></h4>
+                <h4>How was yesterday's class?<span class="glyphicon glyphicon-remove"></span></h4>
+                <h4>How was 24 Aug class?<span class="glyphicon glyphicon-ok"></span></h4>
+
+                <h3>
+                    <small>You can ask propositional questions</small>
+                </h3>
+                <h4>Should we conduct exam on 15 Aug?<span class="glyphicon glyphicon-ok"></span></h4>
+                <h4>Should we conduct exam on Sunday?<span class="glyphicon glyphicon-remove"></span></h4>
+                <h4>Should we conduct exam on this Sunday?<span class="glyphicon glyphicon-remove"></span></h4>
+            </blockquote>
+        </div>
+        <div class='col-xs-8'>
+            <div>
+                <form id='create_endsem_fb_form_form'>
+                    {% csrf_token %}
+                    <input id='to_midsem' type='button' value='Prev' class='btn-default'>
+                    <script>
+                        $(document).ready(function () {
+                            $('#to_midsem').click(function () {
+                                $("#midsem").fadeIn(0);
+                                $("#endsem").fadeOut(0);
+                            });
+                        });
+                    </script>
+                    <input id='validate_endsem' type='button' name='create_endsem_fb_form' value='Submit'
+                           class='btn-success'>
+                    <br><br>
+                    <input style='width: 100%' type='text' id='endsem_fb_form_name' name='endsem_fb_form_name' value=''
+                           placeholder='Give it a name'><br>
+                    <h3>DeadLine</h3>
+                    <span style='font-size: x-large'>Date : </span> <input style='width: 30%' type='date'
+                                                                           id="endsem_fb_form_deadline_date"
+                                                                           name='endsem_fb_form_deadline_date'>
+                    <span style='font-size: x-large'>Time : 24hrs</span> <input style='width: 30%' type='time'
+                                                                                id="endsem_fb_form_deadline_time"
+                                                                                name='endsem_fb_form_deadline_time'><br><br>
+                    <input type='hidden' id='endsem_question_set' name='endsem_question_set' value=''>
+                    <script>
+                        var endsem_questions_array = [];
+                        var delimiter = "{{ delimiter }}";
+
+                        $(document).ready(function () {
+
+                            $('#validate_endsem').click(function () {
+                                {#     validate_endsem form here    #}
+                                // empty name
+                                if ($('#endsem_fb_form_name').val() == '') {
+                                    alert('No Name!');
+                                    return;
+                                }
+                                else if($('#endsem_fb_form_name').val() == $('#midsem_fb_form_name').val()){
+                                    alert('Midsem form and endsem form have same name!');
+                                }
+
+                                // empty question set
+                                var all_question_inputs = $('#endsem_questions').find('input');
+                                if ($(all_question_inputs).length <= 0) {
+                                    alert('No Questions!');
+                                    return;
+                                }
+
+                                endsem_questions_array = [];
+                                var endsem_invalid_question_format = false;
+                                // invalid question format
+                                $(all_question_inputs).each(function () {
+                                    var question_str = $(this).val();
+                                    if (question_str.length > 0) {
+                                        for (var i = 0; i < question_str.length; ++i) {
+                                            if (question_str.charAt(i) == delimiter) {
+                                                alert('Question cannot contain ' + delimiter);
+                                                endsem_invalid_question_format = true;
+                                                return;
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        alert('Empty Question(s)');
+                                        endsem_invalid_question_format = true;
+                                        return;
+                                    }
+                                    endsem_questions_array.push($(this).val());
+                                });
+
+                                // If everything is okay then prepare the endsem_question_set and submit
+                                if (!endsem_invalid_question_format) {
+                                    $('#endsem_question_set').val(endsem_questions_array.join(delimiter));
+                                    submit_new_course();
+                                }
+                            });
+                        });
+                    </script>
+                </form>
+            </div>
+
+            <div style='background: rgba(1, 1, 1, 0.05);overflow: auto;height: 500px' class='row'>
+                <script>
+                    var endsem_new_question_input_html = '<li>' +
+                            '<button class="btn-danger remove_question">X</button>' +
+                            '<input placeholder="Pose a question to the class..." class="question" type="text">' +
+                            '</li>';
+
+                    function endsem_add_question() {
+                        $('#endsem_questions').append(endsem_new_question_input_html);
+                    }
+
+                    $(document).ready(function () {
+                        {# At least one question #}
+                        endsem_add_question();
+
+                        $('#endsem_new_question_btn').click(function () {
+                            endsem_add_question();
+                        });
+
+                        var endsem_questions = $('#endsem_questions');
+
+                        $(endsem_questions).on('click', 'button', function () {
+                            $(this).parent().remove();
+                        });
+                    });
+
+                </script>
+                <ul id="endsem_questions"></ul>
+                <button id='endsem_new_question_btn' class='btn-primary' style='font-size: x-large;margin-left: 10px'>
+                    New
+                    Question
+                </button>
+            </div>
+        </div>
+        <div class='col-xs-1'></div>
+    </div>
+
 {% endblock %}
