@@ -22,7 +22,7 @@
     <div class="container">
         <div class="row" style="text-align: center; color: white;font-size: 50px;font-weight: 900">Instructor</div>
         <div class="row" style="height: 100px";></div>
-        <form action="/instructor_login/register/" method="post" id="form">
+        <form action="{% url 'instructor_login:register' %}" method="post" id="form">
             {% csrf_token %}
         <div class="row">
              <div class="col-xs-3"></div>
