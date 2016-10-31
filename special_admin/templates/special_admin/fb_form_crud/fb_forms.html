@@ -57,50 +57,94 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-xs-9">
+            <div class="col-xs-9 row">
                 <blockquote>
                     {{ course_fb_forms|length }} Feedback available for {{ course.name }}
                     <a href="{% url 'special_admin:new_feedback_form' course.pk %}">
                         <button class="btn-success">Create</button>
                     </a>
                 </blockquote>
-                <table class="table table-hover table-striped" style="overflow: scroll">
-                    <colgroup>
-                        <col span="1" style="width: 40%;">
-                        <col span="1" style="width: 50%;">
-                        <col span="1" style="width: 10%;">
-                    </colgroup>
-                    <thead>
-                    <tr>
-                        <th>Task</th>
-                        <th>Deadline</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for fb_form in course_fb_forms %}
+
+                <div class="col-xs-6">
+                    <h2 class="label-info" style="color: white">Due Tasks</h2>
+                    <table class="table table-hover table-striped" style="overflow: scroll">
+                        <colgroup>
+                            <col span="1" style="width: 40%;">
+                            <col span="1" style="width: 50%;">
+                            <col span="1" style="width: 10%;">
+                        </colgroup>
+                        <thead>
                         <tr>
-                            <td>
-                                <a href="{% url 'special_admin:old_feedback_form' fb_form.pk %}">
-                                    {{ fb_form.name }}
-                                </a>
-                            </td>
-                            <td>
-                                <a href="{% url 'special_admin:old_feedback_form' fb_form.pk %}">
-                                    {{ fb_form.deadline }}
-                                </a>
-                            </td>
-                            <td>
-                                <form action="{% url 'special_admin:feedback_forms' course.pk %}" method="post">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="delete" value="{{ fb_form.pk }}">
-                                    <input type="submit" value="Delete" class="btn-danger">
-                                </form>
-                            </td>
+                            <th>Task</th>
+                            <th>Deadline</th>
+                            <th></th>
                         </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        {% for fb_form in remaining_fb_forms %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'special_admin:old_feedback_form' fb_form.pk %}">
+                                        {{ fb_form.name }}
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{% url 'special_admin:old_feedback_form' fb_form.pk %}">
+                                        {{ fb_form.deadline }}
+                                    </a>
+                                </td>
+                                <td>
+                                    <form action="{% url 'special_admin:feedback_forms' course.pk %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="delete" value="{{ fb_form.pk }}">
+                                        <input type="submit" value="Delete" class="btn-danger">
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-xs-6">
+                    <h2 class="label-danger" style="color: white">Deadline expired</h2>
+                    <table class="table table-hover table-striped" style="overflow: scroll">
+                        <colgroup>
+                            <col span="1" style="width: 40%;">
+                            <col span="1" style="width: 50%;">
+                            <col span="1" style="width: 10%;">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Deadline</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for fb_form in finished_fb_forms %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'special_admin:old_feedback_form' fb_form.pk %}">
+                                        {{ fb_form.name }}
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{% url 'special_admin:old_feedback_form' fb_form.pk %}">
+                                        {{ fb_form.deadline }}
+                                    </a>
+                                </td>
+                                <td>
+                                    <form action="{% url 'special_admin:feedback_forms' course.pk %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="delete" value="{{ fb_form.pk }}">
+                                        <input type="submit" value="Delete" class="btn-danger">
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

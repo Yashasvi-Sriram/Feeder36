@@ -5,10 +5,12 @@
       <w>bootstrapcdn</w>
       <w>clickjacking</w>
       <w>csrf</w>
+      <w>endsem</w>
       <w>glyphicon</w>
       <w>googleapis</w>
       <w>keyup</w>
       <w>maxcdn</w>
+      <w>midsem</w>
       <w>navbar</w>
       <w>sqlite</w>
       <w>tbody</w>

@@ -45,3 +45,13 @@ class FeedBackForm(models.Model):
 
     def __str__(self):
         return self.name + "-" + self.deadline + " of " + self.course
+
+
+class FeedbackResponse(models.Model):
+    answer_set = models.TextField()
+    comment = models.TextField()
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True)
+    feedback_form = models.ForeignKey(FeedBackForm, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return self.student.user_name + " response to " + self.feedback_form.name

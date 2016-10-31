@@ -2,10 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e4f5f38a-25e6-4896-993c-82d5a21a48c8" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/special_admin/datetime_helper.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/pandu.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/pandu.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/android/views.py" afterPath="$PROJECT_DIR$/android/views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TODO.md" afterPath="$PROJECT_DIR$/TODO.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/db.sqlite3" afterPath="$PROJECT_DIR$/db.sqlite3" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/special_admin/static_strings.py" afterPath="$PROJECT_DIR$/special_admin/static_strings.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/special_admin/models.py" afterPath="$PROJECT_DIR$/special_admin/models.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/special_admin/templates/special_admin/fb_form_crud/fb_forms.html" afterPath="$PROJECT_DIR$/special_admin/templates/special_admin/fb_form_crud/fb_forms.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/tasks.html" afterPath="$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/tasks.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/special_admin/views.py" afterPath="$PROJECT_DIR$/special_admin/views.py" />
     </list>
     <ignored path="Feeder.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,14 +35,26 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="450">
       <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/android/views.py">
+        <entry file="file://$PROJECT_DIR$/special_admin/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="842">
-              <caret line="90" column="25" selection-start-line="90" selection-start-column="25" selection-end-line="90" selection-end-column="25" />
+            <state relative-caret-position="624">
+              <caret line="388" column="23" selection-start-line="388" selection-start-column="23" selection-end-line="388" selection-end-column="23" />
               <folding>
-                <element signature="e#280#719#0" expanded="false" />
-                <element signature="e#2379#2752#0" expanded="false" />
-                <element signature="e#2884#3311#0" expanded="false" />
+                <element signature="e#0#53#0" expanded="true" />
+                <element signature="e#471#1852#0" expanded="false" />
+                <element signature="e#1882#2620#0" expanded="false" />
+                <element signature="e#2653#4109#0" expanded="false" />
+                <element signature="e#4146#10503#0" expanded="false" />
+                <element signature="e#10532#11255#0" expanded="false" />
+                <element signature="e#11287#13620#0" expanded="false" />
+                <element signature="e#13656#19972#0" expanded="false" />
+                <element signature="e#20003#22258#0" expanded="false" />
+                <element signature="e#22292#24120#0" expanded="false" />
+                <element signature="e#24154#30765#0" expanded="false" />
+                <element signature="e#33276#35451#0" expanded="false" />
+                <element signature="e#35494#37160#0" expanded="false" />
+                <element signature="e#37196#37610#0" expanded="false" />
+                <element signature="e#37649#38072#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -48,8 +65,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -81,24 +98,27 @@
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/student_crud/new_student.html" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/new_course.html" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/new_task.html" />
-        <option value="$PROJECT_DIR$/TODO.md" />
         <option value="$PROJECT_DIR$/Feeder/settings.py" />
         <option value="$PROJECT_DIR$/android/urls.py" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/fb_form_crud/fb_froms.html" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/old_course.html" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/courses.html" />
-        <option value="$PROJECT_DIR$/special_admin/models.py" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/old_task.html" />
         <option value="$PROJECT_DIR$/special_admin/urls.py" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/fb_form_crud/old_fb_form.html" />
-        <option value="$PROJECT_DIR$/special_admin/templates/special_admin/fb_form_crud/fb_forms.html" />
-        <option value="$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/tasks.html" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/home.html" />
-        <option value="$PROJECT_DIR$/special_admin/views.py" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/base.html" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/fb_form_crud/new_fb_form.html" />
         <option value="$PROJECT_DIR$/special_admin/static_strings.py" />
         <option value="$PROJECT_DIR$/android/views.py" />
+        <option value="$PROJECT_DIR$/special_admin/models.py" />
+        <option value="$PROJECT_DIR$/special_admin/templates/datetime.py" />
+        <option value="$PROJECT_DIR$/special_admin/representations.py" />
+        <option value="$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/tasks.html" />
+        <option value="$PROJECT_DIR$/special_admin/views.py" />
+        <option value="$PROJECT_DIR$/special_admin/datetime_helper.py" />
+        <option value="$PROJECT_DIR$/special_admin/templates/special_admin/fb_form_crud/fb_forms.html" />
+        <option value="$PROJECT_DIR$/TODO.md" />
       </list>
     </option>
   </component>
@@ -110,9 +130,9 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="65" />
-    <option name="y" value="24" />
+    <option name="y" value="-4" />
     <option name="width" value="1855" />
-    <option name="height" value="1056" />
+    <option name="height" value="1084" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -158,9 +178,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches">
-        <subPane />
-      </pane>
       <pane id="Scope">
         <subPane subId="Problems" />
         <subPane subId="Project Files">
@@ -218,11 +235,48 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="android" />
+              <option name="myItemId" value="special_admin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="special_admin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Feeder" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Feeder" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="special_admin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="special_admin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fb_form_crud" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
+      </pane>
+      <pane id="Scratches">
+        <subPane />
       </pane>
     </panes>
   </component>
@@ -234,11 +288,12 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/special_admin" />
+      <recent name="$PROJECT_DIR$/special_admin/templates/special_admin/student_crud" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/super/templates" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/special_admin/templates/special_admin/student_crud" />
     </key>
   </component>
   <component name="RunManager">
@@ -479,7 +534,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="24" width="1855" height="1056" extended-state="6" />
+    <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
     <editor active="false" />
     <layout>
       <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19137466" sideWeight="0.4964249" order="0" side_tool="false" content_ui="combo" />
@@ -520,13 +575,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Feeder/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="104">
@@ -729,24 +777,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/TODO.md">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="52">
-          <caret line="2" column="45" selection-start-line="2" selection-start-column="45" selection-end-line="2" selection-end-column="45" />
-        </state>
-      </provider>
-      <provider editor-type-id="MarkdownFxPreviewEditor">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="FIRST">
-          <first_editor relative-caret-position="52">
-            <caret line="2" column="45" selection-start-line="2" selection-start-column="45" selection-end-line="2" selection-end-column="45" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/special_admin/static/special_admin/logo.svg" />
     <entry file="file://$PROJECT_DIR$/Feeder/settings.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -783,13 +813,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/fb_form_crud/fb_forms.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="52">
-          <caret line="2" column="29" selection-start-line="2" selection-start-column="29" selection-end-line="2" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/old_course.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="26">
@@ -801,13 +824,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1092">
           <caret line="42" column="33" selection-start-line="42" selection-start-column="33" selection-end-line="42" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/tasks.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="15" column="14" selection-start-line="15" selection-start-column="14" selection-end-line="15" selection-end-column="14" />
         </state>
       </provider>
     </entry>
@@ -832,13 +848,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/special_admin/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
-          <caret line="566" column="35" selection-start-line="566" selection-start-column="35" selection-end-line="566" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/fb_form_crud/new_fb_form.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="26">
@@ -860,13 +869,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/special_admin/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="660">
-          <caret line="43" column="10" selection-start-line="43" selection-start-column="10" selection-end-line="43" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/android/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="234">
@@ -876,12 +878,79 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/android/views.py">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="676">
+          <caret line="60" column="29" selection-start-line="60" selection-start-column="29" selection-end-line="60" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/special_admin/models.py">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="842">
-          <caret line="90" column="25" selection-start-line="90" selection-start-column="25" selection-end-line="90" selection-end-column="25" />
+          <caret line="42" column="25" selection-start-line="42" selection-start-column="25" selection-end-line="42" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/special_admin/datetime_helper.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="78">
+          <caret line="3" column="37" selection-start-line="3" selection-start-column="37" selection-end-line="3" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/fb_form_crud/fb_forms.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="804">
+          <caret line="123" column="59" selection-start-line="123" selection-start-column="59" selection-end-line="123" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/tasks.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="674">
+          <caret line="146" column="14" selection-start-line="146" selection-start-column="14" selection-end-line="146" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TODO.md">
+      <provider editor-type-id="MarkdownFxPreviewEditor">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="52">
+          <caret line="2" column="45" selection-start-line="2" selection-start-column="45" selection-end-line="2" selection-end-column="45" />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+        <state split_layout="FIRST">
+          <first_editor relative-caret-position="260">
+            <caret line="10" column="14" selection-start-line="10" selection-start-column="14" selection-end-line="10" selection-end-column="14" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/special_admin/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="624">
+          <caret line="388" column="23" selection-start-line="388" selection-start-column="23" selection-end-line="388" selection-end-column="23" />
           <folding>
-            <element signature="e#280#719#0" expanded="false" />
-            <element signature="e#2379#2752#0" expanded="false" />
-            <element signature="e#2884#3311#0" expanded="false" />
+            <element signature="e#0#53#0" expanded="true" />
+            <element signature="e#471#1852#0" expanded="false" />
+            <element signature="e#1882#2620#0" expanded="false" />
+            <element signature="e#2653#4109#0" expanded="false" />
+            <element signature="e#4146#10503#0" expanded="false" />
+            <element signature="e#10532#11255#0" expanded="false" />
+            <element signature="e#11287#13620#0" expanded="false" />
+            <element signature="e#13656#19972#0" expanded="false" />
+            <element signature="e#20003#22258#0" expanded="false" />
+            <element signature="e#22292#24120#0" expanded="false" />
+            <element signature="e#24154#30765#0" expanded="false" />
+            <element signature="e#33276#35451#0" expanded="false" />
+            <element signature="e#35494#37160#0" expanded="false" />
+            <element signature="e#37196#37610#0" expanded="false" />
+            <element signature="e#37649#38072#0" expanded="false" />
           </folding>
         </state>
       </provider>

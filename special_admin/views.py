@@ -2,9 +2,11 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.http import HttpResponsePermanentRedirect as PerRedirect, HttpResponse
+from datetime import datetime, timedelta
 
 from .models import Student, Course, Task, FeedBackForm, SpecialAdmin
 from .static_strings import SessionKeys as sk, FeedbackStrings as fbs
+from . import datetime_helper
 
 
 def home(request):
@@ -244,7 +246,25 @@ def new_course(request):
                         _new_course.student_set.add(student)
                         student.course_set.add(_new_course)
 
-                return PerRedirect(reverse('special_admin:courses'))
+            # deadline midsem + 60 days from present date time
+            # deadline midsem + 120 days from present date time
+            present_time = datetime.now()
+            plus_two_months = present_time + timedelta(days=60)
+            plus_four_months = present_time + timedelta(days=120)
+
+            midsem = Task(tag='Mid semester Exam', detail='',
+                          deadline=datetime_helper.simple_representation(plus_two_months))
+            endsem = Task(tag='End semester Exam', detail='',
+                          deadline=datetime_helper.simple_representation(plus_four_months))
+            # saving task
+            midsem.save()
+            endsem.save()
+
+            # adding to task set of course
+            _new_course.task_set.add(midsem)
+            _new_course.task_set.add(endsem)
+
+            return PerRedirect(reverse('special_admin:tasks', kwargs={'pk': _new_course.pk}))
 
     elif request.method == 'GET':
         # special admin logged in
@@ -370,22 +390,43 @@ def tasks(request, pk):
     all_courses = Course.objects.all()
     selected_course = get_object_or_404(Course, pk=pk)
     selected_course_tasks = selected_course.task_set.all()
+    finished_tasks = []
+    remaining_tasks = []
+    present_datetime = datetime.now()
+    for task_iter in selected_course_tasks:
+        task_deadline = datetime_helper.get_datetime(task_iter.deadline)
+        if task_deadline <= present_datetime:
+            finished_tasks.append(task_iter)
+        else:
+            remaining_tasks.append(task_iter)
 
     if request.method == 'POST':
         if 'delete' in request.POST:
             delete_task = get_object_or_404(Task, pk=request.POST['delete'])
             delete_task.delete()
             selected_course_tasks = selected_course.task_set.all()
+            finished_tasks = []
+            remaining_tasks = []
+            present_datetime = datetime.now()
+            for task_iter in selected_course_tasks:
+                task_deadline = datetime_helper.get_datetime(task_iter.deadline)
+                if task_deadline <= present_datetime:
+                    finished_tasks.append(task_iter)
+                else:
+                    remaining_tasks.append(task_iter)
+
             return render(request, 'special_admin/task_crud/tasks.html', {'course': selected_course,
                                                                           'all_course': all_courses,
-                                                                          'course_tasks': selected_course_tasks})
+                                                                          'finished_tasks': finished_tasks,
+                                                                          'remaining_tasks': remaining_tasks})
 
     elif request.method == 'GET':
         # special admin logged in
         if request.session.get(sk.special_admin_logged, False):
             return render(request, 'special_admin/task_crud/tasks.html', {'course': selected_course,
                                                                           'all_course': all_courses,
-                                                                          'course_tasks': selected_course_tasks})
+                                                                          'finished_tasks': finished_tasks,
+                                                                          'remaining_tasks': remaining_tasks})
         # NOT logged in
         else:
             return render(request, 'special_admin/login.html')
@@ -543,22 +584,42 @@ def feedback_forms(request, pk):
     all_courses = Course.objects.all()
     selected_course = get_object_or_404(Course, pk=pk)
     selected_course_fb_forms = selected_course.feedbackform_set.all()
+    finished_fb_forms = []
+    remaining_fb_forms = []
+    present_datetime = datetime.now()
+    for fb_form_iter in selected_course_fb_forms:
+        fb_form_deadline = datetime_helper.get_datetime(fb_form_iter.deadline)
+        if fb_form_deadline <= present_datetime:
+            finished_fb_forms.append(fb_form_iter)
+        else:
+            remaining_fb_forms.append(fb_form_iter)
 
     if request.method == 'POST':
         if 'delete' in request.POST:
             delete_fb_form = get_object_or_404(FeedBackForm, pk=request.POST['delete'])
             delete_fb_form.delete()
             selected_course_fb_forms = selected_course.feedbackform_set.all()
+            finished_fb_forms = []
+            remaining_fb_forms = []
+            present_datetime = datetime.now()
+            for fb_form_iter in selected_course_fb_forms:
+                fb_form_deadline = datetime_helper.get_datetime(fb_form_iter.deadline)
+                if fb_form_deadline <= present_datetime:
+                    finished_fb_forms.append(fb_form_iter)
+                else:
+                    remaining_fb_forms.append(fb_form_iter)
             return render(request, 'special_admin/fb_form_crud/fb_forms.html', {'course': selected_course,
                                                                                 'all_course': all_courses,
-                                                                                'course_fb_forms': selected_course_fb_forms})
+                                                                                'finished_fb_forms': finished_fb_forms,
+                                                                                'remaining_fb_forms': remaining_fb_forms})
 
     elif request.method == 'GET':
         # special admin logged in
         if request.session.get(sk.special_admin_logged, False):
             return render(request, 'special_admin/fb_form_crud/fb_forms.html', {'course': selected_course,
                                                                                 'all_course': all_courses,
-                                                                                'course_fb_forms': selected_course_fb_forms})
+                                                                                'finished_fb_forms': finished_fb_forms,
+                                                                                'remaining_fb_forms': remaining_fb_forms})
         # NOT logged in
         else:
             return render(request, 'special_admin/login.html')
