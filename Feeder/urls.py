@@ -8,4 +8,5 @@ urlpatterns = [
     url(r'^special_admin/', include('special_admin.urls')),
     # localhost:8036/android/
     url(r'^android/', include('android.urls')),
+    url(r'^instructor_login/', include('instructor_login.urls')),
 ]

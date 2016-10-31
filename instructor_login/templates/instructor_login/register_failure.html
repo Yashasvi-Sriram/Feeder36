@@ -1,0 +1,15 @@
+<html>
+<head>
+    <script>
+    {% if messages %}
+        {% for message in messages %}
+            alert(message);
+        {% endfor %}
+    {% endif %}
+    </script>
+</head>
+<body>
+    <div>{{form.as_p}}</div>
+    <div>Click <a href="/instructor_login/register/">here</a> to register again</div>
+</body>
+</html>
