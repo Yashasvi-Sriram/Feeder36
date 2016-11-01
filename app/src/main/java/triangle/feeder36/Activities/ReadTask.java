@@ -10,7 +10,7 @@ import triangle.feeder36.R;
 
 public class ReadTask extends AppCompatActivity {
 
-    RelativeLayout long_view_tasks;
+    RelativeLayout read_task;
     TextView course_code,course_name,task_tag,task_detail,task_deadline;
 
     @Override
@@ -31,12 +31,12 @@ public class ReadTask extends AppCompatActivity {
         DateTime deadlineDateTime = new DateTime(taskDeadlineStored,"/",":"," ");
         taskDeadlineFormatted = deadlineDateTime.formal12Representation();
 
-        long_view_tasks = (RelativeLayout) findViewById(R.id.long_view_tasks);
-        course_code = (TextView) long_view_tasks.findViewById(R.id.task_course_code);
-        course_name = (TextView) long_view_tasks.findViewById(R.id.course_name);
-        task_tag = (TextView) long_view_tasks.findViewById(R.id.task_tag);
-        task_detail = (TextView) long_view_tasks.findViewById(R.id.task_detail);
-        task_deadline = (TextView) long_view_tasks.findViewById(R.id.task_deadline);
+        read_task = (RelativeLayout) findViewById(R.id.read_task);
+        course_code = (TextView) read_task.findViewById(R.id.task_course_code);
+        course_name = (TextView) read_task.findViewById(R.id.course_name);
+        task_tag = (TextView) read_task.findViewById(R.id.task_tag);
+        task_detail = (TextView) read_task.findViewById(R.id.task_detail);
+        task_deadline = (TextView) read_task.findViewById(R.id.task_deadline);
 
         course_code.setText(courseCode);
         course_name.setText(courseName);
@@ -44,4 +44,6 @@ public class ReadTask extends AppCompatActivity {
         task_detail.setText(taskDetail);
         task_deadline.setText(taskDeadlineFormatted);
     }
+
+
 }

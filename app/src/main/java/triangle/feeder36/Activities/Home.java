@@ -38,6 +38,7 @@ import triangle.feeder36.CustomAdapters.FeedbackItem;
 import triangle.feeder36.CustomAdapters.TaskItem;
 import triangle.feeder36.DB.Def.CourseDef;
 import triangle.feeder36.DB.Def.FeedbackFormDef;
+import triangle.feeder36.DB.Def.FeedbackResponseDef;
 import triangle.feeder36.DB.Def.TaskDef;
 import triangle.feeder36.DB.Def.UserInfo;
 import triangle.feeder36.DB.Helpers.Helper;
@@ -49,7 +50,7 @@ import triangle.feeder36.ServerTalk.IPSource;
 public class Home extends AppCompatActivity {
 
     AccountManager account;
-    CaldroidView caldroidView;
+    CaldroidAndLists caldroidAndLists;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +60,7 @@ public class Home extends AppCompatActivity {
         account = new AccountManager();
 
         /* Initializes Caldroid View */
-        caldroidView = new CaldroidView();
+        caldroidAndLists = new CaldroidAndLists();
     }
 
     /* Back button disabled */
@@ -193,13 +194,16 @@ public class Home extends AppCompatActivity {
             Log.i(TLog.TAG, json_string);
             try {
 
-                JSONObject courses_tasks_fb_forms = new JSONObject(json_string);
-                JSONArray courses = (JSONArray) courses_tasks_fb_forms.get(CourseDef.JSONResponseKeys.COURSES_DICT);
-                JSONArray tasks = (JSONArray) courses_tasks_fb_forms.get(TaskDef.JSONResponseKeys.TASKS_DICT);
-                JSONArray feedback_forms = (JSONArray) courses_tasks_fb_forms.get(FeedbackFormDef.JSONResponseKeys.FEEDBACK_FORM_DICT);
+                JSONObject courses_tasks_fb_forms_fb_responses = new JSONObject(json_string);
+                JSONArray courses = (JSONArray) courses_tasks_fb_forms_fb_responses.get(CourseDef.JSONResponseKeys.COURSES_DICT);
+                JSONArray tasks = (JSONArray) courses_tasks_fb_forms_fb_responses.get(TaskDef.JSONResponseKeys.TASKS_DICT);
+                JSONArray feedback_forms = (JSONArray) courses_tasks_fb_forms_fb_responses.get(FeedbackFormDef.JSONResponseKeys.FEEDBACK_FORM_DICT);
+                JSONArray feedback_responses = (JSONArray) courses_tasks_fb_forms_fb_responses.get(FeedbackResponseDef.JSONResponseKeys.FEEDBACK_RESPONSE_DICT);
                 this.syncCourses(this.prepareCoursesHashMap(courses), dbManager.prepareCoursesHashMap());
                 this.syncTasks(this.prepareTasksHashMap(tasks), dbManager.prepareTasksHashMap());
+                /* Forms should be synced before Responses */
                 this.syncFeedbackForms(this.prepareFeedbackFormsHashMap(feedback_forms), dbManager.prepareFeedbackFormsHashMap());
+                this.syncFeedbackResponses(this.prepareFeedbackResponsesHashMap(feedback_responses), dbManager.prepareFeedbackResponsesHashMap());
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -351,6 +355,58 @@ public class Home extends AppCompatActivity {
 
         }
 
+        private void syncFeedbackResponses(HashMap<Integer, FeedbackResponseDef> remote, HashMap<Integer, FeedbackResponseDef> local) {
+            // going through local table
+            for (Map.Entry local_entry : local.entrySet()) {
+
+                // current key
+                int key = (int) local_entry.getKey();
+                FeedbackResponseDef local_value = (FeedbackResponseDef) local_entry.getValue();
+
+                // remote has that entry
+                if (remote.get(key) != null) {
+
+                    FeedbackResponseDef remote_value = remote.get(key);
+                    // with same fields => no change
+                    if (local_value.identical(remote_value)) {
+                        // remove from remote hash
+                        remote.remove(key);
+                    }
+                    // with different fields => updated at django
+                    else {
+                        // TODO: issue update notification
+                        // update local db
+                        Log.i(TLog.TAG, "syncFeedbackResponses: (ERROR THIS SHOULD NOT HAPPEN!) update in with feedback form pk " + local_value.FEEDBACK_FORM_PK);
+                        remote.remove(key);
+                    }
+                }
+                // remote has no such entry => deleted at django
+                else {
+                    FeedbackFormDef remote_fb_form = dbManager.getFormOf(local_value);
+                    if(remote_fb_form == null){
+                        // TODO: issue delete notification
+                        Log.i(TLog.TAG, "syncFeedbackResponses: delete with feedback form pk " + local_value.FEEDBACK_FORM_PK);
+                        dbManager.deleteEntryWithKeyValue(db.TABLES.FEEDBACK_RESPONSES.TABLE_NAME, db.TABLES.FEEDBACK_RESPONSES.FEEDBACK_FORM_PK, String.valueOf(key));
+                    }
+                    else {
+                        Log.i(TLog.TAG, "syncFeedbackResponses: found response to be submitted with feedback form pk " + local_value.FEEDBACK_FORM_PK + " submit status " + local_value.SUBMIT_STATUS);
+                    }
+                }
+
+            }
+            // now going through remote table
+            // now it has only new
+            for (Map.Entry remote_entry : remote.entrySet()) {
+                int key = (int) remote_entry.getKey();
+                FeedbackResponseDef new_value = (FeedbackResponseDef) remote_entry.getValue();
+                // TODO: issue create notification
+                Log.i(TLog.TAG, "syncFeedbackResponses: create with feedback form pk " + new_value.FEEDBACK_FORM_PK);
+                dbManager.insert(new_value,1);
+            }
+
+
+        }
+
         HashMap<Integer, CourseDef> prepareCoursesHashMap(JSONArray courses) {
             HashMap<Integer, CourseDef> remote = new HashMap<>();
             try {
@@ -393,6 +449,21 @@ public class Home extends AppCompatActivity {
             return remote;
         }
 
+        HashMap<Integer, FeedbackResponseDef> prepareFeedbackResponsesHashMap(JSONArray feedbackResponses) {
+            HashMap<Integer, FeedbackResponseDef> remote = new HashMap<>();
+            try {
+                for (int i = 0; i < feedbackResponses.length(); i++) {
+                    FeedbackResponseDef feedbackResponseDef = new FeedbackResponseDef((JSONObject) feedbackResponses.get(i));
+                    remote.put(feedbackResponseDef.FEEDBACK_FORM_PK, feedbackResponseDef);
+                }
+            } catch (JSONException e) {
+                Log.i(TLog.TAG, "not a valid json string to parse FeedbackResponses " + feedbackResponses.toString());
+                e.printStackTrace();
+            }
+            return remote;
+        }
+
+
         @Override
         protected void onPostExecute(String result) {
             // The result is
@@ -423,12 +494,12 @@ public class Home extends AppCompatActivity {
         }
     }
 
-    class CaldroidView {
+    class CaldroidAndLists {
         ListView list_view_tasks, list_view_feedback;
         LinearLayout home, calendar_layout;
         db dbManager;
 
-        public CaldroidView() {
+        public CaldroidAndLists() {
             this.initCaldroid();
         }
 
@@ -439,7 +510,7 @@ public class Home extends AppCompatActivity {
             calendar_layout = (LinearLayout) home.findViewById(R.id.calendar_layout);
             dbManager = new db(Home.this, db.DB_NAME, null, db.DB_VERSION);
 
-            /* initialises CaldroidView View */
+            /* initialises CaldroidAndLists View */
             this.initialiseCaldroidView();
         }
 

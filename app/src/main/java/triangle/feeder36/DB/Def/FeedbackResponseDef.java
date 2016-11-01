@@ -24,6 +24,7 @@ public class FeedbackResponseDef {
     public int FEEDBACK_FORM_PK;
     public String COMMENT;
     public String ANSWER_SET;
+    public int SUBMIT_STATUS;
 
     public FeedbackResponseDef() {
     }
@@ -31,8 +32,10 @@ public class FeedbackResponseDef {
     public FeedbackResponseDef(Cursor cursor) {
         if (cursor != null) {
             this.PK = Integer.parseInt(cursor.getString(cursor.getColumnIndex(Helper.PRIMARY_KEY)));
-            this.ANSWER_SET = cursor.getString(cursor.getColumnIndex(db.TABLES.FEEDBACK_FORMS.QUESTION_SET));
-            this.COMMENT = cursor.getString(cursor.getColumnIndex(db.TABLES.FEEDBACK_FORMS.NAME));
+            this.FEEDBACK_FORM_PK = Integer.parseInt(cursor.getString(cursor.getColumnIndex(db.TABLES.FEEDBACK_RESPONSES.FEEDBACK_FORM_PK)));
+            this.SUBMIT_STATUS = Integer.parseInt(cursor.getString(cursor.getColumnIndex(db.TABLES.FEEDBACK_RESPONSES.SUBMIT_STATUS)));
+            this.ANSWER_SET = cursor.getString(cursor.getColumnIndex(db.TABLES.FEEDBACK_RESPONSES.ANSWER_SET));
+            this.COMMENT = cursor.getString(cursor.getColumnIndex(db.TABLES.FEEDBACK_RESPONSES.COMMENT));
         } else {
             Log.i(TLog.TAG, "FeedbackResponseDef: Tried to initialize instance with null cursor");
         }
@@ -41,16 +44,18 @@ public class FeedbackResponseDef {
     public FeedbackResponseDef(JSONObject jsonObject) {
         if (jsonObject != null) {
             try {
+                this.FEEDBACK_FORM_PK = (int) jsonObject.get(JSONResponseKeys.FEEDBACK_FORM_PK);
                 this.ANSWER_SET = (String) jsonObject.get(JSONResponseKeys.ANSWER_SET);
                 this.COMMENT = (String) jsonObject.get(JSONResponseKeys.COMMENT);
+                this.SUBMIT_STATUS  = 1;
             }
             catch (JSONException e) {
                 e.printStackTrace();
-                Log.i(TLog.TAG, "FeedbackResponseDef: Tried to initialize instance with IMPROPER jsonObject : " + jsonObject.toString());
+                Log.i(TLog.TAG, "FeedbackFormDef: Tried to initialize instance with IMPROPER jsonObject : " + jsonObject.toString());
             }
         }
         else {
-            Log.i(TLog.TAG, "FeedbackResponseDef: Tried to initialize instance with null jsonObject");
+            Log.i(TLog.TAG, "FeedbackFormDef: Tried to initialize instance with null jsonObject");
         }
     }
 
@@ -58,6 +63,7 @@ public class FeedbackResponseDef {
      * Does not consider the equality of PK (of local table)
      */
     public boolean identical(FeedbackResponseDef B) {
+        if (B.FEEDBACK_FORM_PK != this.FEEDBACK_FORM_PK) return false;
         if (!B.COMMENT.equals(this.COMMENT)) return false;
         if (!B.ANSWER_SET.equals(this.ANSWER_SET)) return false;
 
@@ -67,6 +73,7 @@ public class FeedbackResponseDef {
     public String toString() {
         return this.PK + " "
                 + this.COMMENT + " "
-                + this.ANSWER_SET + " ";
+                + this.ANSWER_SET + " "
+                + this.FEEDBACK_FORM_PK + " ";
     }
 }

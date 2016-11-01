@@ -168,6 +168,7 @@ public class db extends Helper {
             public static final String FEEDBACK_FORM_PK = "feedback_form_pk"; /* feedback_form's django pk */
             public static final String ANSWER_SET = "answer_set";
             public static final String COMMENT = "comment";
+            public static final String SUBMIT_STATUS = "submit_status";
 
             /* table query */
             private static final String CREATE_TABLE_QUERY =
@@ -177,7 +178,8 @@ public class db extends Helper {
                             + PRIMARY_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                             + FEEDBACK_FORM_PK + " INTEGER ,"
                             + COMMENT + " TEXT NOT NULL,"
-                            + ANSWER_SET + " TEXT NOT NULL"
+                            + ANSWER_SET + " TEXT NOT NULL,"
+                            + SUBMIT_STATUS + " INTEGER "
                             + ");";
         }
 
@@ -566,12 +568,13 @@ public class db extends Helper {
     /* Feedback forms */
 
     /* Feedback Responses */
-    public void insert(FeedbackResponseDef feedbackResponseDef) {
+    public void insert(FeedbackResponseDef feedbackResponseDef, int submit_status) {
         ContentValues values = new ContentValues();
 
         values.put(TABLES.FEEDBACK_RESPONSES.FEEDBACK_FORM_PK , feedbackResponseDef.FEEDBACK_FORM_PK);
         values.put(TABLES.FEEDBACK_RESPONSES.ANSWER_SET , feedbackResponseDef.ANSWER_SET);
         values.put(TABLES.FEEDBACK_RESPONSES.COMMENT , feedbackResponseDef.COMMENT);
+        values.put(TABLES.FEEDBACK_RESPONSES.SUBMIT_STATUS , submit_status);
 
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLES.FEEDBACK_RESPONSES.TABLE_NAME, null, values);
@@ -614,6 +617,26 @@ public class db extends Helper {
         c.close();
         db.close();
         return null;
+    }
+
+    public HashMap<Integer, FeedbackResponseDef> prepareFeedbackResponsesHashMap() {
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLES.FEEDBACK_RESPONSES.TABLE_NAME + ";";
+
+        HashMap<Integer, FeedbackResponseDef> local = new HashMap<>();
+
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+
+        while (!c.isAfterLast()) {
+            FeedbackResponseDef row = new FeedbackResponseDef(c);
+            local.put(row.FEEDBACK_FORM_PK, row);
+            c.moveToNext();
+        }
+
+        c.close();
+        db.close();
+        return local;
     }
     /* Feedback Responses */
 

@@ -1,7 +1,8 @@
 package triangle.feeder36.Activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -12,6 +13,9 @@ import android.widget.Toast;
 
 import triangle.feeder36.Calender.DateTime;
 import triangle.feeder36.DB.Def.FeedbackFormDef;
+import triangle.feeder36.DB.Def.FeedbackResponseDef;
+import triangle.feeder36.DB.Helpers.db;
+import triangle.feeder36.Log.TLog;
 import triangle.feeder36.R;
 
 public class FillFeedback extends AppCompatActivity {
@@ -22,12 +26,16 @@ public class FillFeedback extends AppCompatActivity {
     String courseCode,courseName,feedbackName,feedbackQuestionSet,feedbackDeadlineFormatted;
     String [] feedbackQns;
     String feedbackResponse = "";
+    int feedback_form_django_pk;
+
+    db dbManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fill_feedback);
 
+        dbManager = new db(this, db.DB_NAME, null, db.DB_VERSION);
         gettingReferences();
         gettingDataFromHomeActivity();
         setTextViews();
@@ -37,13 +45,20 @@ public class FillFeedback extends AppCompatActivity {
         submit_feedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                feedbackResponse= "";
                 for(int i=0;i<feedbackQns.length;i++) {
                     int ratingBarId = 2*i + 2;
                     RatingBar rating_i = (RatingBar) feedback_questions_layout.findViewById(ratingBarId);
                     feedbackResponse += String.valueOf(rating_i.getRating());
                     if(i!= feedbackQns.length-1) feedbackResponse += FeedbackFormDef.JSONResponseKeys.SEP_ANSWER_SET;
                 }
-                Toast.makeText(getApplicationContext(),feedbackResponse,Toast.LENGTH_SHORT).show();
+                FeedbackResponseDef feedbackResponseDef = new FeedbackResponseDef();
+                feedbackResponseDef.FEEDBACK_FORM_PK = feedback_form_django_pk;
+                feedbackResponseDef.ANSWER_SET = feedbackResponse;
+                feedbackResponseDef.COMMENT = "Todo";
+                dbManager.insert(feedbackResponseDef, 0);
+                Log.i(TLog.TAG, "response to feedback form with pk " + feedback_form_django_pk + " is stored locally ");
+                Toast.makeText(getApplicationContext(),"Response recorded",Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -71,6 +86,7 @@ public class FillFeedback extends AppCompatActivity {
         courseName = dataFromFeedbackItem.getString("courseName");
         feedbackName = dataFromFeedbackItem.getString("feedbackName");
         feedbackQuestionSet = dataFromFeedbackItem.getString("feedbackQuestionSet");
+        feedback_form_django_pk = dataFromFeedbackItem.getInt("feedbackDjangoPk");
 
         String feedbackDeadlineStored = dataFromFeedbackItem.getString("feedbackDeadline");
 

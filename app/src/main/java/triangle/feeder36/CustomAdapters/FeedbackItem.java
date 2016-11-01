@@ -60,6 +60,7 @@ public class FeedbackItem extends BaseAdapter {
                 fillFeedback.putExtra("feedbackName", feedbackFormDefs.get(position).NAME);
                 fillFeedback.putExtra("feedbackQuestionSet", feedbackFormDefs.get(position).QUESTION_SET);
                 fillFeedback.putExtra("feedbackDeadline", feedbackFormDefs.get(position).DEADLINE);
+                fillFeedback.putExtra("feedbackDjangoPk", feedbackFormDefs.get(position).DJANGO_PK);
                 context.startActivity(fillFeedback);
             }
         });
