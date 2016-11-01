@@ -51,6 +51,7 @@ def student_sync(request):
                 course_dict_list = []
                 task_dict_list = []
                 fb_forms_dict_list = []
+                fb_responses_dict_list = []
 
                 # inserting into both dictionaries
                 for course in courses:
@@ -78,10 +79,22 @@ def student_sync(request):
                                         'question_set': fb_form.question_set
                                         }
                         fb_forms_dict_list.append(fb_form_dict)
+                        try:
+                            # Response submitted
+                            fb_response = fb_form.feedbackresponse_set.get(student=student)
+                            fb_response_dict = {'feedback_form_pk': fb_form.pk,
+                                                'comment': fb_response.comment,
+                                                'answer_set': fb_response.answer_set}
+                            fb_responses_dict_list.append(fb_response_dict)
+                        except ObjectDoesNotExist:
+                            # Response not yet submitted
+                            pass
 
                 # Making an dictionary of lists
                 # 1. Courses 2. Tasks 3. FeedbackForms
-                courses_tasks_dict = {'courses': course_dict_list, 'tasks': task_dict_list, 'feedback_forms': fb_forms_dict_list}
+                courses_tasks_dict = {'courses': course_dict_list, 'tasks': task_dict_list,
+                                      'feedback_forms': fb_forms_dict_list,
+                                      'feedback_responses': fb_responses_dict_list}
                 return HttpResponse(json.dumps(courses_tasks_dict), content_type='application/json')
             except ObjectDoesNotExist:
                 return HttpResponse("0")
