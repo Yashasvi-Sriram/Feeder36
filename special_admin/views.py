@@ -3,7 +3,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.http import HttpResponsePermanentRedirect as PerRedirect, HttpResponse
 from datetime import datetime, timedelta
+import csv
 
+from Feeder.settings import STUDENT_CSV
 from .models import Student, Course, Task, FeedBackForm, SpecialAdmin
 from .static_strings import SessionKeys as sk, FeedbackStrings as fbs
 from . import datetime_helper
@@ -250,7 +252,8 @@ def new_course(request):
                 # Adding feedback forms
 
                 # MIDSEM
-                if FeedBackForm.objects.filter(name=request.POST['midsem_fb_form_name'] + " - " + _new_course.code).count() > 0:
+                if FeedBackForm.objects.filter(
+                        name=request.POST['midsem_fb_form_name'] + " - " + _new_course.code).count() > 0:
                     _new_course.delete()
                     return render(request, 'special_admin/course_crud/new_course.html', {'all_students': all_students,
                                                                                          'message': 'Midsem form with same Name already Exists',
@@ -266,9 +269,10 @@ def new_course(request):
                     # now time is of format hh:mm:ss
                     date_time_deadline = date_deadline + " " + time_deadline
 
-                    _new_fb_form_midsem = FeedBackForm(name=request.POST['midsem_fb_form_name'] + " - " + _new_course.code,
-                                                       question_set=request.POST['midsem_question_set'],
-                                                       deadline=date_time_deadline)
+                    _new_fb_form_midsem = FeedBackForm(
+                        name=request.POST['midsem_fb_form_name'] + " - " + _new_course.code,
+                        question_set=request.POST['midsem_question_set'],
+                        deadline=date_time_deadline)
                     # saving task
                     _new_fb_form_midsem.save()
 
@@ -276,7 +280,8 @@ def new_course(request):
                     _new_course.feedbackform_set.add(_new_fb_form_midsem)
 
                 # ENDSEM
-                if FeedBackForm.objects.filter(name=request.POST['endsem_fb_form_name'] + " - " + _new_course.code).count() > 0:
+                if FeedBackForm.objects.filter(
+                        name=request.POST['endsem_fb_form_name'] + " - " + _new_course.code).count() > 0:
                     _new_course.delete()
                     return render(request, 'special_admin/course_crud/new_course.html', {'all_students': all_students,
                                                                                          'message': 'Endsem form with same Name already Exists',
@@ -292,9 +297,10 @@ def new_course(request):
                     # now time is of format hh:mm:ss
                     date_time_deadline = date_deadline + " " + time_deadline
 
-                    _new_fb_form_endsem = FeedBackForm(name=request.POST['endsem_fb_form_name'] + " - " + _new_course.code,
-                                                       question_set=request.POST['endsem_question_set'],
-                                                       deadline=date_time_deadline)
+                    _new_fb_form_endsem = FeedBackForm(
+                        name=request.POST['endsem_fb_form_name'] + " - " + _new_course.code,
+                        question_set=request.POST['endsem_question_set'],
+                        deadline=date_time_deadline)
                     # saving task
                     _new_fb_form_endsem.save()
 
@@ -474,7 +480,9 @@ def tasks(request, pk):
             return render(request, 'special_admin/task_crud/tasks.html', {'course': selected_course,
                                                                           'all_course': all_courses,
                                                                           'finished_tasks': finished_tasks,
-                                                                          'remaining_tasks': remaining_tasks})
+                                                                          'remaining_tasks': remaining_tasks,
+                                                                          'total': len(finished_tasks) + len(
+                                                                              remaining_tasks)})
 
     elif request.method == 'GET':
         # special admin logged in
@@ -482,7 +490,9 @@ def tasks(request, pk):
             return render(request, 'special_admin/task_crud/tasks.html', {'course': selected_course,
                                                                           'all_course': all_courses,
                                                                           'finished_tasks': finished_tasks,
-                                                                          'remaining_tasks': remaining_tasks})
+                                                                          'remaining_tasks': remaining_tasks,
+                                                                          'total': len(finished_tasks) + len(
+                                                                              remaining_tasks)})
         # NOT logged in
         else:
             return render(request, 'special_admin/login.html')
@@ -667,7 +677,9 @@ def feedback_forms(request, pk):
             return render(request, 'special_admin/fb_form_crud/fb_forms.html', {'course': selected_course,
                                                                                 'all_course': all_courses,
                                                                                 'finished_fb_forms': finished_fb_forms,
-                                                                                'remaining_fb_forms': remaining_fb_forms})
+                                                                                'remaining_fb_forms': remaining_fb_forms,
+                                                                                'total': len(finished_fb_forms) + len(
+                                                                                    remaining_fb_forms)})
 
     elif request.method == 'GET':
         # special admin logged in
@@ -675,7 +687,9 @@ def feedback_forms(request, pk):
             return render(request, 'special_admin/fb_form_crud/fb_forms.html', {'course': selected_course,
                                                                                 'all_course': all_courses,
                                                                                 'finished_fb_forms': finished_fb_forms,
-                                                                                'remaining_fb_forms': remaining_fb_forms})
+                                                                                'remaining_fb_forms': remaining_fb_forms,
+                                                                                'total': len(finished_fb_forms) + len(
+                                                                                    remaining_fb_forms)})
         # NOT logged in
         else:
             return render(request, 'special_admin/login.html')
@@ -758,9 +772,10 @@ def tasks_redirect(request):
     if request.session.get(sk.special_admin_logged, False):
         all_courses = Course.objects.all()
         if all_courses:
+            pass
             return PerRedirect(reverse('special_admin:tasks', kwargs={'pk': all_courses[0].pk}))
         else:
-            return render(request, 'special_admin/home.html')
+            return render(request, 'special_admin/home.html', {'message': 'No tasks available'})
     # NOT logged in
     else:
         return render(request, 'special_admin/login.html')
@@ -773,7 +788,31 @@ def fb_forms_redirect(request):
         if all_courses:
             return PerRedirect(reverse('special_admin:feedback_forms', kwargs={'pk': all_courses[0].pk}))
         else:
-            return render(request, 'special_admin/home.html')
+            return render(request, 'special_admin/home.html', {'message': 'No feedback available'})
+    # NOT logged in
+    else:
+        return render(request, 'special_admin/login.html')
+
+
+def restart(request):
+    # special admin logged in
+    if request.session.get(sk.special_admin_logged, False):
+
+        all_students = Student.objects.all()
+        for student in all_students:
+            student.delete()
+
+        all_courses = Course.objects.all()
+        for course in all_courses:
+            course.delete()
+
+        with open(STUDENT_CSV) as f:
+            reader = csv.reader(f, delimiter=',')
+            for row in reader:
+                _new_student = Student(name=row[0], user_name=row[1])
+                _new_student.save()
+
+        return render(request, 'special_admin/home.html', {'message': 'reset successful'})
     # NOT logged in
     else:
         return render(request, 'special_admin/login.html')

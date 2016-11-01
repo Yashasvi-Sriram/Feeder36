@@ -6,10 +6,12 @@ app_name = 'special_admin'
 urlpatterns = [
     # localhost:8036/special_admin/home/
     url(r'^home/$', views.home, name='home'),
+    # localhost:8036/special_admin/home/restart/
+    url(r'^home/restart/$', views.restart, name='restart'),
     # localhost:8036/special_admin/home/tasks_redirect/
-    url(r'^home/tasks_redirect/$', views.tasks_redirect, name='tasks_redirect'),
+    url(r'^home/task_redirect/$', views.tasks_redirect, name='tasks_redirect'),
     # localhost:8036/special_admin/home/fb_forms_redirect/
-    url(r'^home/fb_forms_redirect/$', views.fb_forms_redirect, name='fb_forms_redirect'),
+    url(r'^home/fb_form_redirect/$', views.fb_forms_redirect, name='fb_forms_redirect'),
 
     # localhost:8036/special_admin/students/
     url(r'^students/$', views.students, name='students'),

@@ -59,7 +59,7 @@
             </div>
             <div class="col-xs-9 row">
                 <blockquote>
-                    {{ course_fb_forms|length }} Feedback available for {{ course.name }}
+                    {{ total }} Feedback available for {{ course.name }}
                     <a href="{% url 'special_admin:new_feedback_form' course.pk %}">
                         <button class="btn-success">Create</button>
                     </a>

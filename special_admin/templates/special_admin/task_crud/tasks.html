@@ -57,7 +57,7 @@
             </div>
             <div class="col-xs-9 row">
                 <blockquote>
-                    {{ course_tasks|length }} tasks available for {{ course.name }}
+                    {{ total }} tasks available for {{ course.name }}
                     <a href="{% url 'special_admin:new_task' course.pk %}">
                         <button class="btn-success">Create</button>
                     </a>
