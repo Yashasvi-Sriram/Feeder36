@@ -1,2 +1,11 @@
+{% if user and not user.is_anonymous %}
 <h2>Hi {{full_name}} Logged in</h2>
-<h3>Click <a href = "{% url 'instructor_login:logout' %}">here</a> to logout</h3>
+<h3><a href="{% url 'auth:logout' %}?next={% url 'instructor_login:login' %}">Logout</a></h3>
+<h4>You will be redirected to login page</h4>
+{% else %}
+
+     <a href="{% url 'instructor_login:login' %}">No User you need to login</a>
+
+   {% endif %}
+
+

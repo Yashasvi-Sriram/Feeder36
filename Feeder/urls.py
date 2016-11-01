@@ -9,4 +9,6 @@ urlpatterns = [
     # localhost:8036/android/
     url(r'^android/', include('android.urls')),
     url(r'^instructor_login/', include('instructor_login.urls')),
+    url('', include('social.apps.django_app.urls', namespace='social')),
+    url('', include('django.contrib.auth.urls', namespace='auth')),
 ]

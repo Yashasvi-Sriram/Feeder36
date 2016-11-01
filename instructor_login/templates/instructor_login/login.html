@@ -19,6 +19,13 @@
     </style>
 </head>
 <body>
+    {% if user and not user.is_anonymous %}
+    {% csrf_token %}
+    <a>Hello {{ user.get_full_name|default:user.username }}!</a>
+    <h3><a href="{% url 'auth:logout' %}?next={% url 'instructor_login:login' %}">Logout</a></h3>
+
+   {% else %}
+
     <div class="container">
         <div class="row" style="text-align: center; color: white;font-size: 50px;font-weight: 900">Instructor</div>
         <div class="row" style="height: 100px";></div>
@@ -64,8 +71,13 @@
 
         <div class="row" style="text-align: center; color: white;font-size: 30px;">Not Yet Signed?? Click <a href = "{% url 'instructor_login:register' %}" >here</a>  to register</div>
 
+        <div class="row" style="text-align: center; color: white;font-size: 30px;"><a href="{% url 'social:begin' 'facebook' %}?next={% url 'instructor_login:loggedin' %}">Login with Facebook</a></div>
+         <div class="row" style="text-align: center; color: white;font-size: 30px;"> <a href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'instructor_login:loggedin' %}">Login with Google</a></div>
+
+
 
     </div>
+    {% endif %}
 
 </body>
 </html>
