@@ -44,7 +44,7 @@ class FeedBackForm(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.name + "-" + self.deadline + " of " + self.course
+        return self.name + "-" + self.deadline + " of " + self.course.name
 
 
 class FeedbackResponse(models.Model):

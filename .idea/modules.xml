@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Feeder.iml" filepath="$PROJECT_DIR$/.idea/Feeder.iml" />
-      <module fileurl="file://$USER_HOME$/Downloads/Django/myapp/.idea/myapp.iml" filepath="$USER_HOME$/Downloads/Django/myapp/.idea/myapp.iml" />
     </modules>
   </component>
 </project>

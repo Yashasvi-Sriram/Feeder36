@@ -10,5 +10,7 @@ urlpatterns = [
     url(r'^student/password_change/$', views.student_password_change, name='student_password_change'),
     # localhost:8036/android/student/sync/
     url(r'^student/sync/$', views.student_sync, name='student_sync'),
+    # localhost:8036/android/student/submit/
+    url(r'^student/submit/$', views.student_submit, name='student_submit'),
 
 ]
