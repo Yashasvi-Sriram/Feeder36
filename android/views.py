@@ -127,12 +127,13 @@ def student_submit(request):
                     successful_response_submit_list = []
                     for response_json in responses_json:
                         fb_form = FeedBackForm.objects.get(pk=response_json['feedback_form_pk'])
-                        fb_response = FeedbackResponse(answer_set=response_json['answer_set'],
-                                                       comment=response_json['comment'])
-                        fb_response.save()
-                        fb_form.feedbackresponse_set.add(fb_response)
-                        student.feedbackresponse_set.add(fb_response)
-                        successful_response_submit_list.append(response_json['feedback_form_pk'])
+                        fb_response, created = FeedbackResponse.objects.get_or_create(
+                            answer_set=response_json['answer_set'],
+                            comment=response_json['comment'])
+                        if created:
+                            fb_form.feedbackresponse_set.add(fb_response)
+                            student.feedbackresponse_set.add(fb_response)
+                            successful_response_submit_list.append(response_json['feedback_form_pk'])
 
                     return HttpResponse(json.dumps(successful_response_submit_list))
                 else:

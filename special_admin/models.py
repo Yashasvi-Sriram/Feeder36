@@ -54,4 +54,4 @@ class FeedbackResponse(models.Model):
     feedback_form = models.ForeignKey(FeedBackForm, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.student.user_name + " response to " + self.feedback_form.name
+        return self.student.user_name + " response to " + str(self.feedback_form.pk)
