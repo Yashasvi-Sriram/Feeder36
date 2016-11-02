@@ -85,6 +85,7 @@ public class Login extends AppCompatActivity {
                 String ip = IPSource.loginURL();
                 if (!specific_ip.getText().toString().matches("")){
                     IPSource.resetBase(specific_ip.getText().toString(),null);
+                    ip = IPSource.loginURL();
                 }
                 new HTTPLoginRequest().execute(post_user_name, post_password, ip);
             }
