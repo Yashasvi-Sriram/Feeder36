@@ -63,10 +63,22 @@ public class FeedbackResponseDef {
      * Does not consider the equality of PK (of local table)
      */
     public boolean identical(FeedbackResponseDef B) {
-        if (B.FEEDBACK_FORM_PK != this.FEEDBACK_FORM_PK) return false;
-        if (!B.COMMENT.equals(this.COMMENT)) return false;
-        if (!B.ANSWER_SET.equals(this.ANSWER_SET)) return false;
-
+        if (B.FEEDBACK_FORM_PK != this.FEEDBACK_FORM_PK) {
+            Log.i(TLog.TAG, "FB Responses not identical >> fb form pk's " + this.FEEDBACK_FORM_PK + " , " + B.FEEDBACK_FORM_PK);
+            return false;
+        }
+        if (B.SUBMIT_STATUS != this.SUBMIT_STATUS) {
+            Log.i(TLog.TAG, "FB Responses not identical >> submit status " + this.SUBMIT_STATUS + " , " + B.SUBMIT_STATUS );
+            return false;
+        }
+        if (!B.COMMENT.equals(this.COMMENT)) {
+            Log.i(TLog.TAG, "FB Responses not identical >> comment " + this.COMMENT + " , " + B.COMMENT );
+            return false;
+        }
+        if (!B.ANSWER_SET.equals(this.ANSWER_SET)) {
+            Log.i(TLog.TAG, "FB Responses not identical >> answer sets " + this.ANSWER_SET + " , " + B.ANSWER_SET);
+            return false;
+        }
         return true;
     }
 

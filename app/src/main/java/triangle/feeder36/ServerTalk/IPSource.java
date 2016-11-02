@@ -10,6 +10,7 @@ public class IPSource {
 
     public class DataBase {
         public static final String SYNC = "student/sync/";
+        public static final String FEEDBACK_RESPONSE_SUBMIT = "student/submit/";
     }
 
     public static String loginURL(){
@@ -21,4 +22,6 @@ public class IPSource {
     public static String syncURL(){
         return BASE + DataBase.SYNC;
     }
+
+    public static String responseSubmitURL(){return BASE + DataBase.FEEDBACK_RESPONSE_SUBMIT;}
 }

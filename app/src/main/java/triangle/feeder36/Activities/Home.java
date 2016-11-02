@@ -85,7 +85,7 @@ public class Home extends AppCompatActivity {
                 account.onOptionsItemSelected(item);
                 break;
             case R.id.home_menu_synchronize:
-                new SyncDataBases().execute(IPSource.syncURL());
+                new SyncDataBases().execute(IPSource.syncURL(), IPSource.responseSubmitURL());
                 break;
             default:
                 break;
@@ -175,16 +175,76 @@ public class Home extends AppCompatActivity {
                 while ((buffer_line = reader.readLine()) != null) {
                     json_string_builder.append(buffer_line);
                 }
+                // Closing writer
+                wr.close();
+                // Closing reader
                 reader.close();
+                // Closing Connection
+                conn.disconnect();
+
                 // json response string
                 String json_string = json_string_builder.toString();
 
                 this.startSync(json_string);
 
-                // return the response to onPostExecute
-                return json_string_builder.toString();
 
-            } catch (IOException e) {
+                /*------------------------------------------------------------------------------------*/
+                if (!json_string.equals("0") && !json_string.equals("-1")) {
+                    JSONArray responsesToBeSubmitted = dbManager.getFeedbackResponsesToBeSubmitted();
+                    Log.i(TLog.TAG, responsesToBeSubmitted.toString());
+                    String responses_post =
+                            URLEncoder.encode("user_name", "UTF-8")
+                                    + "="
+                                    + URLEncoder.encode(post_user_name, "UTF-8")
+                                    + "&"
+                                    + URLEncoder.encode("password", "UTF-8")
+                                    + "="
+                                    + URLEncoder.encode(post_password, "UTF-8")
+                                    + "&"
+                                    + URLEncoder.encode(FeedbackResponseDef.JSONResponseKeys.FEEDBACK_RESPONSE_DICT, "UTF-8")
+                                    + "="
+                                    + URLEncoder.encode(responsesToBeSubmitted.toString(), "UTF-8");
+
+                    // Prepare URL
+                    URL response_submit_page = new URL(params[1]);
+                    // Open Connection
+                    HttpURLConnection response_submit_conn = (HttpURLConnection) response_submit_page.openConnection();
+                    // This connection can send data to server
+                    response_submit_conn.setDoInput(true);
+                    // The request is of POST type
+                    response_submit_conn.setRequestMethod("POST");
+
+                    // POST feedback responses to server
+                    OutputStreamWriter response_writer = new OutputStreamWriter(response_submit_conn.getOutputStream());
+                    response_writer.write(credentials);
+                    response_writer.write(responses_post);
+                    response_writer.flush();
+
+                    // get the response from the server
+                    BufferedReader response_reader = new BufferedReader(new InputStreamReader(response_submit_conn.getInputStream()));
+                    // using a StringBuilder
+                    StringBuilder response_string_builder = new StringBuilder();
+                    while ((buffer_line = response_reader.readLine()) != null) {
+                        response_string_builder.append(buffer_line);
+                    }
+                    String successful_submit_str = response_string_builder.toString();
+                    JSONArray successful_submit_json = new JSONArray(successful_submit_str);
+                    for (int i = 0; i < successful_submit_json.length(); i++) {
+                        dbManager.markFeedbackResponseAsSubmitted(String.valueOf(successful_submit_json.get(i)));
+                        Log.i(TLog.TAG, "submitFeedbackResponses: response submitted with feedback form pk " + String.valueOf(successful_submit_json.get(i)));
+                    }
+
+                    // Closing writer
+                    response_writer.close();
+                    // Closing reader
+                    reader.close();
+                    // Closing Connection
+                    response_submit_conn.disconnect();
+                }
+
+                // return the response to onPostExecute
+                return json_string;
+            } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
             return "-1";
@@ -370,6 +430,7 @@ public class Home extends AppCompatActivity {
                     // with same fields => no change
                     if (local_value.identical(remote_value)) {
                         // remove from remote hash
+                        Log.i(TLog.TAG, "syncFeedbackResponses: found a response is in sync with feedback form pk " + local_value.FEEDBACK_FORM_PK  + " submit status " + local_value.SUBMIT_STATUS);
                         remote.remove(key);
                     }
                     // with different fields => updated at django
@@ -383,12 +444,11 @@ public class Home extends AppCompatActivity {
                 // remote has no such entry => deleted at django
                 else {
                     FeedbackFormDef remote_fb_form = dbManager.getFormOf(local_value);
-                    if(remote_fb_form == null){
+                    if (remote_fb_form == null) {
                         // TODO: issue delete notification
                         Log.i(TLog.TAG, "syncFeedbackResponses: delete with feedback form pk " + local_value.FEEDBACK_FORM_PK);
                         dbManager.deleteEntryWithKeyValue(db.TABLES.FEEDBACK_RESPONSES.TABLE_NAME, db.TABLES.FEEDBACK_RESPONSES.FEEDBACK_FORM_PK, String.valueOf(key));
-                    }
-                    else {
+                    } else {
                         Log.i(TLog.TAG, "syncFeedbackResponses: found response to be submitted with feedback form pk " + local_value.FEEDBACK_FORM_PK + " submit status " + local_value.SUBMIT_STATUS);
                     }
                 }
@@ -401,7 +461,7 @@ public class Home extends AppCompatActivity {
                 FeedbackResponseDef new_value = (FeedbackResponseDef) remote_entry.getValue();
                 // TODO: issue create notification
                 Log.i(TLog.TAG, "syncFeedbackResponses: create with feedback form pk " + new_value.FEEDBACK_FORM_PK);
-                dbManager.insert(new_value,1);
+                dbManager.insert(new_value, 1);
             }
 
 

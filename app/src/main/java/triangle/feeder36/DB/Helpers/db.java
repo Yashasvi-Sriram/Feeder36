@@ -6,6 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -599,6 +603,53 @@ public class db extends Helper {
         c.close();
         db.close();
         return retVector;
+    }
+
+    public JSONArray getFeedbackResponsesToBeSubmitted() {
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLES.FEEDBACK_RESPONSES.TABLE_NAME
+                + " WHERE "
+                + TABLES.FEEDBACK_RESPONSES.SUBMIT_STATUS + " = " + " 0 "
+                + ";";
+
+        JSONArray response_set_list = new JSONArray();
+
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+
+        while (!c.isAfterLast()) {
+            FeedbackResponseDef row = new FeedbackResponseDef(c);
+            JSONObject response = new JSONObject();
+
+            try {
+                response.put(FeedbackResponseDef.JSONResponseKeys.ANSWER_SET,row.ANSWER_SET);
+                response.put(FeedbackResponseDef.JSONResponseKeys.COMMENT, row.COMMENT);
+                response.put(FeedbackResponseDef.JSONResponseKeys.FEEDBACK_FORM_PK, row.FEEDBACK_FORM_PK);
+
+                response_set_list.put(response);
+            }
+            catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            c.moveToNext();
+        }
+
+        c.close();
+        db.close();
+        return response_set_list;
+    }
+
+    public void markFeedbackResponseAsSubmitted(String fb_form_django_pk) {
+        ContentValues values = new ContentValues();
+
+        values.put(TABLES.FEEDBACK_RESPONSES.SUBMIT_STATUS, "1");
+
+        SQLiteDatabase db = getWritableDatabase();
+        String where = TABLES.FEEDBACK_RESPONSES.FEEDBACK_FORM_PK + " = " + fb_form_django_pk + " ";
+        db.update(TABLES.FEEDBACK_RESPONSES.TABLE_NAME, values, where, null);
+
+        db.close();
     }
 
     public FeedbackFormDef getFormOf(FeedbackResponseDef feedbackResponseDef){

@@ -1,5 +1,6 @@
 package triangle.feeder36.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -59,6 +60,8 @@ public class FillFeedback extends AppCompatActivity {
                 dbManager.insert(feedbackResponseDef, 0);
                 Log.i(TLog.TAG, "response to feedback form with pk " + feedback_form_django_pk + " is stored locally ");
                 Toast.makeText(getApplicationContext(),"Response recorded",Toast.LENGTH_SHORT).show();
+                Intent home = new Intent(FillFeedback.this, Home.class);
+                startActivity(home);
             }
         });
     }
