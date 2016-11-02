@@ -117,7 +117,7 @@ public class Home extends AppCompatActivity {
                 case R.id.home_menu_logout:
                     UserInfo user = new UserInfo("", "");
                     dbManager.updateEntryWithKeyValue(user, Helper.PRIMARY_KEY, "1");
-
+                    dbManager.resetFeedbackResponsesTable();
                     /* Take back to Login screen */
                     Toast.makeText(Home.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
                     Intent login = new Intent(Home.this, Login.class);

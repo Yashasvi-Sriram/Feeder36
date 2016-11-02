@@ -640,6 +640,13 @@ public class db extends Helper {
         return response_set_list;
     }
 
+    public void resetFeedbackResponsesTable(){
+        SQLiteDatabase db = getWritableDatabase();
+        TABLES.dropTable(db, TABLES.FEEDBACK_RESPONSES.TABLE_NAME);
+        TABLES.createTable(db, TABLES.FEEDBACK_RESPONSES.CREATE_TABLE_QUERY);
+        db.close();
+    }
+
     public void markFeedbackResponseAsSubmitted(String fb_form_django_pk) {
         ContentValues values = new ContentValues();
 
