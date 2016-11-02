@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
@@ -20,6 +21,9 @@ import triangle.feeder36.Log.TLog;
 import triangle.feeder36.R;
 
 public class FillFeedback extends AppCompatActivity {
+    public final static int numOfStars = 5;
+    public final static float stepSizeOfRating = (float) 0.5;
+
     RelativeLayout fill_feedback_layout;
     TextView feedback_course_code,feedback_course_name,feedback_name,feedback_deadline;
     LinearLayout feedback_questions_layout;
@@ -53,11 +57,16 @@ public class FillFeedback extends AppCompatActivity {
                     feedbackResponse += String.valueOf(rating_i.getRating());
                     if(i!= feedbackQns.length-1) feedbackResponse += FeedbackFormDef.JSONResponseKeys.SEP_ANSWER_SET;
                 }
+
+                int feedbackCommentId = 2*feedbackQns.length + 1;
+                EditText feedback_comment = (EditText) feedback_questions_layout.findViewById(feedbackCommentId);
+                String feedbackComment = feedback_comment.getText().toString();
+
                 FeedbackResponseDef feedbackResponseDef = new FeedbackResponseDef();
                 feedbackResponseDef.FEEDBACK_FORM_PK = feedback_form_django_pk;
                 feedbackResponseDef.ANSWER_SET = feedbackResponse;
-                feedbackResponseDef.COMMENT = "Todo";
-                dbManager.insert(feedbackResponseDef, 0);
+                feedbackResponseDef.COMMENT = feedbackComment;
+                dbManager.insert(feedbackResponseDef,0);
                 Log.i(TLog.TAG, "response to feedback form with pk " + feedback_form_django_pk + " is stored locally ");
                 Toast.makeText(getApplicationContext(),"Response recorded",Toast.LENGTH_SHORT).show();
                 Intent home = new Intent(FillFeedback.this, Home.class);
@@ -116,14 +125,21 @@ public class FillFeedback extends AppCompatActivity {
             rating_i.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
             feedback_questions_layout.addView(rating_i);
         }
+
+        EditText feedback_comment = new EditText(this);
+        feedback_comment.setHint("Any Other Comments");
+        feedback_comment.setId(2*noOfQns+1);
+        feedback_comment.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+        feedback_questions_layout.addView(feedback_comment);
     }
 
     public void setAttributesRatingBars() {
         for(int i=0;i<feedbackQns.length;i++) {
             int ratingBarId = 2*i + 2;
             RatingBar rating_i = (RatingBar) feedback_questions_layout.findViewById(ratingBarId);
-            rating_i.setNumStars(5);
-            rating_i.setStepSize((float) 0.5);
+            rating_i.setNumStars(numOfStars);
+            rating_i.setStepSize(stepSizeOfRating);
         }
     }
 }

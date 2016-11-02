@@ -8,20 +8,23 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Vector;
 
 import triangle.feeder36.Activities.FillFeedback;
+import triangle.feeder36.Calender.DateTime;
 import triangle.feeder36.DB.Def.CourseDef;
 import triangle.feeder36.DB.Def.FeedbackFormDef;
+import triangle.feeder36.DB.Helpers.db;
 import triangle.feeder36.R;
 
 public class FeedbackItem extends BaseAdapter {
     Context context;
 
-
     Vector<FeedbackFormDef> feedbackFormDefs;
     Vector<CourseDef> coursesOfFbForms;
+    DateTime currentDateTime;
 
     private static LayoutInflater inflater = null;
 
@@ -29,6 +32,7 @@ public class FeedbackItem extends BaseAdapter {
         this.context = mainActivity;
         this.feedbackFormDefs = feedbackFormDefs;
         this.coursesOfFbForms = courseDefs;
+        this.currentDateTime = new DateTime(true);
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -47,21 +51,33 @@ public class FeedbackItem extends BaseAdapter {
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                /* TODO : takes to feedback form if not filled
-                * else just show a toast which saya form has been filled
+                /* Takes to feedback form if not filled
+                * else just shows a toast which says form has been filled
                 * */
 
-                /* Need to implement it */
+                db dbManager;
+                dbManager = new db(context,db.DB_NAME,null,db.DB_VERSION);
 
-                Intent fillFeedback = new Intent(context, FillFeedback.class);
-                fillFeedback.putExtra("courseCode", coursesOfFbForms.get(position).CODE);
-                fillFeedback.putExtra("courseName", coursesOfFbForms.get(position).NAME);
-                fillFeedback.putExtra("feedbackName", feedbackFormDefs.get(position).NAME);
-                fillFeedback.putExtra("feedbackQuestionSet", feedbackFormDefs.get(position).QUESTION_SET);
-                fillFeedback.putExtra("feedbackDeadline", feedbackFormDefs.get(position).DEADLINE);
-                fillFeedback.putExtra("feedbackDjangoPk", feedbackFormDefs.get(position).DJANGO_PK);
-                context.startActivity(fillFeedback);
+                DateTime feedbackDeadline = new DateTime(feedbackFormDefs.get(position).DEADLINE,"/",":"," ");
+
+                if(dbManager.getResponseOf(feedbackFormDefs.get(position)) != null) {
+                    Toast.makeText(context,"You have already filled feedback",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    if(DateTime.isPast(currentDateTime,feedbackDeadline)) {
+                        Intent fillFeedback = new Intent(context, FillFeedback.class);
+                        fillFeedback.putExtra("courseCode", coursesOfFbForms.get(position).CODE);
+                        fillFeedback.putExtra("courseName", coursesOfFbForms.get(position).NAME);
+                        fillFeedback.putExtra("feedbackName", feedbackFormDefs.get(position).NAME);
+                        fillFeedback.putExtra("feedbackQuestionSet", feedbackFormDefs.get(position).QUESTION_SET);
+                        fillFeedback.putExtra("feedbackDeadline", feedbackFormDefs.get(position).DEADLINE);
+                        fillFeedback.putExtra("feedbackDjangoPk", feedbackFormDefs.get(position).DJANGO_PK);
+                        context.startActivity(fillFeedback);
+                    }
+                    else {
+                        Toast.makeText(context,"Oops !! The deadline is over",Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         });
         return rowView;
@@ -93,8 +109,4 @@ public class FeedbackItem extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
-
-
-
-
 }

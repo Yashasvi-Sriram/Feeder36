@@ -123,8 +123,6 @@ public class Home extends AppCompatActivity {
                     break;
             }
         }
-
-
     }
 
     private class SyncDataBases extends AsyncTask<String, String, String> {
@@ -411,8 +409,6 @@ public class Home extends AppCompatActivity {
                 Log.i(TLog.TAG, "syncFeedbackForms: create with name " + new_value.NAME);
                 dbManager.insert(new_value);
             }
-
-
         }
 
         private void syncFeedbackResponses(HashMap<Integer, FeedbackResponseDef> remote, HashMap<Integer, FeedbackResponseDef> local) {
@@ -463,8 +459,6 @@ public class Home extends AppCompatActivity {
                 Log.i(TLog.TAG, "syncFeedbackResponses: create with feedback form pk " + new_value.FEEDBACK_FORM_PK);
                 dbManager.insert(new_value, 1);
             }
-
-
         }
 
         HashMap<Integer, CourseDef> prepareCoursesHashMap(JSONArray courses) {
@@ -617,7 +611,6 @@ public class Home extends AppCompatActivity {
                     onCaldroidSelectDate(new triangle.feeder36.Calender.Date(true));
                 }
             });
-
         }
 
         private void onCaldroidSelectDate(triangle.feeder36.Calender.Date date) {
@@ -635,9 +628,6 @@ public class Home extends AppCompatActivity {
             list_view_tasks.setAdapter(new TaskItem(Home.this, tasksOnDay, coursesOfTasks));
             list_view_feedback.setAdapter(new FeedbackItem(Home.this, feedbackFormsOnDay, coursesOfFbForms));
         }
-
-
     }
-
 
 }
