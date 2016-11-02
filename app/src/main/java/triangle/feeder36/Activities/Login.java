@@ -171,7 +171,7 @@ public class Login extends AppCompatActivity {
                     startActivity(homeScreen);
                     break;
                 case "0":
-                    Toast.makeText(Login.this, "No User Detected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login.this, "Invalid user or password", Toast.LENGTH_SHORT).show();
                     break;
                 case "-1":
                     Toast.makeText(Login.this, "Login Failed", Toast.LENGTH_SHORT).show();

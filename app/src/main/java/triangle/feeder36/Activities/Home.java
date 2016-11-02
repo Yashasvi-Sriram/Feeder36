@@ -10,8 +10,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.roomorama.caldroid.CaldroidFragment;
@@ -551,6 +554,8 @@ public class Home extends AppCompatActivity {
     class CaldroidAndLists {
         ListView list_view_tasks, list_view_feedback;
         LinearLayout home, calendar_layout;
+        TextView task_heading,feedback_heading;
+
         db dbManager;
 
         public CaldroidAndLists() {
@@ -562,6 +567,9 @@ public class Home extends AppCompatActivity {
             list_view_tasks = (ListView) home.findViewById(R.id.list_view_tasks);
             list_view_feedback = (ListView) home.findViewById(R.id.list_view_feedback);
             calendar_layout = (LinearLayout) home.findViewById(R.id.calendar_layout);
+            task_heading = (TextView) findViewById(R.id.task_heading);
+            feedback_heading = (TextView) findViewById(R.id.feedback_heading);
+
             dbManager = new db(Home.this, db.DB_NAME, null, db.DB_VERSION);
 
             /* initialises CaldroidAndLists View */
@@ -625,9 +633,50 @@ public class Home extends AppCompatActivity {
                 coursesOfFbForms.add(dbManager.getCourseOf(feedbackFormsOnDay.get(i)));
             }
 
+            /* Set visibility of heading text views accordingly */
+            if(tasksOnDay.size() != 0) {
+                task_heading.setVisibility(View.VISIBLE);
+            }
+            else {
+                task_heading.setVisibility(View.GONE);
+            }
+
+            if(feedbackFormsOnDay.size() != 0) {
+                feedback_heading.setVisibility(View.VISIBLE);
+            }
+            else {
+                feedback_heading.setVisibility(View.GONE);
+            }
+
             list_view_tasks.setAdapter(new TaskItem(Home.this, tasksOnDay, coursesOfTasks));
             list_view_feedback.setAdapter(new FeedbackItem(Home.this, feedbackFormsOnDay, coursesOfFbForms));
+            setListViewHeightBasedOnChildren(list_view_tasks);
+            setListViewHeightBasedOnChildren(list_view_feedback);
         }
     }
 
+    /**** Method for Setting the Height of the ListView dynamically.
+     **** Hack to fix the issue of not showing all the items of the ListView
+     **** when placed inside a ScrollView  ****/
+
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null)
+            return;
+
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        int totalHeight = 0;
+        View view = null;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            view = listAdapter.getView(i, view, listView);
+            if (i == 0)
+                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+    }
 }
