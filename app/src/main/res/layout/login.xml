@@ -43,6 +43,16 @@
             android:hint="Password"
             android:fontFamily="monospace"/>
 
+        <EditText
+            android:id="@+id/specific_ip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="10sp"
+            android:inputType="phone"
+            android:hint="IP (if other than 10.0.2.2)"
+            android:fontFamily="monospace"/>
+
         <Button
             android:id="@+id/submit"
             android:layout_width="match_parent"

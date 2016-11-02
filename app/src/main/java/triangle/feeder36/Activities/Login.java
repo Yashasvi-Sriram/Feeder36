@@ -31,7 +31,7 @@ import triangle.feeder36.ServerTalk.IPSource;
 public class Login extends AppCompatActivity {
 
     ScrollView login;
-    EditText user_name, password;
+    EditText user_name, password, specific_ip;
     Button submit;
 
     String post_user_name;
@@ -69,6 +69,7 @@ public class Login extends AppCompatActivity {
         login = (ScrollView) findViewById(R.id.login);
         user_name = (EditText) login.findViewById(R.id.user_name);
         password = (EditText) login.findViewById(R.id.password);
+        specific_ip = (EditText) login.findViewById(R.id.specific_ip);
         submit = (Button) login.findViewById(R.id.submit);
 
         /* Submit listener */
@@ -81,7 +82,11 @@ public class Login extends AppCompatActivity {
                 }
                 post_user_name = user_name.getText().toString();
                 post_password = password.getText().toString();
-                new HTTPLoginRequest().execute(post_user_name, post_password, IPSource.loginURL());
+                String ip = IPSource.loginURL();
+                if (!specific_ip.getText().toString().matches("")){
+                    IPSource.resetBase(specific_ip.getText().toString(),null);
+                }
+                new HTTPLoginRequest().execute(post_user_name, post_password, ip);
             }
         });
     }
