@@ -119,6 +119,7 @@ public class Login extends AppCompatActivity {
                 URL login_request_page = new URL(params[2]);
                 // Open Connection
                 HttpURLConnection conn = (HttpURLConnection) login_request_page.openConnection();
+                Log.i(TLog.TAG, "HTTPUrlConnection connected to " + params[2] + " to login ");
                 // This connection can send data to server
                 conn.setDoInput(true);
                 // The request is of POST type

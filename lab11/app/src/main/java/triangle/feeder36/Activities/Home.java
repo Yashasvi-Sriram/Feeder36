@@ -1,9 +1,6 @@
 package triangle.feeder36.Activities;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -34,16 +31,12 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
-import triangle.feeder36.Calender.DateTime;
 import triangle.feeder36.CustomAdapters.FeedbackItem;
 import triangle.feeder36.CustomAdapters.TaskItem;
 import triangle.feeder36.DB.Def.CourseDef;
@@ -166,6 +159,7 @@ public class Home extends AppCompatActivity {
                 URL login_request_page = new URL(params[0]);
                 // Open Connection
                 HttpURLConnection conn = (HttpURLConnection) login_request_page.openConnection();
+                Log.i(TLog.TAG, "HTTPUrlConnection connected to " + params[0] + " to sync db ");
                 // This connection can send data to server
                 conn.setDoInput(true);
                 // The request is of POST type
@@ -218,6 +212,7 @@ public class Home extends AppCompatActivity {
                     URL response_submit_page = new URL(params[1]);
                     // Open Connection
                     HttpURLConnection response_submit_conn = (HttpURLConnection) response_submit_page.openConnection();
+                    Log.i(TLog.TAG, "HTTPUrlConnection connected to " + params[1] + " to send responses ");
                     // This connection can send data to server
                     response_submit_conn.setDoInput(true);
                     // The request is of POST type
@@ -436,7 +431,7 @@ public class Home extends AppCompatActivity {
                     // with same fields => no change
                     if (local_value.identical(remote_value)) {
                         // remove from remote hash
-                        Log.i(TLog.TAG, "syncFeedbackResponses: found a response is in sync with feedback form pk " + local_value.FEEDBACK_FORM_PK  + " submit status " + local_value.SUBMIT_STATUS);
+                        Log.i(TLog.TAG, "syncFeedbackResponses: found a response is in sync with feedback form pk " + local_value.FEEDBACK_FORM_PK + " submit status " + local_value.SUBMIT_STATUS);
                         remote.remove(key);
                     }
                     // with different fields => updated at django
@@ -559,9 +554,10 @@ public class Home extends AppCompatActivity {
     }
 
     class CaldroidAndLists {
+
         ListView list_view_tasks, list_view_feedback;
         LinearLayout home, calendar_layout;
-        TextView task_heading,feedback_heading;
+        TextView task_heading, feedback_heading;
         CaldroidFragment caldroidFragment;
 
         db dbManager;
@@ -643,17 +639,15 @@ public class Home extends AppCompatActivity {
             }
 
             /* Set visibility of heading text views accordingly */
-            if(tasksOnDay.size() != 0) {
+            if (tasksOnDay.size() != 0) {
                 task_heading.setVisibility(View.VISIBLE);
-            }
-            else {
+            } else {
                 task_heading.setVisibility(View.GONE);
             }
 
-            if(feedbackFormsOnDay.size() != 0) {
+            if (feedbackFormsOnDay.size() != 0) {
                 feedback_heading.setVisibility(View.VISIBLE);
-            }
-            else {
+            } else {
                 feedback_heading.setVisibility(View.GONE);
             }
 
@@ -664,91 +658,60 @@ public class Home extends AppCompatActivity {
         }
 
         private String convertToCorrStr(int i) {
-            if(i >= 0 && i <= 9) {
+            if (i >= 0 && i <= 9) {
                 return String.valueOf(i);
-            }
-            else {
+            } else {
             /* convert to number residues starting from zero */
                 i -= 10;
             /* convert to corresponding ASCII */
                 i += 65;
-                return String.valueOf((char)i);
+                return String.valueOf((char) i);
             }
         }
 
         private String myHashFn(String courseName) {
             int val = 0;
 
-            for(int i=0;i<courseName.length();i++) {
+            for (int i = 0; i < courseName.length(); i++) {
                 val += courseName.charAt(i);
             }
 
             String col = "#";
 
-            for(int i=0;i<6;i++) {
-                col += convertToCorrStr(val%(16-i));
+            for (int i = 0; i < 6; i++) {
+                col += convertToCorrStr(val % (16 - i));
             }
             return col;
         }
 
-        private void setColoursForDates() throws ParseException {
-            db dbManager = new db(Home.this, db.DB_NAME, null, db.DB_VERSION);
+        private void setColoursForDates() {
             Vector<TaskDef> allTasks = dbManager.getAllTasks();
             Vector<FeedbackFormDef> allFeedbacks = dbManager.getAllFeedbackForms();
 
-            for(int i=0;i<allTasks.size();i++) {
-                Map<hirondelle.date4j.DateTime,Drawable> mapDateToColors = caldroidFragment.getBackgroundForDateTimeMap();
+            HashMap<String, Vector<TaskDef>> taskDefHashMap = dbManager.getDateTaskDefHashMap();
 
-            /* Used an old date for Book Keeping */
-                hirondelle.date4j.DateTime pastDateUncolored = new hirondelle.date4j.DateTime("2010-01-19");
-                ColorDrawable defaultCellColorDrawable = (ColorDrawable) mapDateToColors.get(pastDateUncolored);
 
-                TaskDef task_i = allTasks.get(i);
-                CourseDef course_i = dbManager.getCourseOf(task_i);
-
-                String color_hex_i = myHashFn(course_i.NAME);
-                int color_int_i = Color.parseColor(color_hex_i);
-
-                DateTime task_i_date_time = new DateTime(task_i.DEADLINE,"/",":"," ");
-                String task_i_date_as_string = task_i_date_time.$DATE.simpleRepresentation();
-
-                DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-                Date task_i_date = formatter.parse(task_i_date_as_string);
-
-                ColorDrawable color_for_course_i = new ColorDrawable(color_int_i);
-                caldroidFragment.setBackgroundDrawableForDate(color_for_course_i,task_i_date);
+            for (Map.Entry pair : taskDefHashMap.entrySet()) {
+                String task_date_i = (String) pair.getKey();
+                Vector<TaskDef> task_def_vec = (Vector<TaskDef>) pair.getValue();
+                Log.i(TLog.TAG, task_date_i);
+                for (int i = 0; i < task_def_vec.size(); i++) {
+                    Log.i(TLog.TAG, task_def_vec.get(i).toString());
+                }
             }
 
-            for(int i=0;i<allFeedbacks.size();i++) {
-                FeedbackFormDef feedback_i = allFeedbacks.get(i);
-                CourseDef course_i = dbManager.getCourseOf(feedback_i);
-
-                String color_hex_i = myHashFn(course_i.NAME);
-                int color_int_i = Color.parseColor(color_hex_i);
-
-                DateTime feedback_i_date_time = new DateTime(feedback_i.DEADLINE,"/",":"," ");
-                String feedback_i_date_as_string = feedback_i_date_time.$DATE.simpleRepresentation();
-
-                DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-                Date feedback_i_date = formatter.parse(feedback_i_date_as_string);
-
-                ColorDrawable color_for_feedback_i = new ColorDrawable(color_int_i);
-                caldroidFragment.setBackgroundDrawableForDate(color_for_feedback_i,feedback_i_date);
-            }
         }
 
         public void caldroidSetColorForDates() {
-            try {
-                setColoursForDates();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            setColoursForDates();
         }
     }
 
-    /**** Method for Setting the Height of the ListView dynamically.
-     **** Hack to fix the issue of not showing all the items of the ListView
-     **** when placed inside a ScrollView  ****/
+    /****
+     * Method for Setting the Height of the ListView dynamically.
+     * *** Hack to fix the issue of not showing all the items of the ListView
+     * *** when placed inside a ScrollView
+     ****/
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();

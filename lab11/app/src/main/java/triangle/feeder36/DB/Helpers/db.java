@@ -266,9 +266,9 @@ public class db extends Helper {
     public void insert(CourseDef courseDef) {
         ContentValues values = new ContentValues();
 
-        values.put(TABLES.COURSES.DJANGO_PK , courseDef.DJANGO_PK);
-        values.put(TABLES.COURSES.CODE , courseDef.CODE);
-        values.put(TABLES.COURSES.NAME , courseDef.NAME);
+        values.put(TABLES.COURSES.DJANGO_PK, courseDef.DJANGO_PK);
+        values.put(TABLES.COURSES.CODE, courseDef.CODE);
+        values.put(TABLES.COURSES.NAME, courseDef.NAME);
 
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLES.COURSES.TABLE_NAME, null, values);
@@ -333,11 +333,11 @@ public class db extends Helper {
     public void insert(TaskDef taskDef) {
         ContentValues values = new ContentValues();
 
-        values.put(TABLES.TASKS.COURSE_PK , taskDef.COURSE_PK);
-        values.put(TABLES.TASKS.DJANGO_PK , taskDef.DJANGO_PK);
-        values.put(TABLES.TASKS.TAG , taskDef.TAG);
-        values.put(TABLES.TASKS.DEADLINE , taskDef.DEADLINE);
-        values.put(TABLES.TASKS.DETAIL , taskDef.DETAIL);
+        values.put(TABLES.TASKS.COURSE_PK, taskDef.COURSE_PK);
+        values.put(TABLES.TASKS.DJANGO_PK, taskDef.DJANGO_PK);
+        values.put(TABLES.TASKS.TAG, taskDef.TAG);
+        values.put(TABLES.TASKS.DEADLINE, taskDef.DEADLINE);
+        values.put(TABLES.TASKS.DETAIL, taskDef.DETAIL);
 
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLES.TASKS.TABLE_NAME, null, values);
@@ -347,11 +347,11 @@ public class db extends Helper {
     public void updateEntryWithKeyValue(TaskDef taskDef, String key, String value) {
         ContentValues values = new ContentValues();
 
-        values.put(TABLES.TASKS.COURSE_PK , taskDef.COURSE_PK);
-        values.put(TABLES.TASKS.DJANGO_PK , taskDef.DJANGO_PK);
-        values.put(TABLES.TASKS.TAG , taskDef.TAG);
-        values.put(TABLES.TASKS.DEADLINE , taskDef.DEADLINE);
-        values.put(TABLES.TASKS.DETAIL , taskDef.DETAIL);
+        values.put(TABLES.TASKS.COURSE_PK, taskDef.COURSE_PK);
+        values.put(TABLES.TASKS.DJANGO_PK, taskDef.DJANGO_PK);
+        values.put(TABLES.TASKS.TAG, taskDef.TAG);
+        values.put(TABLES.TASKS.DEADLINE, taskDef.DEADLINE);
+        values.put(TABLES.TASKS.DETAIL, taskDef.DETAIL);
 
         SQLiteDatabase db = getWritableDatabase();
         String where = key + " = '" + value + "' ";
@@ -410,8 +410,8 @@ public class db extends Helper {
 
         while (!c.isAfterLast()) {
             TaskDef row = new TaskDef(c);
-            DateTime row_deadline = new DateTime(row.DEADLINE,Date.SIMPLE_REPR_SEPARATOR, Time.SIMPLE_REPR_SEPARATOR,DateTime.SIMPLE_REPR_SEPARATOR);
-            if(date.isEqualTo(row_deadline.$DATE)){
+            DateTime row_deadline = new DateTime(row.DEADLINE, Date.SIMPLE_REPR_SEPARATOR, Time.SIMPLE_REPR_SEPARATOR, DateTime.SIMPLE_REPR_SEPARATOR);
+            if (date.isEqualTo(row_deadline.$DATE)) {
                 retVector.add(row);
             }
             c.moveToNext();
@@ -422,7 +422,7 @@ public class db extends Helper {
         return retVector;
     }
 
-    public CourseDef getCourseOf(TaskDef taskDef){
+    public CourseDef getCourseOf(TaskDef taskDef) {
         SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT * FROM " + TABLES.COURSES.TABLE_NAME
                 + " WHERE "
@@ -440,49 +440,47 @@ public class db extends Helper {
         return null;
     }
 
-    public HashMap<Date, Vector<TaskDef> > getDateTaskDefHaspMap() {
+    public HashMap<String, Vector<TaskDef>> getDateTaskDefHashMap() {
+
         SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT * FROM " + TABLES.TASKS.TABLE_NAME + ";";
 
-        HashMap<Date, Vector<TaskDef> > ret = new HashMap<>();
+        HashMap<String, Vector<TaskDef>> vectorHashMap = new HashMap<>();
 
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
 
         while (!c.isAfterLast()) {
+
             TaskDef row = new TaskDef(c);
-            DateTime dateTime = new DateTime(row.DEADLINE, Date.SIMPLE_REPR_SEPARATOR,Time.SIMPLE_REPR_SEPARATOR, DateTime.SIMPLE_REPR_SEPARATOR);
+            DateTime rowDatetime = new DateTime(row.DEADLINE, Date.SIMPLE_REPR_SEPARATOR, Time.SIMPLE_REPR_SEPARATOR, DateTime.SIMPLE_REPR_SEPARATOR);
+            Vector<TaskDef> taskDefVector = vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation());
 
-            Vector<TaskDef> value = ret.get(dateTime.$DATE);
-
-            if (value == null){
-                value = new Vector<>();
-                value.add(row);
-                ret.put(dateTime.$DATE, value);
-            }
-            else {
-                value.add(row);
-                ret.put(dateTime.$DATE, value);
+            if (taskDefVector == null) {
+                vectorHashMap.put(rowDatetime.$DATE.simpleRepresentation(), new Vector<TaskDef>());
+                vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation()).add(row);
+            } else {
+                vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation()).add(row);
             }
 
             c.moveToNext();
         }
-
         c.close();
         db.close();
-        return ret;
+        return vectorHashMap;
     }
+
     /* Tasks */
 
     /* Feedback forms */
     public void insert(FeedbackFormDef feedbackFormDef) {
         ContentValues values = new ContentValues();
 
-        values.put(TABLES.FEEDBACK_FORMS.COURSE_PK , feedbackFormDef.COURSE_PK);
-        values.put(TABLES.FEEDBACK_FORMS.DJANGO_PK , feedbackFormDef.DJANGO_PK);
-        values.put(TABLES.FEEDBACK_FORMS.NAME , feedbackFormDef.NAME);
-        values.put(TABLES.FEEDBACK_FORMS.DEADLINE , feedbackFormDef.DEADLINE);
-        values.put(TABLES.FEEDBACK_FORMS.QUESTION_SET , feedbackFormDef.QUESTION_SET);
+        values.put(TABLES.FEEDBACK_FORMS.COURSE_PK, feedbackFormDef.COURSE_PK);
+        values.put(TABLES.FEEDBACK_FORMS.DJANGO_PK, feedbackFormDef.DJANGO_PK);
+        values.put(TABLES.FEEDBACK_FORMS.NAME, feedbackFormDef.NAME);
+        values.put(TABLES.FEEDBACK_FORMS.DEADLINE, feedbackFormDef.DEADLINE);
+        values.put(TABLES.FEEDBACK_FORMS.QUESTION_SET, feedbackFormDef.QUESTION_SET);
 
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLES.FEEDBACK_FORMS.TABLE_NAME, null, values);
@@ -492,11 +490,11 @@ public class db extends Helper {
     public void updateEntryWithKeyValue(FeedbackFormDef feedbackFormDef, String key, String value) {
         ContentValues values = new ContentValues();
 
-        values.put(TABLES.FEEDBACK_FORMS.COURSE_PK , feedbackFormDef.COURSE_PK);
-        values.put(TABLES.FEEDBACK_FORMS.DJANGO_PK , feedbackFormDef.DJANGO_PK);
-        values.put(TABLES.FEEDBACK_FORMS.NAME , feedbackFormDef.NAME);
-        values.put(TABLES.FEEDBACK_FORMS.DEADLINE , feedbackFormDef.DEADLINE);
-        values.put(TABLES.FEEDBACK_FORMS.QUESTION_SET , feedbackFormDef.QUESTION_SET);
+        values.put(TABLES.FEEDBACK_FORMS.COURSE_PK, feedbackFormDef.COURSE_PK);
+        values.put(TABLES.FEEDBACK_FORMS.DJANGO_PK, feedbackFormDef.DJANGO_PK);
+        values.put(TABLES.FEEDBACK_FORMS.NAME, feedbackFormDef.NAME);
+        values.put(TABLES.FEEDBACK_FORMS.DEADLINE, feedbackFormDef.DEADLINE);
+        values.put(TABLES.FEEDBACK_FORMS.QUESTION_SET, feedbackFormDef.QUESTION_SET);
 
         SQLiteDatabase db = getWritableDatabase();
         String where = key + " = '" + value + "' ";
@@ -555,8 +553,8 @@ public class db extends Helper {
 
         while (!c.isAfterLast()) {
             FeedbackFormDef row = new FeedbackFormDef(c);
-            DateTime row_deadline = new DateTime(row.DEADLINE,Date.SIMPLE_REPR_SEPARATOR, Time.SIMPLE_REPR_SEPARATOR,DateTime.SIMPLE_REPR_SEPARATOR);
-            if(date.isEqualTo(row_deadline.$DATE)){
+            DateTime row_deadline = new DateTime(row.DEADLINE, Date.SIMPLE_REPR_SEPARATOR, Time.SIMPLE_REPR_SEPARATOR, DateTime.SIMPLE_REPR_SEPARATOR);
+            if (date.isEqualTo(row_deadline.$DATE)) {
                 retVector.add(row);
             }
             c.moveToNext();
@@ -567,7 +565,7 @@ public class db extends Helper {
         return retVector;
     }
 
-    public CourseDef getCourseOf(FeedbackFormDef feedbackFormDef){
+    public CourseDef getCourseOf(FeedbackFormDef feedbackFormDef) {
         SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT * FROM " + TABLES.COURSES.TABLE_NAME
                 + " WHERE "
@@ -585,7 +583,7 @@ public class db extends Helper {
         return null;
     }
 
-    public FeedbackResponseDef getResponseOf(FeedbackFormDef feedbackFormDef){
+    public FeedbackResponseDef getResponseOf(FeedbackFormDef feedbackFormDef) {
         SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT * FROM " + TABLES.FEEDBACK_RESPONSES.TABLE_NAME
                 + " WHERE "
@@ -603,48 +601,46 @@ public class db extends Helper {
         return null;
     }
 
-    public HashMap<Date, Vector<FeedbackFormDef> > getDateFeedbackFormDefHaspMap() {
+    public HashMap<String, Vector<FeedbackFormDef>> getDateFeedbackDefHashMap() {
+
         SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT * FROM " + TABLES.FEEDBACK_FORMS.TABLE_NAME + ";";
 
-        HashMap<Date, Vector<FeedbackFormDef> > ret = new HashMap<>();
+        HashMap<String, Vector<FeedbackFormDef>> vectorHashMap = new HashMap<>();
 
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
 
         while (!c.isAfterLast()) {
+
             FeedbackFormDef row = new FeedbackFormDef(c);
-            DateTime dateTime = new DateTime(row.DEADLINE, Date.SIMPLE_REPR_SEPARATOR,Time.SIMPLE_REPR_SEPARATOR, DateTime.SIMPLE_REPR_SEPARATOR);
+            DateTime rowDatetime = new DateTime(row.DEADLINE, Date.SIMPLE_REPR_SEPARATOR, Time.SIMPLE_REPR_SEPARATOR, DateTime.SIMPLE_REPR_SEPARATOR);
+            Vector<FeedbackFormDef> taskDefVector = vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation());
 
-            Vector<FeedbackFormDef> value = ret.get(dateTime.$DATE);
-
-            if (value == null){
-                value = new Vector<>();
-                value.add(row);
-                ret.put(dateTime.$DATE, value);
-            }
-            else {
-                value.add(row);
-                ret.put(dateTime.$DATE, value);
+            if (taskDefVector == null) {
+                vectorHashMap.put(rowDatetime.$DATE.simpleRepresentation(), new Vector<FeedbackFormDef>());
+                vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation()).add(row);
+            } else {
+                vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation()).add(row);
             }
 
             c.moveToNext();
         }
-
         c.close();
         db.close();
-        return ret;
+        return vectorHashMap;
     }
+
     /* Feedback forms */
 
     /* Feedback Responses */
     public void insert(FeedbackResponseDef feedbackResponseDef, int submit_status) {
         ContentValues values = new ContentValues();
 
-        values.put(TABLES.FEEDBACK_RESPONSES.FEEDBACK_FORM_PK , feedbackResponseDef.FEEDBACK_FORM_PK);
-        values.put(TABLES.FEEDBACK_RESPONSES.ANSWER_SET , feedbackResponseDef.ANSWER_SET);
-        values.put(TABLES.FEEDBACK_RESPONSES.COMMENT , feedbackResponseDef.COMMENT);
-        values.put(TABLES.FEEDBACK_RESPONSES.SUBMIT_STATUS , submit_status);
+        values.put(TABLES.FEEDBACK_RESPONSES.FEEDBACK_FORM_PK, feedbackResponseDef.FEEDBACK_FORM_PK);
+        values.put(TABLES.FEEDBACK_RESPONSES.ANSWER_SET, feedbackResponseDef.ANSWER_SET);
+        values.put(TABLES.FEEDBACK_RESPONSES.COMMENT, feedbackResponseDef.COMMENT);
+        values.put(TABLES.FEEDBACK_RESPONSES.SUBMIT_STATUS, submit_status);
 
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLES.FEEDBACK_RESPONSES.TABLE_NAME, null, values);
@@ -688,13 +684,12 @@ public class db extends Helper {
             JSONObject response = new JSONObject();
 
             try {
-                response.put(FeedbackResponseDef.JSONResponseKeys.ANSWER_SET,row.ANSWER_SET);
+                response.put(FeedbackResponseDef.JSONResponseKeys.ANSWER_SET, row.ANSWER_SET);
                 response.put(FeedbackResponseDef.JSONResponseKeys.COMMENT, row.COMMENT);
                 response.put(FeedbackResponseDef.JSONResponseKeys.FEEDBACK_FORM_PK, row.FEEDBACK_FORM_PK);
 
                 response_set_list.put(response);
-            }
-            catch (JSONException e) {
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
 
@@ -706,7 +701,7 @@ public class db extends Helper {
         return response_set_list;
     }
 
-    public void resetFeedbackResponsesTable(){
+    public void resetFeedbackResponsesTable() {
         SQLiteDatabase db = getWritableDatabase();
         TABLES.dropTable(db, TABLES.FEEDBACK_RESPONSES.TABLE_NAME);
         TABLES.createTable(db, TABLES.FEEDBACK_RESPONSES.CREATE_TABLE_QUERY);
@@ -725,7 +720,7 @@ public class db extends Helper {
         db.close();
     }
 
-    public FeedbackFormDef getFormOf(FeedbackResponseDef feedbackResponseDef){
+    public FeedbackFormDef getFormOf(FeedbackResponseDef feedbackResponseDef) {
         SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT * FROM " + TABLES.FEEDBACK_FORMS.TABLE_NAME
                 + " WHERE "

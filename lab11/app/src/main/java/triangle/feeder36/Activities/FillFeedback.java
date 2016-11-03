@@ -22,7 +22,7 @@ import triangle.feeder36.R;
 
 public class FillFeedback extends AppCompatActivity {
     public final static int numOfStars = 5;
-    public final static float stepSizeOfRating = (float) 0.5;
+    public final static float stepSizeOfRating = (float) 1;
 
     RelativeLayout fill_feedback_layout;
     TextView feedback_course_code,feedback_course_name,feedback_name,feedback_deadline;
