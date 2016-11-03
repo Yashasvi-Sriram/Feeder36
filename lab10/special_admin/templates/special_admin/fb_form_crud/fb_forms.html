@@ -1,0 +1,151 @@
+{% extends 'special_admin/base.html' %}
+{% block body %}
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-xs-2"></div>
+            <div class="col-xs-8">
+                <h1 style="text-align: center;margin: 0;font-size: 50px">{{ course.name }}'s Feedback </h1>
+            </div>
+            <div class="col-xs-2">
+                <a href="{% url 'special_admin:tasks' course.pk %}">
+                    <button class="btn-info" style="width: 100px;height: 50px;font-size: xx-large">
+                        Tasks
+                    </button>
+                </a>
+            </div>
+        </div>
+
+
+        <hr>
+        <div class="row">
+            <div class="col-xs-1">
+{#                <blockquote>{{ all_course|length }} courses available</blockquote>#}
+{#                <table class="table table-hover table-striped" style="overflow: scroll">#}
+{#                    <colgroup>#}
+{#                        <col span="1" style="width: 30%;">#}
+{#                        <col span="1" style="width: 60%;">#}
+{#                        <col span="1" style="width: 10%;">#}
+{#                    </colgroup>#}
+{#                    <thead>#}
+{#                    <tr>#}
+{#                        <th>Code</th>#}
+{#                        <th>Name</th>#}
+{#                        <th></th>#}
+{#                    </tr>#}
+{#                    </thead>#}
+{#                    <tbody>#}
+{#                    {% for course in all_course %}#}
+{#                        <tr>#}
+{#                            <td>#}
+{#                                <a href="{% url 'special_admin:feedback_forms' course.pk %}">#}
+{#                                    {{ course.code }}#}
+{#                                </a>#}
+{#                            </td>#}
+{#                            <td>#}
+{#                                <a href="{% url 'special_admin:feedback_forms' course.pk %}">#}
+{#                                    {{ course.name }}#}
+{#                                </a>#}
+{#                            </td>#}
+{#                            <td>#}
+{#                                <a href="{% url 'special_admin:new_feedback_form' course.pk %}">#}
+{#                                    <button class="btn-success">Create</button>#}
+{#                                </a>#}
+{#                            </td>#}
+{#                        </tr>#}
+{#                    {% endfor %}#}
+{#                    </tbody>#}
+{#                </table>#}
+            </div>
+            <div class="col-xs-11 row">
+                <blockquote>
+                    {{ total }} Feedback available for {{ course.name }}
+{#                    <a href="{% url 'special_admin:new_feedback_form' course.pk %}">#}
+{#                        <button class="btn-success">Create</button>#}
+{#                    </a>#}
+                </blockquote>
+
+                <div class="col-xs-6">
+                    <h2 class="label-info" style="color: white">Due Tasks</h2>
+                    <table class="table table-hover table-striped" style="overflow: scroll">
+                        <colgroup>
+                            <col span="1" style="width: 40%;">
+                            <col span="1" style="width: 50%;">
+                            <col span="1" style="width: 10%;">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Deadline</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for fb_form in remaining_fb_forms %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'special_admin:old_feedback_form' fb_form.pk %}">
+                                        {{ fb_form.name }}
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{% url 'special_admin:old_feedback_form' fb_form.pk %}">
+                                        {{ fb_form.deadline }}
+                                    </a>
+                                </td>
+                                <td>
+                                    <form action="{% url 'special_admin:feedback_forms' course.pk %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="delete" value="{{ fb_form.pk }}">
+                                        <input type="submit" value="Delete" class="btn-danger">
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-xs-6">
+                    <h2 class="label-danger" style="color: white">Deadline expired</h2>
+                    <table class="table table-hover table-striped" style="overflow: scroll">
+                        <colgroup>
+                            <col span="1" style="width: 40%;">
+                            <col span="1" style="width: 50%;">
+                            <col span="1" style="width: 10%;">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Deadline</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for fb_form in finished_fb_forms %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'special_admin:old_feedback_form' fb_form.pk %}">
+                                        {{ fb_form.name }}
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{% url 'special_admin:old_feedback_form' fb_form.pk %}">
+                                        {{ fb_form.deadline }}
+                                    </a>
+                                </td>
+                                <td>
+                                    <form action="{% url 'special_admin:feedback_forms' course.pk %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="delete" value="{{ fb_form.pk }}">
+                                        <input type="submit" value="Delete" class="btn-danger">
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
