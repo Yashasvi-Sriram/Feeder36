@@ -471,7 +471,6 @@ public class db extends Helper {
     }
 
     public HashMap<String, Vector<CourseDef>> getDateCourseDefHashMap() {
-
         SQLiteDatabase db = getWritableDatabase();
 
         String query1 = "SELECT * FROM " + TABLES.TASKS.TABLE_NAME + ";";

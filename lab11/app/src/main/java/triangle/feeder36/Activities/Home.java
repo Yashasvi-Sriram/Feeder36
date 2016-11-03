@@ -683,7 +683,7 @@ public class Home extends AppCompatActivity {
                 val += courseName.charAt(i);
             }
 
-            String col = "#59";
+            String col = "#";
 
             for (int i = 0; i < 6; i++) {
                 col += convertToCorrStr(val % (16 - i));
@@ -692,15 +692,20 @@ public class Home extends AppCompatActivity {
         }
 
         private void setColoursForDates() {
-            HashMap<String, Vector<TaskDef>> taskDefHashMap = dbManager.getDateTaskDefHashMap();
-            HashMap<String, Vector<FeedbackFormDef>> feedbackDefHashMap = dbManager.getDateFeedbackDefHashMap();
-
+            HashMap<String, Vector<CourseDef>> courseDefHashMap = dbManager.getDateCourseDefHashMap();
+            String defaultMultiColoringCol = "000FFF";
             DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-            for (Map.Entry pair : taskDefHashMap.entrySet()) {
+            for (Map.Entry pair : courseDefHashMap.entrySet()) {
                 String task_date_str_i = (String) pair.getKey();
-                Vector<TaskDef> task_def_vec = (Vector<TaskDef>) pair.getValue();
+                Vector<CourseDef> course_def_vec = (Vector<CourseDef>) pair.getValue();
 
-                if(feedbackDefHashMap.containsKey(task_date_str_i)) {
+
+                if(course_def_vec.size() == 1) {
+                    CourseDef course_i = course_def_vec.get(0);
+
+                    String color_hex_i = myHashFn(course_i.NAME);
+                    int color_int_i = Color.parseColor(color_hex_i);
+
                     Date task_date_i = null;
                     try {
                         task_date_i = formatter.parse(task_date_str_i);
@@ -708,77 +713,54 @@ public class Home extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    ColorDrawable blue = new ColorDrawable(Color.parseColor("#80000FFF"));
-                    caldroidFragment.setBackgroundDrawableForDate(blue,task_date_i);
-                    feedbackDefHashMap.remove(task_date_str_i);
+                    ColorDrawable color_for_course_i = new ColorDrawable(color_int_i);
+                    caldroidFragment.setBackgroundDrawableForDate(color_for_course_i,task_date_i);
                 }
                 else {
-                    if(task_def_vec.size() == 1) {
-                        TaskDef task_i = task_def_vec.get(0);
-                        CourseDef course_i = dbManager.getCourseOf(task_i);
-                        String color_hex_i = myHashFn(course_i.NAME);
-                        int color_int_i = Color.parseColor(color_hex_i);
-
-                        Date task_date_i = null;
-                        try {
-                            task_date_i = formatter.parse(task_date_str_i);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-
-                        ColorDrawable color_for_course_i = new ColorDrawable(color_int_i);
-                        caldroidFragment.setBackgroundDrawableForDate(color_for_course_i,task_date_i);
+                    Date course_date_i = null;
+                    try {
+                        course_date_i = formatter.parse(task_date_str_i);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
-                    else {
-                        Date task_date_i = null;
-                        try {
-                            task_date_i = formatter.parse(task_date_str_i);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
 
-                        ColorDrawable blue = new ColorDrawable(Color.parseColor("#80000FFF"));
-                        caldroidFragment.setBackgroundDrawableForDate(blue,task_date_i);
-                    }
+                    /* Assuming light theme :( */
+                    String transparency = determineTransparency(course_def_vec.size());
+
+                    String col = "#" + transparency + defaultMultiColoringCol;
+                    ColorDrawable defaultCol = new ColorDrawable(Color.parseColor(col));
+                    caldroidFragment.setBackgroundDrawableForDate(defaultCol,course_date_i);
                 }
-            }
-
-            for (Map.Entry pair : feedbackDefHashMap.entrySet()) {
-                String feedback_date_str_i = (String) pair.getKey();
-                Vector<FeedbackFormDef> feedback_def_vec = (Vector<FeedbackFormDef>) pair.getValue();
-
-                    if(feedback_def_vec.size() == 1) {
-                        FeedbackFormDef form_i = feedback_def_vec.get(0);
-                        CourseDef course_i = dbManager.getCourseOf(form_i);
-                        String color_hex_i = myHashFn(course_i.NAME);
-                        int color_int_i = Color.parseColor(color_hex_i);
-
-                        Date feedback_date_i = null;
-                        try {
-                            feedback_date_i = formatter.parse(feedback_date_str_i);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-
-                        ColorDrawable color_for_course_i = new ColorDrawable(color_int_i);
-                        caldroidFragment.setBackgroundDrawableForDate(color_for_course_i,feedback_date_i);
-                    }
-                    else {
-                        Date feedback_date_i = null;
-                        try {
-                            feedback_date_i = formatter.parse(feedback_date_str_i);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-
-                        ColorDrawable blue = new ColorDrawable(Color.parseColor("#80000FFF"));
-                        caldroidFragment.setBackgroundDrawableForDate(blue,feedback_date_i);
-                    }
             }
         }
 
         public void caldroidSetColorForDates() {
             setColoursForDates();
+        }
+
+        private String determineTransparency(int num) {
+            switch (num) {
+                case 2 :
+                    return "1A";
+                case 3 :
+                    return "33";
+                case 4 :
+                    return "4D";
+                case 5 :
+                    return "66";
+                case 6 :
+                    return "80";
+                case 7 :
+                    return "99";
+                case 8 :
+                    return "B3";
+                case 9 :
+                    return "CC";
+                case 10 :
+                    return "E6";
+                default:
+                    return "FF";
+            }
         }
     }
 
