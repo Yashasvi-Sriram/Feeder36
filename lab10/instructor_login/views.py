@@ -426,18 +426,40 @@ def old_feedback_form(request, pk):
     qsnlen = len(question_set)
     response_count = 0
     ans_dict = {}
-    rate = [0]*6
+    text_response = []
+
+
 
     for qsn in question_set:
-        ans_dict[qsn] = rate
+        ans_dict[qsn] = [0]*6
 
     for response_data in all_feedback_responses:
         student_response = response_data.answer_set.split(fbs.form_delimiter)
         student_response = [int(float(i)) for i in student_response]
+        extra_response = response_data.comment
+        if len(extra_response) > 0 :
+            text_response.append(extra_response)
+        print(student_response)
         i = 0
         for qsn in question_set:
-            ans_dict[qsn][student_response[i]] = ans_dict[qsn][student_response[i]] + 1
+            ans_dict[qsn][student_response[question_set.index(qsn)]] = ans_dict[qsn][student_response[question_set.index(qsn)]] + 1
+
         response_count = response_count + 1
+
+    print(ans_dict)
+
+    final_dict = {'fb_form': selected_fb_form,
+                 'year': date[2],
+                 'month': date[1],
+                 'day': date[0],
+                 'hour': time[0],
+                 'minute': time[1],
+                 'course': selected_course,
+                 'question_set': question_set,
+                 'response_count': response_count,
+                  'text_response' : text_response}
+
+    final_dict.update(ans_dict)
 
 
 
@@ -451,16 +473,7 @@ def old_feedback_form(request, pk):
     elif request.method == 'GET':
         # special admin logged in
         #if request.session.get(sk.instructor_login_logged, False):
-        return render(request, 'instructor_login/fb_form_crud/old_fb_form.html', {'fb_form': selected_fb_form,
-                                                                                 'year': date[2],
-                                                                                 'month': date[1],
-                                                                                 'day': date[0],
-                                                                                 'hour': time[0],
-                                                                                 'minute': time[1],
-                                                                                 'all_responses': ans_dict,
-                                                                                 'course': selected_course,
-                                                                                 'question_set': question_set,
-                                                                                  'response_count' : response_count})
+        return render(request, 'instructor_login/fb_form_crud/old_fb_form.html',final_dict )
         # NOT logged in
         # else:
         #     return render(request, 'instructor_login/login.html')

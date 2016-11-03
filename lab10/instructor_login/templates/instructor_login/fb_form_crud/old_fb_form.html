@@ -65,23 +65,31 @@
                         <div class="panel panel-default">
                         <div class="panel-heading">
                         <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#ans{{ forloop.counter }}">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#ans{{ forloop.counter0 }}">
                         {{ question }}</a></h4>
                         </div>
-                        <div id="ans{{ forloop.counter }}" class="panel-collapse collapse in">
+                        <div id="ans{{ forloop.counter0 }}" class="panel-collapse collapse in">
                         <div class="panel-body">
                             {% if  response_count  > 0 %}
+                            <h4>Hello</h4>
+
 
                             <table class="table table-hover table-striped">
-                            {% for x in all_responses.question %}
+                            {% for data in final_dict.items.question %}
                                 <tr>
                                 <td class="table_data">
-                                    {{ forloop.counter }}
+                                {{ forloop.counter0 }}
 
                                 </td>
                                 <td class="table_data">
-                                {{ x }}
+                                {{ data }}
                                 </td>
+
+                                    </td>
+                                <td class="table_data">
+                                Hello
+                                </td>
+
                                 </tr>
 
                             {% endfor %}
@@ -97,6 +105,14 @@
                         </div>
                      {% endfor %}
 
+
+                </div>
+
+                <div>
+                    <h4>Suggestions</h4>
+                    {% for text in text_response %}
+                    {{text}}<br>
+                    {% endfor %}
 
                 </div>
 
