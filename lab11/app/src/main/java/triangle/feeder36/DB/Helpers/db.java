@@ -470,6 +470,59 @@ public class db extends Helper {
         return vectorHashMap;
     }
 
+    public HashMap<String, Vector<CourseDef>> getDateCourseDefHashMap() {
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        String query1 = "SELECT * FROM " + TABLES.TASKS.TABLE_NAME + ";";
+
+        HashMap<String, Vector<CourseDef>> vectorHashMap = new HashMap<>();
+
+        Cursor c1 = db.rawQuery(query1, null);
+        c1.moveToFirst();
+
+        while (!c1.isAfterLast()) {
+
+            TaskDef row = new TaskDef(c1);
+            CourseDef courseDef = this.getCourseOf(row);
+            DateTime rowDatetime = new DateTime(row.DEADLINE, Date.SIMPLE_REPR_SEPARATOR, Time.SIMPLE_REPR_SEPARATOR, DateTime.SIMPLE_REPR_SEPARATOR);
+            Vector<CourseDef> courseDefVector = vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation());
+
+            if (courseDefVector == null) {
+                vectorHashMap.put(rowDatetime.$DATE.simpleRepresentation(), new Vector<CourseDef>());
+                vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation()).add(courseDef);
+            } else {
+                vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation()).add(courseDef);
+            }
+
+            c1.moveToNext();
+        }
+
+        String query2 = "SELECT * FROM " + TABLES.FEEDBACK_FORMS.TABLE_NAME + ";";
+
+        Cursor c2 = db.rawQuery(query2, null);
+        c2.moveToFirst();
+
+        while (!c2.isAfterLast()) {
+            FeedbackFormDef row = new FeedbackFormDef(c2);
+            CourseDef courseDef = getCourseOf(row);
+            DateTime rowDatetime = new DateTime(row.DEADLINE, Date.SIMPLE_REPR_SEPARATOR, Time.SIMPLE_REPR_SEPARATOR, DateTime.SIMPLE_REPR_SEPARATOR);
+            Vector<CourseDef> taskDefVector = vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation());
+
+            if (taskDefVector == null) {
+                vectorHashMap.put(rowDatetime.$DATE.simpleRepresentation(), new Vector<CourseDef>());
+                vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation()).add(courseDef);
+            } else {
+                vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation()).add(courseDef);
+            }
+
+            c2.moveToNext();
+        }
+        c2.close();
+        db.close();
+        return vectorHashMap;
+    }
+
     /* Tasks */
 
     /* Feedback forms */
