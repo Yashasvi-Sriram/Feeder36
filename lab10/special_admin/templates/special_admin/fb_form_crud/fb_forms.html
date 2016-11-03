@@ -19,50 +19,50 @@
 
         <hr>
         <div class="row">
-            <div class="col-xs-3">
-                <blockquote>{{ all_course|length }} courses available</blockquote>
-                <table class="table table-hover table-striped" style="overflow: scroll">
-                    <colgroup>
-                        <col span="1" style="width: 30%;">
-                        <col span="1" style="width: 60%;">
-                        <col span="1" style="width: 10%;">
-                    </colgroup>
-                    <thead>
-                    <tr>
-                        <th>Code</th>
-                        <th>Name</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for course in all_course %}
-                        <tr>
-                            <td>
-                                <a href="{% url 'special_admin:feedback_forms' course.pk %}">
-                                    {{ course.code }}
-                                </a>
-                            </td>
-                            <td>
-                                <a href="{% url 'special_admin:feedback_forms' course.pk %}">
-                                    {{ course.name }}
-                                </a>
-                            </td>
-                            <td>
-                                <a href="{% url 'special_admin:new_feedback_form' course.pk %}">
-                                    <button class="btn-success">Create</button>
-                                </a>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+            <div class="col-xs-1">
+{#                <blockquote>{{ all_course|length }} courses available</blockquote>#}
+{#                <table class="table table-hover table-striped" style="overflow: scroll">#}
+{#                    <colgroup>#}
+{#                        <col span="1" style="width: 30%;">#}
+{#                        <col span="1" style="width: 60%;">#}
+{#                        <col span="1" style="width: 10%;">#}
+{#                    </colgroup>#}
+{#                    <thead>#}
+{#                    <tr>#}
+{#                        <th>Code</th>#}
+{#                        <th>Name</th>#}
+{#                        <th></th>#}
+{#                    </tr>#}
+{#                    </thead>#}
+{#                    <tbody>#}
+{#                    {% for course in all_course %}#}
+{#                        <tr>#}
+{#                            <td>#}
+{#                                <a href="{% url 'special_admin:feedback_forms' course.pk %}">#}
+{#                                    {{ course.code }}#}
+{#                                </a>#}
+{#                            </td>#}
+{#                            <td>#}
+{#                                <a href="{% url 'special_admin:feedback_forms' course.pk %}">#}
+{#                                    {{ course.name }}#}
+{#                                </a>#}
+{#                            </td>#}
+{#                            <td>#}
+{#                                <a href="{% url 'special_admin:new_feedback_form' course.pk %}">#}
+{#                                    <button class="btn-success">Create</button>#}
+{#                                </a>#}
+{#                            </td>#}
+{#                        </tr>#}
+{#                    {% endfor %}#}
+{#                    </tbody>#}
+{#                </table>#}
             </div>
-            <div class="col-xs-9 row">
+            <div class="col-xs-11 row">
                 <blockquote>
                     {{ total }} Feedback available for {{ course.name }}
-                    <a href="{% url 'special_admin:new_feedback_form' course.pk %}">
-                        <button class="btn-success">Create</button>
-                    </a>
+{#                    <a href="{% url 'special_admin:new_feedback_form' course.pk %}">#}
+{#                        <button class="btn-success">Create</button>#}
+{#                    </a>#}
                 </blockquote>
 
                 <div class="col-xs-6">

@@ -15,16 +15,16 @@
                     <colgroup>
                         <col span="1" style="width: 10%;">
                         <col span="1" style="width: 50%;">
-                        <col span="1" style="width: 10%;">
-                        <col span="1" style="width: 15%;">
-                        <col span="1" style="width: 15%;">
+{#                        <col span="1" style="width: 10%;">#}
+{#                        <col span="1" style="width: 15%;">#}
+{#                        <col span="1" style="width: 15%;">#}
                     </colgroup>
                     <thead>
                     <tr>
                         <th>Code</th>
                         <th>Name</th>
-                        <th></th>
-                        <th></th>
+{#                        <th></th>#}
+{#                        <th></th>#}
                         <th></th>
                     </tr>
                     </thead>
@@ -41,20 +41,20 @@
                                     {{ course.name }}
                                 </a>
                             </td>
-                            <td>
-                                <a href="{% url 'special_admin:tasks' course.pk %}">
-                                    <button class="btn-info">
-                                        Tasks
-                                    </button>
-                                </a>
-                            </td>
-                            <td>
-                                <a href="{% url 'special_admin:feedback_forms' course.pk %}">
-                                    <button class="btn-default">
-                                        Feedback
-                                    </button>
-                                </a>
-                            </td>
+{#                            <td>#}
+{#                                <a href="{% url 'special_admin:tasks' course.pk %}">#}
+{#                                    <button class="btn-info">#}
+{#                                        Tasks#}
+{#                                    </button>#}
+{#                                </a>#}
+{#                            </td>#}
+{#                            <td>#}
+{#                                <a href="{% url 'special_admin:feedback_forms' course.pk %}">#}
+{#                                    <button class="btn-default">#}
+{#                                        Feedback#}
+{#                                    </button>#}
+{#                                </a>#}
+{#                            </td>#}
                             <td>
                                 <form action="{% url 'special_admin:courses' %}" method="post">
                                     {% csrf_token %}
