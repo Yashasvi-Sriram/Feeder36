@@ -1,6 +1,8 @@
 package triangle.feeder36.Activities;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -31,6 +33,9 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -49,6 +54,8 @@ import triangle.feeder36.DB.Helpers.db;
 import triangle.feeder36.Log.TLog;
 import triangle.feeder36.R;
 import triangle.feeder36.ServerTalk.IPSource;
+
+import static android.media.CamcorderProfile.get;
 
 public class Home extends AppCompatActivity {
 
@@ -676,7 +683,7 @@ public class Home extends AppCompatActivity {
                 val += courseName.charAt(i);
             }
 
-            String col = "#";
+            String col = "#59";
 
             for (int i = 0; i < 6; i++) {
                 col += convertToCorrStr(val % (16 - i));
@@ -685,21 +692,89 @@ public class Home extends AppCompatActivity {
         }
 
         private void setColoursForDates() {
-            Vector<TaskDef> allTasks = dbManager.getAllTasks();
-            Vector<FeedbackFormDef> allFeedbacks = dbManager.getAllFeedbackForms();
-
             HashMap<String, Vector<TaskDef>> taskDefHashMap = dbManager.getDateTaskDefHashMap();
+            HashMap<String, Vector<FeedbackFormDef>> feedbackDefHashMap = dbManager.getDateFeedbackDefHashMap();
 
-
+            DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
             for (Map.Entry pair : taskDefHashMap.entrySet()) {
-                String task_date_i = (String) pair.getKey();
+                String task_date_str_i = (String) pair.getKey();
                 Vector<TaskDef> task_def_vec = (Vector<TaskDef>) pair.getValue();
-                Log.i(TLog.TAG, task_date_i);
-                for (int i = 0; i < task_def_vec.size(); i++) {
-                    Log.i(TLog.TAG, task_def_vec.get(i).toString());
+
+                if(feedbackDefHashMap.containsKey(task_date_str_i)) {
+                    Date task_date_i = null;
+                    try {
+                        task_date_i = formatter.parse(task_date_str_i);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    ColorDrawable blue = new ColorDrawable(Color.parseColor("#80000FFF"));
+                    caldroidFragment.setBackgroundDrawableForDate(blue,task_date_i);
+                    feedbackDefHashMap.remove(task_date_str_i);
+                }
+                else {
+                    if(task_def_vec.size() == 1) {
+                        TaskDef task_i = task_def_vec.get(0);
+                        CourseDef course_i = dbManager.getCourseOf(task_i);
+                        String color_hex_i = myHashFn(course_i.NAME);
+                        int color_int_i = Color.parseColor(color_hex_i);
+
+                        Date task_date_i = null;
+                        try {
+                            task_date_i = formatter.parse(task_date_str_i);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                        ColorDrawable color_for_course_i = new ColorDrawable(color_int_i);
+                        caldroidFragment.setBackgroundDrawableForDate(color_for_course_i,task_date_i);
+                    }
+                    else {
+                        Date task_date_i = null;
+                        try {
+                            task_date_i = formatter.parse(task_date_str_i);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                        ColorDrawable blue = new ColorDrawable(Color.parseColor("#80000FFF"));
+                        caldroidFragment.setBackgroundDrawableForDate(blue,task_date_i);
+                    }
                 }
             }
 
+            for (Map.Entry pair : feedbackDefHashMap.entrySet()) {
+                String feedback_date_str_i = (String) pair.getKey();
+                Vector<FeedbackFormDef> feedback_def_vec = (Vector<FeedbackFormDef>) pair.getValue();
+
+                    if(feedback_def_vec.size() == 1) {
+                        FeedbackFormDef form_i = feedback_def_vec.get(0);
+                        CourseDef course_i = dbManager.getCourseOf(form_i);
+                        String color_hex_i = myHashFn(course_i.NAME);
+                        int color_int_i = Color.parseColor(color_hex_i);
+
+                        Date feedback_date_i = null;
+                        try {
+                            feedback_date_i = formatter.parse(feedback_date_str_i);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                        ColorDrawable color_for_course_i = new ColorDrawable(color_int_i);
+                        caldroidFragment.setBackgroundDrawableForDate(color_for_course_i,feedback_date_i);
+                    }
+                    else {
+                        Date feedback_date_i = null;
+                        try {
+                            feedback_date_i = formatter.parse(feedback_date_str_i);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                        ColorDrawable blue = new ColorDrawable(Color.parseColor("#80000FFF"));
+                        caldroidFragment.setBackgroundDrawableForDate(blue,feedback_date_i);
+                    }
+            }
         }
 
         public void caldroidSetColorForDates() {
