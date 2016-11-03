@@ -34,12 +34,12 @@
                 <form method="post" action="{% url 'special_admin:old_course' course.pk %}" id="update_course_form">
                     {% csrf_token %}
                     <br>
-                    <input style='width: 100%' type='text' id='course_code' readonly name='course_code' value='{{ course.code }}'
+                    <input style='width: 100%' type='text' id='course_code'  name='course_code' value='{{ course.code }}'
                            placeholder='code'><br><br>
-                    <input style='width: 100%' type='text' name='course_name' readonly value='{{ course.name }}'
+                    <input style='width: 100%' type='text' name='course_name' value='{{ course.name }}'
                            placeholder='name'><br><br>
                     <input type="hidden" value="" id="students_input" name="students">
-{#                    <input id="validate" type='button' name='update_course' value='Update' class='btn-info'>#}
+                    <input id="validate" type='button' name='update_course' value='Update' class='btn-info'>
                     <script type="text/javascript">
                         var signed_students = [];
                         var signed_class_name = 'signed';
@@ -73,20 +73,20 @@
                 $(document).ready(function () {
                     update_totals();
 
-{#                    $('#students_signed').find('.course').click(function () {#}
-{#                        $(this).fadeOut(0).removeClass(signed_class_name);#}
-{#                        $('#students_available').find('#' + $(this).attr('id')).fadeIn(0);#}
-{#                        no_available++;#}
-{#                        no_signed--;#}
-{#                        update_totals();#}
-{#                    });#}
-{#                    $('#students_available').find('.course').click(function () {#}
-{#                        $(this).fadeOut(0);#}
-{#                        $('#students_signed').find('#' + $(this).attr('id')).fadeIn(0).addClass(signed_class_name);#}
-{#                        no_available--;#}
-{#                        no_signed++;#}
-{#                        update_totals();#}
-{#                    });#}
+                    $('#students_signed').find('.course').click(function () {
+                        $(this).fadeOut(0).removeClass(signed_class_name);
+                        $('#students_available').find('#' + $(this).attr('id')).fadeIn(0);
+                        no_available++;
+                        no_signed--;
+                        update_totals();
+                    });
+                    $('#students_available').find('.course').click(function () {
+                        $(this).fadeOut(0);
+                        $('#students_signed').find('#' + $(this).attr('id')).fadeIn(0).addClass(signed_class_name);
+                        no_available--;
+                        no_signed++;
+                        update_totals();
+                    });
                 });
             </script>
             <div class='col-xs-5'>

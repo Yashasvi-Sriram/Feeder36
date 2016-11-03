@@ -2,15 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e4f5f38a-25e6-4896-993c-82d5a21a48c8" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/db.sqlite3" afterPath="$PROJECT_DIR$/db.sqlite3" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/special_admin/students.csv" afterPath="$PROJECT_DIR$/special_admin/students.csv" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/courses.html" afterPath="$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/courses.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/old_course.html" afterPath="$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/old_course.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/special_admin/templates/special_admin/fb_form_crud/fb_forms.html" afterPath="$PROJECT_DIR$/special_admin/templates/special_admin/fb_form_crud/fb_forms.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/special_admin/templates/special_admin/home.html" afterPath="$PROJECT_DIR$/special_admin/templates/special_admin/home.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/tasks.html" afterPath="$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/tasks.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/special_admin/templates/special_admin/login.html" afterPath="$PROJECT_DIR$/special_admin/templates/special_admin/login.html" />
     </list>
     <ignored path="Feeder.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -33,59 +28,26 @@
     <favorites_list name="Feeder" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="450">
-      <file leaf-file-name="courses.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/courses.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="32" column="25" selection-start-line="32" selection-start-column="25" selection-end-line="32" selection-end-column="25" />
-              <folding>
-                <marker date="1478165786515" expanded="false" signature="882:893" ph="..." />
-                <marker date="1478165786515" expanded="false" signature="945:956" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="fb_forms.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/fb_form_crud/fb_forms.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="234">
-              <caret line="46" column="57" selection-start-line="46" selection-start-column="57" selection-end-line="46" selection-end-column="57" />
-              <folding>
-                <marker date="1478167223255" expanded="false" signature="875:891" ph="..." />
-                <marker date="1478167223255" expanded="false" signature="978:989" ph="..." />
-                <marker date="1478167223255" expanded="false" signature="1041:1052" ph="..." />
-                <marker date="1478167223255" expanded="false" signature="1104:1115" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="tasks.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/tasks.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1534">
-              <caret line="59" column="26" selection-start-line="59" selection-start-column="26" selection-end-line="59" selection-end-column="26" />
-              <folding>
-                <marker date="1478167149063" expanded="false" signature="884:900" ph="..." />
-                <marker date="1478167149063" expanded="false" signature="987:998" ph="..." />
-                <marker date="1478167149063" expanded="false" signature="1050:1061" ph="..." />
-                <marker date="1478167149063" expanded="false" signature="1113:1124" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
+    <leaf>
       <file leaf-file-name="old_course.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/old_course.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="780">
-              <caret line="30" column="25" selection-start-line="30" selection-start-column="25" selection-end-line="30" selection-end-column="25" />
+            <state relative-caret-position="26">
+              <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
               <folding>
-                <marker date="1478165766331" expanded="false" signature="473:518" ph="..." />
-                <marker date="1478165766331" expanded="false" signature="809:854" ph="..." />
+                <marker date="1478174841763" expanded="false" signature="473:518" ph="..." />
+                <marker date="1478174841763" expanded="false" signature="809:854" ph="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="login.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/login.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="104">
+              <caret line="4" column="50" selection-start-line="4" selection-start-column="50" selection-end-line="4" selection-end-column="50" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -113,7 +75,6 @@
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/students.html" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/new_student.html" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/student_crud/student.html" />
-        <option value="$PROJECT_DIR$/special_admin/templates/special_admin/login.html" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/student_crud/students.html" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/student_crud/old_student.html" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/student_crud/new_student.html" />
@@ -153,10 +114,11 @@
         <option value="$PROJECT_DIR$/special_admin/models.py" />
         <option value="$PROJECT_DIR$/android/views.py" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/home.html" />
-        <option value="$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/old_course.html" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/courses.html" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/tasks.html" />
         <option value="$PROJECT_DIR$/special_admin/templates/special_admin/fb_form_crud/fb_forms.html" />
+        <option value="$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/old_course.html" />
+        <option value="$PROJECT_DIR$/special_admin/templates/special_admin/login.html" />
       </list>
     </option>
   </component>
@@ -216,18 +178,11 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches">
-        <subPane />
-      </pane>
       <pane id="Scope">
         <subPane subId="Problems" />
         <subPane subId="Project Files">
           <PATH>
             <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT USER_OBJECT="Feeder">
               <option name="myItemId" value="" />
               <option name="myItemType" value="" />
             </PATH_ELEMENT>
@@ -252,7 +207,72 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lab10" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lab10" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="special_admin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lab10" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lab10" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="special_admin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="special_admin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lab10" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lab10" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="special_admin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="special_admin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="course_crud" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
+      </pane>
+      <pane id="Scratches">
+        <subPane />
       </pane>
     </panes>
   </component>
@@ -552,26 +572,13 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/tasks.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1534">
-          <caret line="59" column="26" selection-start-line="59" selection-start-column="26" selection-end-line="59" selection-end-column="26" />
-          <folding>
-            <marker date="1478167149063" expanded="false" signature="884:900" ph="..." />
-            <marker date="1478167149063" expanded="false" signature="987:998" ph="..." />
-            <marker date="1478167149063" expanded="false" signature="1050:1061" ph="..." />
-            <marker date="1478167149063" expanded="false" signature="1113:1124" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/old_course.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="780">
           <caret line="30" column="25" selection-start-line="30" selection-start-column="25" selection-end-line="30" selection-end-column="25" />
           <folding>
-            <marker date="1478165766331" expanded="false" signature="473:518" ph="..." />
-            <marker date="1478165766331" expanded="false" signature="809:854" ph="..." />
+            <marker date="1478174841763" expanded="false" signature="473:518" ph="..." />
+            <marker date="1478174841763" expanded="false" signature="809:854" ph="..." />
           </folding>
         </state>
       </provider>
@@ -592,8 +599,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1478165766331" expanded="false" signature="473:518" ph="..." />
-            <marker date="1478165766331" expanded="false" signature="809:854" ph="..." />
+            <marker date="1478174841763" expanded="false" signature="473:518" ph="..." />
+            <marker date="1478174841763" expanded="false" signature="809:854" ph="..." />
           </folding>
         </state>
       </provider>
@@ -610,12 +617,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#312#914#0" expanded="false" />
-            <element signature="e#972#1780#0" expanded="false" />
-            <element signature="e#1827#5386#0" expanded="false" />
-            <element signature="e#5435#7060#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -746,13 +747,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/login.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="156">
-          <caret line="6" column="16" selection-start-line="6" selection-start-column="16" selection-end-line="6" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/android/admin.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="78">
@@ -825,31 +819,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/TODO.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
-        <state split_layout="FIRST">
-          <first_editor relative-caret-position="260">
-            <caret line="10" column="9" selection-start-line="10" selection-start-column="9" selection-end-line="10" selection-end-column="9" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-      <provider editor-type-id="MarkdownFxPreviewEditor">
-        <state />
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="52">
-          <caret line="2" column="45" selection-start-line="2" selection-start-column="45" selection-end-line="2" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/special_admin/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="27" column="31" selection-start-line="27" selection-start-column="31" selection-end-line="27" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/special_admin/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="556">
@@ -883,41 +852,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/old_course.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="780">
-          <caret line="30" column="25" selection-start-line="30" selection-start-column="25" selection-end-line="30" selection-end-column="25" />
-          <folding>
-            <marker date="1478165766331" expanded="false" signature="473:518" ph="..." />
-            <marker date="1478165766331" expanded="false" signature="809:854" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/courses.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="32" column="25" selection-start-line="32" selection-start-column="25" selection-end-line="32" selection-end-column="25" />
-          <folding>
-            <marker date="1478165786515" expanded="false" signature="882:893" ph="..." />
-            <marker date="1478165786515" expanded="false" signature="945:956" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/tasks.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1534">
-          <caret line="59" column="26" selection-start-line="59" selection-start-column="26" selection-end-line="59" selection-end-column="26" />
-          <folding>
-            <marker date="1478167149063" expanded="false" signature="884:900" ph="..." />
-            <marker date="1478167149063" expanded="false" signature="987:998" ph="..." />
-            <marker date="1478167149063" expanded="false" signature="1050:1061" ph="..." />
-            <marker date="1478167149063" expanded="false" signature="1113:1124" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/fb_form_crud/old_fb_form.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1251">
@@ -929,12 +863,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="234">
           <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
-          <folding>
-            <element signature="e#312#914#0" expanded="false" />
-            <element signature="e#972#1780#0" expanded="false" />
-            <element signature="e#1827#5386#0" expanded="false" />
-            <element signature="e#5435#7060#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -946,24 +874,109 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/special_admin/views.py">
+    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/courses.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1965">
-          <caret line="184" column="0" selection-start-line="184" selection-start-column="0" selection-end-line="184" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="-288">
+          <caret line="32" column="25" selection-start-line="32" selection-start-column="25" selection-end-line="32" selection-end-column="25" />
+          <folding>
+            <marker date="1478165786515" expanded="false" signature="882:893" ph="..." />
+            <marker date="1478165786515" expanded="false" signature="945:956" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/fb_form_crud/fb_forms.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="46" column="57" selection-start-line="46" selection-start-column="57" selection-end-line="46" selection-end-column="57" />
+        <state relative-caret-position="468">
+          <caret line="63" column="4" selection-start-line="63" selection-start-column="4" selection-end-line="63" selection-end-column="4" />
           <folding>
             <marker date="1478167223255" expanded="false" signature="875:891" ph="..." />
             <marker date="1478167223255" expanded="false" signature="978:989" ph="..." />
             <marker date="1478167223255" expanded="false" signature="1041:1052" ph="..." />
             <marker date="1478167223255" expanded="false" signature="1104:1115" ph="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/task_crud/tasks.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="26">
+          <caret line="59" column="26" selection-start-line="59" selection-start-column="26" selection-end-line="59" selection-end-column="26" />
+          <folding>
+            <marker date="1478167149063" expanded="false" signature="884:900" ph="..." />
+            <marker date="1478167149063" expanded="false" signature="987:998" ph="..." />
+            <marker date="1478167149063" expanded="false" signature="1050:1061" ph="..." />
+            <marker date="1478167149063" expanded="false" signature="1113:1124" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/special_admin/tests.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="78">
+          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/special_admin/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="296">
+          <caret line="26" column="31" selection-start-line="26" selection-start-column="31" selection-end-line="26" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/special_admin/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2382">
+          <caret line="697" column="33" selection-start-line="697" selection-start-column="33" selection-end-line="697" selection-end-column="33" />
+          <folding>
+            <element signature="e#4197#10554#0" expanded="false" />
+            <element signature="e#10583#11306#0" expanded="false" />
+            <element signature="e#11338#17622#0" expanded="false" />
+            <element signature="e#17658#23974#0" expanded="false" />
+            <element signature="e#24005#26672#0" expanded="false" />
+            <element signature="e#26706#28534#0" expanded="false" />
+            <element signature="e#28568#35179#0" expanded="false" />
+            <element signature="e#35219#38095#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TODO.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+        <state split_layout="FIRST">
+          <first_editor relative-caret-position="260">
+            <caret line="10" column="20" selection-start-line="10" selection-start-column="20" selection-end-line="10" selection-end-column="20" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+      <provider editor-type-id="MarkdownFxPreviewEditor">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="52">
+          <caret line="2" column="45" selection-start-line="2" selection-start-column="45" selection-end-line="2" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/course_crud/old_course.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="26">
+          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <folding>
+            <marker date="1478174841763" expanded="false" signature="473:518" ph="..." />
+            <marker date="1478174841763" expanded="false" signature="809:854" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/special_admin/templates/special_admin/login.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="104">
+          <caret line="4" column="50" selection-start-line="4" selection-start-column="50" selection-end-line="4" selection-end-column="50" />
+          <folding />
         </state>
       </provider>
     </entry>
