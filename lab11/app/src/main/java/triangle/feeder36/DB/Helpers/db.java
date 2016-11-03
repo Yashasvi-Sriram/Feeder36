@@ -439,6 +439,39 @@ public class db extends Helper {
         db.close();
         return null;
     }
+
+    public HashMap<Date, Vector<TaskDef> > getDateTaskDefHaspMap() {
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLES.TASKS.TABLE_NAME + ";";
+
+        HashMap<Date, Vector<TaskDef> > ret = new HashMap<>();
+
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+
+        while (!c.isAfterLast()) {
+            TaskDef row = new TaskDef(c);
+            DateTime dateTime = new DateTime(row.DEADLINE, Date.SIMPLE_REPR_SEPARATOR,Time.SIMPLE_REPR_SEPARATOR, DateTime.SIMPLE_REPR_SEPARATOR);
+
+            Vector<TaskDef> value = ret.get(dateTime.$DATE);
+
+            if (value == null){
+                value = new Vector<>();
+                value.add(row);
+                ret.put(dateTime.$DATE, value);
+            }
+            else {
+                value.add(row);
+                ret.put(dateTime.$DATE, value);
+            }
+
+            c.moveToNext();
+        }
+
+        c.close();
+        db.close();
+        return ret;
+    }
     /* Tasks */
 
     /* Feedback forms */
@@ -568,6 +601,39 @@ public class db extends Helper {
         c.close();
         db.close();
         return null;
+    }
+
+    public HashMap<Date, Vector<FeedbackFormDef> > getDateFeedbackFormDefHaspMap() {
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLES.FEEDBACK_FORMS.TABLE_NAME + ";";
+
+        HashMap<Date, Vector<FeedbackFormDef> > ret = new HashMap<>();
+
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+
+        while (!c.isAfterLast()) {
+            FeedbackFormDef row = new FeedbackFormDef(c);
+            DateTime dateTime = new DateTime(row.DEADLINE, Date.SIMPLE_REPR_SEPARATOR,Time.SIMPLE_REPR_SEPARATOR, DateTime.SIMPLE_REPR_SEPARATOR);
+
+            Vector<FeedbackFormDef> value = ret.get(dateTime.$DATE);
+
+            if (value == null){
+                value = new Vector<>();
+                value.add(row);
+                ret.put(dateTime.$DATE, value);
+            }
+            else {
+                value.add(row);
+                ret.put(dateTime.$DATE, value);
+            }
+
+            c.moveToNext();
+        }
+
+        c.close();
+        db.close();
+        return ret;
     }
     /* Feedback forms */
 
