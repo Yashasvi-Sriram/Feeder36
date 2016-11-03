@@ -116,10 +116,14 @@
                 </div>
 
                 <div>
-                    <h4>Suggestions</h4>
+                    <h3>Suggestions from Students</h3>
+
                     {% for text in text_response %}
-                    {{text}}<br>
+                     <ul>
+                      <li>{{ text }}</li>
+                    </ul>
                     {% endfor %}
+
 
                 </div>
 

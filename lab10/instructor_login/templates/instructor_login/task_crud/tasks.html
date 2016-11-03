@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-xs-2"></div>
             <div class="col-xs-8">
-                <h1 style="text-align: center;margin: 0;font-size: 50px">{{ course.name }}'s Tasks</h1>
+                <h1 style="text-align: center;margin: 0;font-size: 50px">{{ course.name }}'s Task(s)</h1>
             </div>
             <div class="col-xs-2">
                 <a href="{% url 'instructor_login:feedback_forms' course.pk %}">
@@ -19,7 +19,7 @@
         <hr>
         <div class="row">
             <div class="col-xs-3">
-                <blockquote>{{ all_course|length }} courses available</blockquote>
+                <blockquote>{{ all_course|length }} course(s) available</blockquote>
                 <table class="table table-hover table-striped" style="overflow: scroll">
                     <colgroup>
                         <col span="1" style="width: 30%;">
@@ -58,7 +58,7 @@
             </div>
             <div class="col-xs-9 row">
                 <blockquote>
-                    {{ total }} tasks available for {{ course.name }}
+                    {{ total }} task(s) available for {{ course.name }}
                     <a href="{% url 'instructor_login:new_task' course.pk %}">
                         <button class="btn-success">Create</button>
                     </a>
