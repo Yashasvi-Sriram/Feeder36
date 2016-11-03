@@ -60,15 +60,46 @@
                 <blockquote>
                     {{ question_set|length }} questions were posted for this feedback
                 </blockquote>
-                <table id='questions' class="table table-hover table-striped">
-                    {% for question in question_set %}
-                        <tr>
-                            <td class="question">
-                                {{ question }}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </table>
+                 <div class="panel-group" id="accordion">
+                     {% for question in question_set %}
+                        <div class="panel panel-default">
+                        <div class="panel-heading">
+                        <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#ans{{ forloop.counter }}">
+                        {{ question }}</a></h4>
+                        </div>
+                        <div id="ans{{ forloop.counter }}" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            {% if  response_count  > 0 %}
+
+                            <table class="table table-hover table-striped">
+                            {% for x in all_responses.question %}
+                                <tr>
+                                <td class="table_data">
+                                    {{ forloop.counter }}
+
+                                </td>
+                                <td class="table_data">
+                                {{ x }}
+                                </td>
+                                </tr>
+
+                            {% endfor %}
+                                </table>
+                            {% else %}
+                            <p> No Respnses as of now</p>
+
+                            {% endif %}
+
+
+                        </div>
+                         </div>
+                        </div>
+                     {% endfor %}
+
+
+                </div>
+
             </div>
         </div>
     </div>

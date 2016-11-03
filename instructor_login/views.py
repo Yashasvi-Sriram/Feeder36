@@ -15,7 +15,7 @@ from datetime import datetime, timedelta
 import csv
 
 from Feeder.settings import STUDENT_CSV
-from special_admin.models import Student, Course, Task, FeedBackForm, SpecialAdmin
+from special_admin.models import Student, Course, Task, FeedBackForm, SpecialAdmin,FeedbackResponse
 from special_admin.static_strings import SessionKeys as sk, FeedbackStrings as fbs
 from special_admin import datetime_helper
 
@@ -422,6 +422,25 @@ def old_feedback_form(request, pk):
     date = date_time_parts[0].split("/")
     time = date_time_parts[1].split(":")
     question_set = selected_fb_form.question_set.split(fbs.form_delimiter)
+    all_feedback_responses = FeedbackResponse.objects.filter(feedback_form_id=selected_fb_form.pk)
+    qsnlen = len(question_set)
+    response_count = 0
+    ans_dict = {}
+    rate = [0]*6
+
+    for qsn in question_set:
+        ans_dict[qsn] = rate
+
+    for response_data in all_feedback_responses:
+        student_response = response_data.answer_set.split(fbs.form_delimiter)
+        student_response = [int(float(i)) for i in student_response]
+        i = 0
+        for qsn in question_set:
+            ans_dict[qsn][student_response[i]] = ans_dict[qsn][student_response[i]] + 1
+        response_count = response_count + 1
+
+
+
 
     if request.method == 'POST':
         # delete student
@@ -433,21 +452,18 @@ def old_feedback_form(request, pk):
         # special admin logged in
         #if request.session.get(sk.instructor_login_logged, False):
         return render(request, 'instructor_login/fb_form_crud/old_fb_form.html', {'fb_form': selected_fb_form,
-                                                                                   'year': date[2],
-                                                                                   'month': date[1],
-                                                                                   'day': date[0],
-                                                                                   'hour': time[0],
-                                                                                   'minute': time[1],
-                                                                                   'course': selected_course,
-                                                                                   'question_set': question_set})
+                                                                                 'year': date[2],
+                                                                                 'month': date[1],
+                                                                                 'day': date[0],
+                                                                                 'hour': time[0],
+                                                                                 'minute': time[1],
+                                                                                 'all_responses': ans_dict,
+                                                                                 'course': selected_course,
+                                                                                 'question_set': question_set,
+                                                                                  'response_count' : response_count})
         # NOT logged in
         # else:
         #     return render(request, 'instructor_login/login.html')
-
-
-
-
-
 
 
 
