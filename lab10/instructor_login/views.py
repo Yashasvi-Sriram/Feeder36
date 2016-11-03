@@ -426,27 +426,44 @@ def old_feedback_form(request, pk):
     qsnlen = len(question_set)
     response_count = 0
     ans_dict = {}
+    num_dict = {}
     text_response = []
 
 
 
-    for qsn in question_set:
-        ans_dict[qsn] = [0]*6
+    # for qsn in question_set:
+    #     ans_dict[qsn] = [0]*6
+    for i in range(0,qsnlen):
+        num_dict[i] = [0] * 6
+
+    # for response_data in all_feedback_responses:
+    #     student_response = response_data.answer_set.split(fbs.form_delimiter)
+    #     student_response = [int(float(i)) for i in student_response]
+    #     extra_response = response_data.comment
+    #     if len(extra_response) > 0 :
+    #         text_response.append(extra_response)
+    #     print(student_response)
+    #     i = 0
+    #     for qsn in question_set:
+    #         ans_dict[qsn][student_response[question_set.index(qsn)]] = ans_dict[qsn][student_response[question_set.index(qsn)]] + 1
+    #
+    #     response_count = response_count + 1
 
     for response_data in all_feedback_responses:
         student_response = response_data.answer_set.split(fbs.form_delimiter)
         student_response = [int(float(i)) for i in student_response]
         extra_response = response_data.comment
-        if len(extra_response) > 0 :
+        if len(extra_response) > 0:
             text_response.append(extra_response)
         print(student_response)
-        i = 0
-        for qsn in question_set:
-            ans_dict[qsn][student_response[question_set.index(qsn)]] = ans_dict[qsn][student_response[question_set.index(qsn)]] + 1
+
+        for j in range(0,qsnlen):
+            num_dict[j][student_response[j]] = num_dict[j][student_response[j]] + 1
+
 
         response_count = response_count + 1
 
-    print(ans_dict)
+    # print(ans_dict)
 
     final_dict = {'fb_form': selected_fb_form,
                  'year': date[2],
@@ -457,9 +474,10 @@ def old_feedback_form(request, pk):
                  'course': selected_course,
                  'question_set': question_set,
                  'response_count': response_count,
+                  'num_dict':num_dict,
                   'text_response' : text_response}
 
-    final_dict.update(ans_dict)
+    #final_dict.update(num_dict)
 
 
 

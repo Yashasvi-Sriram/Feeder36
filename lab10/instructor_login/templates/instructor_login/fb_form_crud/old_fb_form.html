@@ -1,4 +1,5 @@
 {% extends 'instructor_login/base.html' %}
+{% load my_filter %}
 {% block specific_css %}
     <style>
         .question {
@@ -19,6 +20,7 @@
     </style>
 {% endblock %}
 {% block body %}
+
     <div class='container-fluid'>
 
         <h1 style='text-align: center;margin: 0;font-size: 50px'>{{ fb_form.name }} Feedback for <a
@@ -58,7 +60,8 @@
 
             <div style='overflow: auto;height: 500px' class='row'>
                 <blockquote>
-                    {{ question_set|length }} questions were posted for this feedback
+                    {{ question_set|length }} questions were posted for this feedback<br>
+                    Total {{ response_count }} responses recorded<br>
                 </blockquote>
                  <div class="panel-group" id="accordion">
                      {% for question in question_set %}
@@ -71,29 +74,33 @@
                         <div id="ans{{ forloop.counter0 }}" class="panel-collapse collapse in">
                         <div class="panel-body">
                             {% if  response_count  > 0 %}
-                            <h4>Hello</h4>
+                         <table class="table table-bordered">
+                            <thead>
+                              <tr>
+                                <th>Rating</th>
+                                <th>No of students</th>
 
+                              </tr>
+                             <thead>
 
-                            <table class="table table-hover table-striped">
-                            {% for data in final_dict.items.question %}
+                            {% for data in num_dict|lookup:forloop.counter0 %}
+
                                 <tr>
-                                <td class="table_data">
-                                {{ forloop.counter0 }}
-
-                                </td>
-                                <td class="table_data">
-                                {{ data }}
-                                </td>
-
+                                    <td>
+                                        {{forloop.counter0}}
                                     </td>
-                                <td class="table_data">
-                                Hello
-                                </td>
+                                    <td>
+                                        {{data}}
+                                    </td>
+
 
                                 </tr>
 
+
                             {% endfor %}
-                                </table>
+                            </table>
+
+
                             {% else %}
                             <p> No Responses as of now</p>
 
