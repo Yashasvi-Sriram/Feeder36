@@ -158,8 +158,8 @@ public class Home extends AppCompatActivity {
                 // Prepare URL
                 URL login_request_page = new URL(params[0]);
                 // Open Connection
+                Log.i(TLog.TAG, "HTTPUrlConnection connecting to " + params[0] + " to sync db ");
                 HttpURLConnection conn = (HttpURLConnection) login_request_page.openConnection();
-                Log.i(TLog.TAG, "HTTPUrlConnection connected to " + params[0] + " to sync db ");
                 // This connection can send data to server
                 conn.setDoInput(true);
                 // The request is of POST type
@@ -211,8 +211,8 @@ public class Home extends AppCompatActivity {
                     // Prepare URL
                     URL response_submit_page = new URL(params[1]);
                     // Open Connection
+                    Log.i(TLog.TAG, "HTTPUrlConnection connecting to " + params[1] + " to send responses ");
                     HttpURLConnection response_submit_conn = (HttpURLConnection) response_submit_page.openConnection();
-                    Log.i(TLog.TAG, "HTTPUrlConnection connected to " + params[1] + " to send responses ");
                     // This connection can send data to server
                     response_submit_conn.setDoInput(true);
                     // The request is of POST type
