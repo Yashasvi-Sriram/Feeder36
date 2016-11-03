@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    {% load staticfiles %}
+    <link href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <meta charset="UTF-8">
+    <title>Instructor Login</title>
+    <link rel="icon" href="{% static "instructor_login/logo.png" %}" />
+    <style>
+        body {
+            font-family: 'VT323', monospace;
+            font-size: 20px;
+            background-size: cover;
+            background-image: url("http://wallpapercave.com/wp/4SSFz3R.png");
+        }
+
+        .navbar {
+            background-color: rgba(4, 0, 0, 0.85);
+        }
+
+        .navbar a {
+            color: #ffffff;
+        }
+
+        .navbar a:hover {
+            color: darkgreen;
+        }
+    </style>
+    {% block specific_css %}{% endblock %}
+</head>
+<body>
+
+{# navbar #}
+{% block navbar %}
+    <nav class="navbar" style="border:0;border-radius:0;">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#"><big>Feed'er</big></a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="{% url 'instructor_login:courses' %}">Courses</a></li>
+                <li><a href="{% url 'auth:logout' %}?next={% url 'instructor_login:login' %}">Logout</a></li>
+
+            </ul>
+        </div>
+    </nav>
+{% endblock %}
+
+<div id="message" style="display:none;position: fixed;top: 700px;left: 50px;font-size: 50px">
+    <script>
+        function message_popup(message) {
+            $('#message').text('{{ message }}').fadeIn(0).delay(3000).fadeOut(0);
+        }
+
+        $(document).ready(function () {
+            message_popup();
+        });
+    </script>
+</div>
+
+{% block message %}
+
+{% endblock %}
+
+{# body block #}
+{% block body %}
+
+{% endblock %}
+
+</body>
+</html>

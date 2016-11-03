@@ -1,0 +1,75 @@
+{% extends 'instructor_login/base.html' %}
+{% block specific_css %}
+    <style>
+        .question {
+            width: 90%;
+        }
+
+        #questions {
+            list-style: decimal;
+            font-size: xx-large;
+            margin-bottom: 10px;
+            margin-top: 10px;
+            color: black;
+        }
+
+        .remove_question {
+            margin-right: 10px;
+        }
+    </style>
+{% endblock %}
+{% block body %}
+    <div class='container-fluid'>
+
+        <h1 style='text-align: center;margin: 0;font-size: 50px'>{{ fb_form.name }} Feedback for <a
+                href="{% url 'instructor_login:feedback_forms' course.pk %}">{{ course.name }}</a></h1>
+        <hr>
+
+        <div class='col-xs-4'>
+            <form method="post" action="{% url 'instructor_login:old_feedback_form' fb_form.pk %}" class="form-horizontal">
+                {% csrf_token %}
+                <input type="submit" name="delete_fb_form" value="Delete" class="btn-danger">
+            </form>
+            <div>
+                <form id='create_fb_form_form'>
+                    {% csrf_token %}
+                    <br>
+                    <input style='width: 100%;font-size: xx-large' type='text' id='fb_form_name' name='fb_form_name'
+                           value='{{ fb_form.name }}'
+                           placeholder='Give it a name'
+                           readonly><br>
+                    <h3>Deadline</h3>
+                    <span style="font-size: x-large">Date : </span><input style='width: 30%' id='fb_form_deadline_date'
+                                                                          type='date'
+                                                                          value='{{ year }}-{{ month }}-{{ day }}'
+                                                                          name='fb_form_deadline_date'
+                                                                          readonly>
+                    <span style="font-size: x-large">Time : 24hrs</span> <input style='width: 30%'
+                                                                                id='fb_form_deadline_time'
+                                                                                type='time' name='task_deadline_time'
+                                                                                value='{{ hour }}:{{ minute }}'
+                                                                                readonly><br><br>
+                    <input type='hidden' id='question_set' name='question_set' value=''>
+                </form>
+            </div>
+        </div>
+        <div class='col-xs-1'></div>
+        <div class='col-xs-7'>
+
+            <div style='overflow: auto;height: 500px' class='row'>
+                <blockquote>
+                    {{ question_set|length }} questions were posted for this feedback
+                </blockquote>
+                <table id='questions' class="table table-hover table-striped">
+                    {% for question in question_set %}
+                        <tr>
+                            <td class="question">
+                                {{ question }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

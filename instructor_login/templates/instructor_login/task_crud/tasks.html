@@ -1,0 +1,150 @@
+{% extends 'instructor_login/base.html' %}
+{% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-2"></div>
+            <div class="col-xs-8">
+                <h1 style="text-align: center;margin: 0;font-size: 50px">{{ course.name }}'s Tasks</h1>
+            </div>
+            <div class="col-xs-2">
+                <a href="{% url 'instructor_login:feedback_forms' course.pk %}">
+                    <button class="btn-info" style="width: 150px;height: 50px;font-size: xx-large">
+                        Feedbacks
+                    </button>
+                </a>
+
+            </div>
+        </div>
+
+        <hr>
+        <div class="row">
+            <div class="col-xs-3">
+                <blockquote>{{ all_course|length }} courses available</blockquote>
+                <table class="table table-hover table-striped" style="overflow: scroll">
+                    <colgroup>
+                        <col span="1" style="width: 30%;">
+                        <col span="1" style="width: 60%;">
+                        <col span="1" style="width: 10%;">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for course in all_course %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'instructor_login:tasks' course.pk %}">
+                                    {{ course.code }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{% url 'instructor_login:tasks' course.pk %}">
+                                    {{ course.name }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{% url 'instructor_login:new_task' course.pk %}">
+                                    <button class="btn-success">Create</button>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-xs-9 row">
+                <blockquote>
+                    {{ total }} tasks available for {{ course.name }}
+                    <a href="{% url 'instructor_login:new_task' course.pk %}">
+                        <button class="btn-success">Create</button>
+                    </a>
+                </blockquote>
+
+                <div class="col-xs-6">
+                    <h2 class="label-info" style="color: white">Due Tasks</h2>
+                    <table class="table table-hover table-striped" style="overflow: scroll">
+                        <colgroup>
+                            <col span="1" style="width: 40%;">
+                            <col span="1" style="width: 50%;">
+                            <col span="1" style="width: 10%;">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Deadline</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for task in remaining_tasks %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'instructor_login:old_task' task.pk %}">
+                                        {{ task.tag }}
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{% url 'instructor_login:old_task' task.pk %}">
+                                        {{ task.deadline }}
+                                    </a>
+                                </td>
+                                <td>
+                                    <form action="{% url 'instructor_login:tasks' course.pk %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="delete" value="{{ task.pk }}">
+                                        <input type="submit" value="Delete" class="btn-danger">
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-xs-6">
+                    <h2 class="label-danger" style="color: white">Deadline expired</h2>
+                    <table class="table table-hover table-striped" style="overflow: scroll">
+                        <colgroup>
+                            <col span="1" style="width: 40%;">
+                            <col span="1" style="width: 50%;">
+                            <col span="1" style="width: 10%;">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Deadline</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for task in finished_tasks %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'instructor_login:old_task' task.pk %}">
+                                        {{ task.tag }}
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{% url 'instructor_login:old_task' task.pk %}">
+                                        {{ task.deadline }}
+                                    </a>
+                                </td>
+                                <td>
+                                    <form action="{% url 'instructor_login:tasks' course.pk %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="delete" value="{{ task.pk }}">
+                                        <input type="submit" value="Delete" class="btn-danger">
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Feeder.iml" filepath="$PROJECT_DIR$/.idea/Feeder.iml" />
-      <module fileurl="file://$USER_HOME$/testdjango/testsauth/.idea/testsauth.iml" filepath="$USER_HOME$/testdjango/testsauth/.idea/testsauth.iml" />
     </modules>
   </component>
 </project>
