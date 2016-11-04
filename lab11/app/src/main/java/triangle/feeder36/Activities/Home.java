@@ -1,11 +1,13 @@
 package triangle.feeder36.Activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -120,13 +122,54 @@ public class Home extends AppCompatActivity {
                     startActivity(changePassword);
                     break;
                 case R.id.home_menu_logout:
-                    UserInfo user = new UserInfo("", "");
-                    dbManager.updateEntryWithKeyValue(user, Helper.PRIMARY_KEY, "1");
-                    dbManager.resetFeedbackResponsesTable();
-                    /* Take back to Login screen */
-                    Toast.makeText(Home.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
-                    Intent login = new Intent(Home.this, Login.class);
-                    startActivity(login);
+                    Vector<FeedbackResponseDef> feedbackResponsesVec = dbManager.getAllFeedbackResponses();
+                    int count = 0;
+
+                    for(int i=0;i<feedbackResponsesVec.size();i++) {
+                        FeedbackResponseDef feedbackResponsesVec_i = feedbackResponsesVec.get(i);
+                        if(feedbackResponsesVec_i.SUBMIT_STATUS == 0) count++;
+                    }
+
+                    if(count != 0) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(Home.this);
+                        builder.setTitle("Warning !!");
+                        builder.setInverseBackgroundForced(true);
+                        String warningMsg = "You have some unsubmitted feedbacks which will be lost after logging out..." + "\n"
+                                + "Do you wish to proceed ?";
+                        builder.setMessage(warningMsg);
+
+                        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                UserInfo user = new UserInfo("", "");
+                                dbManager.updateEntryWithKeyValue(user, Helper.PRIMARY_KEY, "1");
+                                dbManager.resetFeedbackResponsesTable();
+                            /* Take back to Login screen */
+                                Toast.makeText(Home.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+                                Intent login = new Intent(Home.this, Login.class);
+                                startActivity(login);
+                            }
+                        });
+
+                        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                        AlertDialog alert = builder.create();
+                        alert.show();
+                    }
+                    else {
+                        UserInfo user = new UserInfo("", "");
+                        dbManager.updateEntryWithKeyValue(user, Helper.PRIMARY_KEY, "1");
+                        dbManager.resetFeedbackResponsesTable();
+                            /* Take back to Login screen */
+                        Toast.makeText(Home.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+                        Intent login = new Intent(Home.this, Login.class);
+                        startActivity(login);
+                    }
                 default:
                     break;
             }
@@ -695,12 +738,19 @@ public class Home extends AppCompatActivity {
             HashMap<String, Vector<CourseDef>> courseDefHashMap = dbManager.getDateCourseDefHashMap();
             String defaultMultiColoringCol = "000000";
             DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+
             for (Map.Entry pair : courseDefHashMap.entrySet()) {
                 String task_date_str_i = (String) pair.getKey();
                 Vector<CourseDef> course_def_vec = (Vector<CourseDef>) pair.getValue();
 
+                HashMap<String,Integer> courseCodeHashMap = new HashMap<>();
 
-                if (course_def_vec.size() == 1) {
+                for(int i=0;i<course_def_vec.size();i++) {
+                    CourseDef course_i = course_def_vec.get(i);
+                    courseCodeHashMap.put(course_i.CODE,1);
+                }
+
+                if (courseCodeHashMap.size() == 1) {
                     CourseDef course_i = course_def_vec.get(0);
 
                     String color_hex_i = myHashFn(course_i.NAME);
