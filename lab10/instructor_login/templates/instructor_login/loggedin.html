@@ -5,12 +5,7 @@
             <div class="row">
                 <div class="col-xs-4"></div>
                 <div class="col-xs-4" style="text-align: center;font-size: 90px;">
-                    <script>
-                        $(document).ready(function () {
-                            $('#greeting').slideDown(1500);
-                        });
-                    </script>
-                    <span id="greeting" style="display: none">Hello {{ user.get_full_name|default:user.username }}!</span>
+                    <span id="greeting">Hello {{ user.get_full_name|default:user.username }}!</span>
                 </div>
                 <div class="col-xs-4"></div>
             </div>

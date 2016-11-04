@@ -9,8 +9,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <meta charset="UTF-8">
-    <title>Instructor</title>
-    <link rel="icon" href="{% static "instructor_login/logo.png" %}"/>
+    <title>Special Admin</title>
+    <link rel="icon" href="{% static "special_admin/logo.png" %}" />
     <style>
         body {
             font-family: 'VT323', monospace;
@@ -43,14 +43,10 @@
                 <a class="navbar-brand" href="{% url 'home:home' %}"><big>Feed'er</big></a>
             </div>
             <ul class="nav navbar-nav">
-                <li><a href="{% url 'instructor_login:courses' %}">Courses</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <a href="{% url 'auth:logout' %}?next={% url 'instructor_login:login' %}">
-                    <button class="btn-danger" style="width: 100px;height: 50px;font-size: xx-large">
-                        Out
-                    </button>
-                </a>
+                <li><a href="{% url 'instructor_login:login' %}">Instructor</a></li>
+                <li><a href="{% url 'special_admin:home' %}">Special Admin</a></li>
+{#                <li><a href="{% url 'special_admin:tasks_redirect' %}">Tasks</a></li>#}
+{#                <li><a href="{% url 'special_admin:fb_forms_redirect' %}">Feedback</a></li>#}
             </ul>
         </div>
     </nav>
