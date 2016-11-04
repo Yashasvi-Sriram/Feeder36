@@ -55,8 +55,6 @@ import triangle.feeder36.Log.TLog;
 import triangle.feeder36.R;
 import triangle.feeder36.ServerTalk.IPSource;
 
-import static android.media.CamcorderProfile.get;
-
 public class Home extends AppCompatActivity {
 
     AccountManager account;
@@ -664,7 +662,7 @@ public class Home extends AppCompatActivity {
             setListViewHeightBasedOnChildren(list_view_feedback);
         }
 
-        private String convertToCorrStr(int i) {
+        private String convertToHexColorStr(int i) {
             if (i >= 0 && i <= 9) {
                 return String.valueOf(i);
             } else {
@@ -686,7 +684,7 @@ public class Home extends AppCompatActivity {
             String col = "#";
 
             for (int i = 0; i < 6; i++) {
-                col += convertToCorrStr(val % (16 - i));
+                col += convertToHexColorStr(val % (16 - i));
             }
             return col;
         }
@@ -702,7 +700,7 @@ public class Home extends AppCompatActivity {
                 Vector<CourseDef> course_def_vec = (Vector<CourseDef>) pair.getValue();
 
 
-                if(course_def_vec.size() == 1) {
+                if (course_def_vec.size() == 1) {
                     CourseDef course_i = course_def_vec.get(0);
 
                     String color_hex_i = myHashFn(course_i.NAME);
@@ -716,9 +714,8 @@ public class Home extends AppCompatActivity {
                     }
 
                     ColorDrawable color_for_course_i = new ColorDrawable(color_int_i);
-                    caldroidFragment.setBackgroundDrawableForDate(color_for_course_i,task_date_i);
-                }
-                else {
+                    caldroidFragment.setBackgroundDrawableForDate(color_for_course_i, task_date_i);
+                } else {
                     Date course_date_i = null;
                     try {
                         course_date_i = formatter.parse(task_date_str_i);
@@ -729,9 +726,9 @@ public class Home extends AppCompatActivity {
                     String transparency = determineTransparencyLightTheme(course_def_vec.size());
 
                     String col = "#" + transparency + defaultMultiColoringCol;
-                    Log.i(TLog.TAG,transparency + " " + task_date_str_i);
+                    Log.i(TLog.TAG, transparency + " " + task_date_str_i);
                     ColorDrawable defaultCol = new ColorDrawable(Color.parseColor(col));
-                    caldroidFragment.setBackgroundDrawableForDate(defaultCol,course_date_i);
+                    caldroidFragment.setBackgroundDrawableForDate(defaultCol, course_date_i);
                 }
             }
         }
@@ -742,11 +739,11 @@ public class Home extends AppCompatActivity {
             int minOp = 10;
             int maxOp = 55;
 
-            /* table for opacities varying from 0% to 100% */
-            String [] transpTable = {"00","0D","1A","26","33","40","4D","59","66","73","80"
-                                    ,"8C","99","A6","B3","BF","CC","D9","E6","F2","FF"};
-            int ind = minOp/5 + num - 2;
-            return transpTable[ind];
+            /* table for opacity varying from 0% to 100% */
+            String[] transparencyTable = {"00", "0D", "1A", "26", "33", "40", "4D", "59", "66", "73", "80"
+                    , "8C", "99", "A6", "B3", "BF", "CC", "D9", "E6", "F2", "FF"};
+            int ind = minOp / 5 + num - 2;
+            return transparencyTable[ind];
         }
     }
 
@@ -755,7 +752,6 @@ public class Home extends AppCompatActivity {
      * *** Hack to fix the issue of not showing all the items of the ListView
      * *** when placed inside a ScrollView
      ****/
-
     public static void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter == null)
@@ -776,4 +772,5 @@ public class Home extends AppCompatActivity {
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
     }
+
 }
