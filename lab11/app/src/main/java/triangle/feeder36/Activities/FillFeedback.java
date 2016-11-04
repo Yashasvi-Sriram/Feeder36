@@ -20,11 +20,13 @@ import triangle.feeder36.DB.Helpers.db;
 import triangle.feeder36.Log.TLog;
 import triangle.feeder36.R;
 
+import static triangle.feeder36.R.id.fill_feedback_layout;
+
 public class FillFeedback extends AppCompatActivity {
     public final static int numOfStars = 5;
     public final static float stepSizeOfRating = (float) 1;
 
-    RelativeLayout fill_feedback_layout;
+    LinearLayout fill_feedback_layout;
     TextView feedback_course_code,feedback_course_name,feedback_name,feedback_deadline;
     LinearLayout feedback_questions_layout;
     Button submit_feedback;
@@ -76,7 +78,7 @@ public class FillFeedback extends AppCompatActivity {
     }
 
     public void gettingReferences() {
-        fill_feedback_layout = (RelativeLayout) findViewById(R.id.fill_feedback_layout);
+        fill_feedback_layout = (LinearLayout) findViewById(R.id.fill_feedback_layout);
         feedback_course_code = (TextView) fill_feedback_layout.findViewById(R.id.feedback_course_code);
         feedback_course_name = (TextView) fill_feedback_layout.findViewById(R.id.feedback_course_name);
         feedback_name = (TextView) fill_feedback_layout.findViewById(R.id.feedback_name);

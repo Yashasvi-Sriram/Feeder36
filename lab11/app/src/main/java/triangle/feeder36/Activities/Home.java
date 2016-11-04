@@ -96,7 +96,6 @@ public class Home extends AppCompatActivity {
                 break;
             case R.id.home_menu_synchronize:
                 new SyncDataBases().execute(IPSource.syncURL(), IPSource.responseSubmitURL());
-                caldroidAndLists.caldroidSetColorForDates();
                 break;
             default:
                 break;
@@ -545,6 +544,8 @@ public class Home extends AppCompatActivity {
                     break;
                 default:
                     Toast.makeText(Home.this, "Sync Completed", Toast.LENGTH_SHORT).show();
+                    caldroidAndLists.reloadColoursForCalendar();
+                    caldroidAndLists.onCaldroidSelectDate(new triangle.feeder36.Calender.Date(true));
                     break;
             }
         }
@@ -561,7 +562,6 @@ public class Home extends AppCompatActivity {
     }
 
     class CaldroidAndLists {
-
         ListView list_view_tasks, list_view_feedback;
         LinearLayout home, calendar_layout;
         TextView task_heading, feedback_heading;
@@ -594,7 +594,7 @@ public class Home extends AppCompatActivity {
             args.putInt(CaldroidFragment.MONTH, cal.get(Calendar.MONTH) + 1);
             args.putInt(CaldroidFragment.YEAR, cal.get(Calendar.YEAR));
             args.putInt(CaldroidFragment.START_DAY_OF_WEEK, CaldroidFragment.MONDAY);
-            args.putInt(CaldroidFragment.THEME_RESOURCE, com.caldroid.R.style.CaldroidDefaultDark);
+//            args.putInt(CaldroidFragment.THEME_RESOURCE, com.caldroid.R.style.CaldroidDefaultDark);
             caldroidFragment.setArguments(args);
 
             FragmentTransaction t = getSupportFragmentManager().beginTransaction();
@@ -628,7 +628,7 @@ public class Home extends AppCompatActivity {
                 public void onCaldroidViewCreated() {
                     /* Initialises the list view below the CalView with present day tasks */
                     onCaldroidSelectDate(new triangle.feeder36.Calender.Date(true));
-                    caldroidSetColorForDates();
+                    reloadColoursForCalendar();
                 }
             });
         }
@@ -691,9 +691,11 @@ public class Home extends AppCompatActivity {
             return col;
         }
 
-        private void setColoursForDates() {
+        private void reloadColoursForCalendar() {
+            caldroidFragment.getBackgroundForDateTimeMap().clear();
+            caldroidFragment.refreshView();
             HashMap<String, Vector<CourseDef>> courseDefHashMap = dbManager.getDateCourseDefHashMap();
-            String defaultMultiColoringCol = "000FFF";
+            String defaultMultiColoringCol = "000000";
             DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
             for (Map.Entry pair : courseDefHashMap.entrySet()) {
                 String task_date_str_i = (String) pair.getKey();
@@ -724,43 +726,27 @@ public class Home extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    /* Assuming light theme :( */
-                    String transparency = determineTransparency(course_def_vec.size());
+                    String transparency = determineTransparencyLightTheme(course_def_vec.size());
 
                     String col = "#" + transparency + defaultMultiColoringCol;
+                    Log.i(TLog.TAG,transparency + " " + task_date_str_i);
                     ColorDrawable defaultCol = new ColorDrawable(Color.parseColor(col));
                     caldroidFragment.setBackgroundDrawableForDate(defaultCol,course_date_i);
                 }
             }
         }
 
-        public void caldroidSetColorForDates() {
-            setColoursForDates();
-        }
+        /* Assuming light theme :( */
+        private String determineTransparencyLightTheme(int num) {
+            /* Diff must be 45 for the code to work */
+            int minOp = 10;
+            int maxOp = 55;
 
-        private String determineTransparency(int num) {
-            switch (num) {
-                case 2 :
-                    return "1A";
-                case 3 :
-                    return "33";
-                case 4 :
-                    return "4D";
-                case 5 :
-                    return "66";
-                case 6 :
-                    return "80";
-                case 7 :
-                    return "99";
-                case 8 :
-                    return "B3";
-                case 9 :
-                    return "CC";
-                case 10 :
-                    return "E6";
-                default:
-                    return "FF";
-            }
+            /* table for opacities varying from 0% to 100% */
+            String [] transpTable = {"00","0D","1A","26","33","40","4D","59","66","73","80"
+                                    ,"8C","99","A6","B3","BF","CC","D9","E6","F2","FF"};
+            int ind = minOp/5 + num - 2;
+            return transpTable[ind];
         }
     }
 
