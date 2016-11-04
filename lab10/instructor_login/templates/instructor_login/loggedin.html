@@ -1,14 +1,25 @@
 {% extends 'instructor_login/base.html' %}
 {% block body %}
-{% if user and not user.is_anonymous %}
-<h2>Hello {{ user.get_full_name|default:user.username }}!</h2>
-<h3><a href="{% url 'auth:logout' %}?next={% url 'instructor_login:login' %}">Logout</a></h3>
-<h4>You will be redirected to login page</h4>
-{% else %}
-<h2>Invalid Access!!!</h2>
-<h2>You need to login as a user before accessing this page</h2>
-<h2><a href = "{% url 'instructor_login:login' %}">Click Here to login</a></h2>
-{% endif %}
+    <div class="container-fluid">
+        {% if user and not user.is_anonymous %}
+            <div class="row">
+                <div class="col-xs-4"></div>
+                <div class="col-xs-4" style="text-align: center;font-size: 90px;">
+                    <script>
+                        $(document).ready(function () {
+                            $('#greeting').slideDown(1500);
+                        });
+                    </script>
+                    <span id="greeting" style="display: none">Hello {{ user.get_full_name|default:user.username }}!</span>
+                </div>
+                <div class="col-xs-4"></div>
+            </div>
+        {% else %}
+            <h2>Invalid Access!!!</h2>
+            <h2>You need to login as a user before accessing this page</h2>
+            <h2><a href="{% url 'instructor_login:login' %}">Click Here to login</a></h2>
+        {% endif %}
+    </div>
 {% endblock %}
 
 

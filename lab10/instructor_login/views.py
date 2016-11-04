@@ -1,67 +1,64 @@
-from django.shortcuts import render
-from django.shortcuts import render_to_response
-from django.http import HttpResponseRedirect
-from django.http import HttpResponse
-from django.template import loader
+from datetime import datetime
+
 from django.contrib import auth
-from django.contrib.auth.forms import  UserCreationForm
-from .forms import MyForm
-from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
-from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponsePermanentRedirect as PerRedirect
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-from django.http import HttpResponsePermanentRedirect as PerRedirect, HttpResponse
-from datetime import datetime, timedelta
-import csv
 
-from Feeder.settings import STUDENT_CSV
-from special_admin.models import Student, Course, Task, FeedBackForm, SpecialAdmin,FeedbackResponse
-from special_admin.static_strings import SessionKeys as sk, FeedbackStrings as fbs
 from special_admin import datetime_helper
+from special_admin.models import Course, Task, FeedBackForm, FeedbackResponse, Student
+from special_admin.static_strings import FeedbackStrings as fbs
+from .forms import MyForm
 
-#need to check whether to add extra project
-
-
+# need to check whether to add extra project
 
 
 dict = {}
+
+
 # Create your views here.
 def login(request):
-    #template = loader.get_template('instructor_login/login.html')
+    # template = loader.get_template('instructor_login/login.html')
 
-    return render(request,'instructor_login/login.html',{'user': request.user})
+    return render(request, 'instructor_login/login.html', {'user': request.user})
+
 
 def auth_view(request):
-    username = request.POST.get('username','')
-    password = request.POST.get('password','')
-    user = auth.authenticate(username = username,password = password)
+    username = request.POST.get('username', '')
+    password = request.POST.get('password', '')
+    user = auth.authenticate(username=username, password=password)
 
     if user is not None:
-        auth.login(request,user)
+        auth.login(request, user)
         url = '/instructor_login/loggedin/'
         return HttpResponseRedirect(url)
     else:
         url = '/instructor_login/invalid/'
         return HttpResponseRedirect(url)
 
+
 def loggedin(request):
-    #template = loader.get_template('instructor_login/loggedin.html')
-    context = {'full_name' : request.user.username}
-    return render(request,'instructor_login/loggedin.html',{'user': request.user})
+    # template = loader.get_template('instructor_login/loggedin.html')
+    context = {'full_name': request.user.username}
+    return render(request, 'instructor_login/loggedin.html', {'user': request.user})
+
 
 def invalid(request):
-    #template = loader.get_template('instructor_login/loggedin.html')
-    #context = {'full_name' : request.user.username}
-    return render(request,'instructor_login/invalid.html')
+    # template = loader.get_template('instructor_login/loggedin.html')
+    # context = {'full_name' : request.user.username}
+    return render(request, 'instructor_login/invalid.html')
+
 
 def logout(request):
-    #template = loader.get_template('instructor_login/loggedin.html')
+    # template = loader.get_template('instructor_login/loggedin.html')
     auth.logout(request)
-    return render(request,'instructor_login/logout.html')
+    return render(request, 'instructor_login/logout.html')
 
 
 def register(request):
-    #template = loader.get_template('instructor_login/loggedin.html')
+    # template = loader.get_template('instructor_login/loggedin.html')
 
     if request.method == 'POST':
         form = MyForm(request.POST)
@@ -76,23 +73,22 @@ def register(request):
         else:
             return render(request, 'instructor_login/register_failure.html', {'form': form})
 
-
-
-
     args = {}
     args['form'] = MyForm()
     return render(request, 'instructor_login/register.html', args)
 
 
 def register_success(request):
-    #template = loader.get_template('instructor_login/loggedin.html')
+    # template = loader.get_template('instructor_login/loggedin.html')
 
-    return render(request,'instructor_login/register_success.html')
+    return render(request, 'instructor_login/register_success.html')
+
 
 def register_failure(request):
-    #template = loader.get_template('instructor_login/loggedin.html')
+    # template = loader.get_template('instructor_login/loggedin.html')
 
-    return render(request,'instructor_login/register_failure.html',dict)
+    return render(request, 'instructor_login/register_failure.html', dict)
+
 
 def tasks(request, pk):
     all_courses = Course.objects.all()
@@ -124,23 +120,23 @@ def tasks(request, pk):
                     remaining_tasks.append(task_iter)
 
             return render(request, 'instructor_login/task_crud/tasks.html', {'course': selected_course,
-                                                                          'all_course': all_courses,
+                                                                             'all_course': all_courses,
                                                                              'user': request.user,
-                                                                          'finished_tasks': finished_tasks,
-                                                                          'remaining_tasks': remaining_tasks,
-                                                                          'total': len(finished_tasks) + len(
-                                                                              remaining_tasks)})
+                                                                             'finished_tasks': finished_tasks,
+                                                                             'remaining_tasks': remaining_tasks,
+                                                                             'total': len(finished_tasks) + len(
+                                                                                 remaining_tasks)})
 
     elif request.method == 'GET':
         # special admin logged in
-        #if request.session.get(sk.instructor_login_logged, False):
+        # if request.session.get(sk.instructor_login_logged, False):
         return render(request, 'instructor_login/task_crud/tasks.html', {'course': selected_course,
-                                                                          'all_course': all_courses,
+                                                                         'all_course': all_courses,
                                                                          'user': request.user,
-                                                                          'finished_tasks': finished_tasks,
-                                                                          'remaining_tasks': remaining_tasks,
-                                                                          'total': len(finished_tasks) + len(
-                                                                              remaining_tasks)})
+                                                                         'finished_tasks': finished_tasks,
+                                                                         'remaining_tasks': remaining_tasks,
+                                                                         'total': len(finished_tasks) + len(
+                                                                             remaining_tasks)})
         # NOT logged in
         # else:
         #     return render(request, 'instructor_login/login.html')
@@ -155,7 +151,7 @@ def new_task(request, pk):
                 Task.objects.get(tag=request.POST['task_tag'])
                 return render(request, 'instructor_login/task_crud/new_task.html', {'course': course,
                                                                                     'user': request.user,
-                                                                                 'message': 'Task with same Tag already exists'})
+                                                                                    'message': 'Task with same Tag already exists'})
             # adding new task
             except ObjectDoesNotExist:
                 # changing formats
@@ -180,8 +176,8 @@ def new_task(request, pk):
 
     elif request.method == 'GET':
         # special admin logged in
-        #if request.session.get(sk.instructor_login_logged, False):
-            return render(request, 'instructor_login/task_crud/new_task.html', {'course': course,'user': request.user,})
+        # if request.session.get(sk.instructor_login_logged, False):
+        return render(request, 'instructor_login/task_crud/new_task.html', {'course': course, 'user': request.user,})
         # NOT logged in
         # else:
         #     return render(request, 'instructor_login/login.html')
@@ -207,16 +203,16 @@ def old_task(request, pk):
                 # the same tag exists for some other event
                 if request.POST['task_tag'] != selected_task.tag:
                     # special admin logged in
-                    #if request.session.get(sk.instructor_login_logged, False):
+                    # if request.session.get(sk.instructor_login_logged, False):
                     return render(request, 'instructor_login/task_crud/old_task.html', {'task': selected_task,
                                                                                         'user': request.user,
-                                                                                         'year': date[2],
-                                                                                         'month': date[1],
-                                                                                         'day': date[0],
-                                                                                         'hour': time[0],
-                                                                                         'minute': time[1],
-                                                                                         'course': selected_course,
-                                                                                         'message': 'Task with same Tag already exists'})
+                                                                                        'year': date[2],
+                                                                                        'month': date[1],
+                                                                                        'day': date[0],
+                                                                                        'hour': time[0],
+                                                                                        'minute': time[1],
+                                                                                        'course': selected_course,
+                                                                                        'message': 'Task with same Tag already exists'})
                 # exists for the same event
                 else:
 
@@ -242,14 +238,14 @@ def old_task(request, pk):
                     time = date_time_parts[1].split(":")
 
                     return render(request, 'instructor_login/task_crud/old_task.html', {'task': selected_task,
-                                                                                     'year': date[2],
+                                                                                        'year': date[2],
                                                                                         'user': request.user,
-                                                                                     'month': date[1],
-                                                                                     'day': date[0],
-                                                                                     'hour': time[0],
-                                                                                     'minute': time[1],
-                                                                                     'course': selected_course,
-                                                                                     'message': 'updated'})
+                                                                                        'month': date[1],
+                                                                                        'day': date[0],
+                                                                                        'hour': time[0],
+                                                                                        'minute': time[1],
+                                                                                        'course': selected_course,
+                                                                                        'message': 'updated'})
 
             except ObjectDoesNotExist:
                 # updating old task
@@ -274,43 +270,43 @@ def old_task(request, pk):
                 time = date_time_parts[1].split(":")
 
                 return render(request, 'instructor_login/task_crud/old_task.html', {'task': selected_task,
-                                                                                 'year': date[2],
+                                                                                    'year': date[2],
                                                                                     'user': request.user,
-                                                                                 'month': date[1],
-                                                                                 'day': date[0],
-                                                                                 'hour': time[0],
-                                                                                 'minute': time[1],
-                                                                                 'course': selected_course,
-                                                                                 'message': 'updated'})
+                                                                                    'month': date[1],
+                                                                                    'day': date[0],
+                                                                                    'hour': time[0],
+                                                                                    'minute': time[1],
+                                                                                    'course': selected_course,
+                                                                                    'message': 'updated'})
 
     elif request.method == 'GET':
         # special admin logged in
-        #if request.session.get(sk.instructor_login_logged, False):
+        # if request.session.get(sk.instructor_login_logged, False):
         return render(request, 'instructor_login/task_crud/old_task.html', {'task': selected_task,
-                                                                             'year': date[2],
+                                                                            'year': date[2],
                                                                             'user': request.user,
-                                                                             'month': date[1],
-                                                                             'day': date[0],
-                                                                             'hour': time[0],
-                                                                             'minute': time[1],
-                                                                             'course': selected_course})
+                                                                            'month': date[1],
+                                                                            'day': date[0],
+                                                                            'hour': time[0],
+                                                                            'minute': time[1],
+                                                                            'course': selected_course})
         # NOT logged in
         # else:
         #     return render(request, 'instructor_login/login.html')
 
 
-
 def tasks_redirect(request):
     # special admin logged in
 
-        all_courses = Course.objects.all()
-        if all_courses:
-            pass
-            return PerRedirect(reverse('instructor_login:tasks', kwargs={'pk': all_courses[0].pk}))
-        else:
-            return render(request, 'instructor_login/home.html', {'message': 'No tasks available'})
+    all_courses = Course.objects.all()
+    if all_courses:
+        pass
+        return PerRedirect(reverse('instructor_login:tasks', kwargs={'pk': all_courses[0].pk}))
+    else:
+        return render(request, 'instructor_login/home.html', {'message': 'No tasks available'})
 
-    # NOT logged in
+        # NOT logged in
+
 
 def courses(request):
     # if request.method == 'POST':
@@ -321,14 +317,14 @@ def courses(request):
     #         return render(request, 'instructor_login/course_crud/courses.html', {'all_courses': all_courses})
     #
     # elif request.method == 'GET':
-        # special admin logged in
-        #if request.session.get(sk.special_admin_logged, False):
-        all_courses = Course.objects.all()
-        return render(request, 'instructor_login/course_crud/courses.html', {'user': request.user,'all_courses': all_courses})
-        # NOT logged in
-        # else:
-        #     return render(request, 'instructor_login/login.html')
-
+    # special admin logged in
+    # if request.session.get(sk.special_admin_logged, False):
+    all_courses = Course.objects.all()
+    return render(request, 'instructor_login/course_crud/courses.html',
+                  {'user': request.user, 'all_courses': all_courses})
+    # NOT logged in
+    # else:
+    #     return render(request, 'instructor_login/login.html')
 
 
 def feedback_forms(request, pk):
@@ -360,23 +356,24 @@ def feedback_forms(request, pk):
                 else:
                     remaining_fb_forms.append(fb_form_iter)
             return render(request, 'instructor_login/fb_form_crud/fb_forms.html', {'course': selected_course,
-                                                                                'all_course': all_courses,
+                                                                                   'all_course': all_courses,
                                                                                    'user': request.user,
-                                                                                'finished_fb_forms': finished_fb_forms,
-                                                                                'remaining_fb_forms': remaining_fb_forms,
-                                                                                'total': len(finished_fb_forms) + len(
-                                                                                    remaining_fb_forms)})
+                                                                                   'finished_fb_forms': finished_fb_forms,
+                                                                                   'remaining_fb_forms': remaining_fb_forms,
+                                                                                   'total': len(
+                                                                                       finished_fb_forms) + len(
+                                                                                       remaining_fb_forms)})
 
     elif request.method == 'GET':
         # special admin logged in
-        #if request.session.get(sk.instructor_login_logged, False):
+        # if request.session.get(sk.instructor_login_logged, False):
         return render(request, 'instructor_login/fb_form_crud/fb_forms.html', {'course': selected_course,
-                                                                                'all_course': all_courses,
+                                                                               'all_course': all_courses,
                                                                                'user': request.user,
-                                                                                'finished_fb_forms': finished_fb_forms,
-                                                                                'remaining_fb_forms': remaining_fb_forms,
-                                                                                'total': len(finished_fb_forms) + len(
-                                                                                    remaining_fb_forms)})
+                                                                               'finished_fb_forms': finished_fb_forms,
+                                                                               'remaining_fb_forms': remaining_fb_forms,
+                                                                               'total': len(finished_fb_forms) + len(
+                                                                                   remaining_fb_forms)})
         # NOT logged in
         # else:
         #     return render(request, 'instructor_login/login.html')
@@ -391,8 +388,8 @@ def new_feedback_form(request, pk):
                 FeedBackForm.objects.get(name=request.POST['fb_form_name'])
                 return render(request, 'instructor_login/fb_form_crud/new_fb_form.html', {'course': course,
                                                                                           'user': request.user,
-                                                                                       'delimiter': fbs.form_delimiter,
-                                                                                       'message': 'Feedback form with same Name already exists'})
+                                                                                          'delimiter': fbs.form_delimiter,
+                                                                                          'message': 'Feedback form with same Name already exists'})
             # adding new fb form
             except ObjectDoesNotExist:
                 # changing formats
@@ -417,10 +414,10 @@ def new_feedback_form(request, pk):
 
     elif request.method == 'GET':
         # special admin logged in
-        #if request.session.get(sk.instructor_login_logged, False):
+        # if request.session.get(sk.instructor_login_logged, False):
         return render(request, 'instructor_login/fb_form_crud/new_fb_form.html', {'course': course,
                                                                                   'user': request.user,
-                                                                                   'delimiter': fbs.form_delimiter})
+                                                                                  'delimiter': fbs.form_delimiter})
         # NOT logged in
         # else:
         #     return render(request, 'instructor_login/login.html')
@@ -434,25 +431,25 @@ def old_feedback_form(request, pk):
     time = date_time_parts[1].split(":")
     question_set = selected_fb_form.question_set.split(fbs.form_delimiter)
     all_feedback_responses = FeedbackResponse.objects.filter(feedback_form_id=selected_fb_form.pk)
-    qsnlen = len(question_set)
+
+    no_options = 6
+    size_of_question_set = len(question_set)
     response_count = 0
-    ans_dict = {}
     num_dict = {}
-    text_response = []
-
-
+    comment_response = []
+    avg_rating_list = [0] * no_options
 
     # for qsn in question_set:
     #     ans_dict[qsn] = [0]*6
-    for i in range(0,qsnlen):
-        num_dict[i] = [0] * 6
+    for i in range(0, size_of_question_set):
+        num_dict[i] = [0] * no_options
 
     # for response_data in all_feedback_responses:
     #     student_response = response_data.answer_set.split(fbs.form_delimiter)
     #     student_response = [int(float(i)) for i in student_response]
     #     extra_response = response_data.comment
     #     if len(extra_response) > 0 :
-    #         text_response.append(extra_response)
+    #         comment_response.append(extra_response)
     #     print(student_response)
     #     i = 0
     #     for qsn in question_set:
@@ -464,36 +461,40 @@ def old_feedback_form(request, pk):
         student_response = response_data.answer_set.split(fbs.form_delimiter)
         student_response = [int(float(i)) for i in student_response]
         extra_response = response_data.comment
-        if len(extra_response) > 0:
-            text_response.append(extra_response)
-        print(student_response)
+        response_count = response_count + 1
+        avg_rating_list = [x + y for x, y in zip(avg_rating_list, student_response)]
 
-        for j in range(0,qsnlen):
+
+        if len(extra_response) > 0:
+            comment_response.append(extra_response)
+
+        for j in range(0, size_of_question_set):
             num_dict[j][student_response[j]] = num_dict[j][student_response[j]] + 1
 
-
-        response_count = response_count + 1
-
+    avg_rating_list = [float(i) for i in avg_rating_list]
+    if response_count > 0 :
+        avg_rating_list = [x / response_count for x in avg_rating_list]
+        avg_rating_list = [round(x,1) for x in avg_rating_list]
     # print(ans_dict)
 
+    no_students_for_this_course = len(Student.objects.filter(course=selected_course))
     final_dict = {'fb_form': selected_fb_form,
-                 'year': date[2],
-                 'month': date[1],
-                 'day': date[0],
-                 'hour': time[0],
-                 'minute': time[1],
+                  'year': date[2],
+                  'month': date[1],
+                  'day': date[0],
+                  'hour': time[0],
+                  'minute': time[1],
                   'user': request.user,
-                 'course': selected_course,
-                 'question_set': question_set,
-                 'response_count': response_count,
-                  'num_dict':num_dict,
-                  'text_response' : text_response}
+                  'course': selected_course,
+                  'question_set': question_set,
+                  'response_count': response_count,
+                  'num_dict': num_dict,
+                  'comment_response': comment_response,
+                  'no_students': no_students_for_this_course,
+                  'no_options': no_options,
+                  'avg_rating': avg_rating_list}
 
-    #final_dict.update(num_dict)
-
-
-
-
+    # final_dict.update(num_dict)
     if request.method == 'POST':
         # delete student
         if 'delete_fb_form' in request.POST:
@@ -502,11 +503,8 @@ def old_feedback_form(request, pk):
 
     elif request.method == 'GET':
         # special admin logged in
-        #if request.session.get(sk.instructor_login_logged, False):
-        return render(request, 'instructor_login/fb_form_crud/old_fb_form.html',final_dict )
+        # if request.session.get(sk.instructor_login_logged, False):
+        return render(request, 'instructor_login/fb_form_crud/old_fb_form.html', final_dict)
         # NOT logged in
         # else:
         #     return render(request, 'instructor_login/login.html')
-
-
-

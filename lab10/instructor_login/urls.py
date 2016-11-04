@@ -4,9 +4,9 @@ from . import views
 app_name = 'instructor_login'
 
 urlpatterns = [
-    url(r'^login/$', views.login , name ='login'),
-    url(r'^auth/$', views.auth_view , name ='auth_view'),
-    #you need to modify this#add variable#restrict regex
+    url(r'^login/$', views.login, name='login'),
+    url(r'^auth/$', views.auth_view, name='auth_view'),
+    # you need to modify this#add variable#restrict regex
     url(r'^loggedin/$', views.loggedin, name='loggedin'),
     url(r'^logout/$', views.logout, name='logout'),
     url(r'^invalid/$', views.invalid, name='invalid'),
@@ -26,7 +26,5 @@ urlpatterns = [
     url(r'^course/(?P<pk>[1-9][0-9]*)/feedback/form/new/$', views.new_feedback_form, name='new_feedback_form'),
     # localhost:8036/special_admin/feedback/form/<task_pk>/
     url(r'^feedback/form/(?P<pk>[1-9][0-9]*)/$', views.old_feedback_form, name='old_feedback_form'),
-
-
 
 ]

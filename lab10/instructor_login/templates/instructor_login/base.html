@@ -9,8 +9,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <meta charset="UTF-8">
-    <title>Instructor Login</title>
-    <link rel="icon" href="{% static "instructor_login/logo.png" %}" />
+    <title>Instructor</title>
+    <link rel="icon" href="{% static "instructor_login/logo.png" %}"/>
     <style>
         body {
             font-family: 'VT323', monospace;
@@ -44,8 +44,13 @@
             </div>
             <ul class="nav navbar-nav">
                 <li><a href="{% url 'instructor_login:courses' %}">Courses</a></li>
-                <li><a href="{% url 'auth:logout' %}?next={% url 'instructor_login:login' %}">Logout</a></li>
-
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <a href="{% url 'auth:logout' %}?next={% url 'instructor_login:login' %}">
+                    <button class="btn-danger" style="width: 100px;height: 50px;font-size: xx-large">
+                        Out
+                    </button>
+                </a>
             </ul>
         </div>
     </nav>
