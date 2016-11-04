@@ -1,5 +1,6 @@
 {% extends 'instructor_login/base.html' %}
 {% block body %}
+    {% if user and not user.is_anonymous %}
     <div class="container-fluid">
         <div class="row">
             <div class="col-xs-2"></div>
@@ -147,4 +148,9 @@
             </div>
         </div>
     </div>
+{% else %}
+<h2>Invalid Access!!!</h2>
+<h2>You need to login as a user before accessing this page</h2>
+<h2><a href = "{% url 'instructor_login:login' %}">Click Here to login</a></h2>
+{% endif %}
 {% endblock %}

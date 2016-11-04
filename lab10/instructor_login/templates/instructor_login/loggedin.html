@@ -1,9 +1,14 @@
-
 {% extends 'instructor_login/base.html' %}
 {% block body %}
+{% if user and not user.is_anonymous %}
 <h2>Hello {{ user.get_full_name|default:user.username }}!</h2>
 <h3><a href="{% url 'auth:logout' %}?next={% url 'instructor_login:login' %}">Logout</a></h3>
 <h4>You will be redirected to login page</h4>
+{% else %}
+<h2>Invalid Access!!!</h2>
+<h2>You need to login as a user before accessing this page</h2>
+<h2><a href = "{% url 'instructor_login:login' %}">Click Here to login</a></h2>
+{% endif %}
 {% endblock %}
 
 
