@@ -727,7 +727,7 @@ public class Home extends AppCompatActivity {
                 val += courseName.charAt(i);
             }
 
-            String col = "#";
+            String col = "#" + "B3";
 
             for (int i = 0; i < 6; i++) {
                 col += convertToHexColorStr(val % (16 - i));
@@ -789,8 +789,8 @@ public class Home extends AppCompatActivity {
         /* Assuming light theme :( */
         private String determineTransparencyLightTheme(int num) {
             /* Diff must be 45 for the code to work */
-            int minOp = 10;
-            int maxOp = 55;
+            int minOp = 30;
+            int maxOp = 75;
 
             /* table for opacity varying from 0% to 100% */
             String[] transparencyTable = {"00", "0D", "1A", "26", "33", "40", "4D", "59", "66", "73", "80"

@@ -51,7 +51,8 @@
             android:layout_marginBottom="10sp"
             android:inputType="phone"
             android:hint="IP (if other than 10.0.2.2)"
-            android:fontFamily="monospace"/>
+            android:fontFamily="monospace"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/submit"
