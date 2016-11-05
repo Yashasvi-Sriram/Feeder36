@@ -15,4 +15,8 @@
             android:icon="@mipmap/ic_launcher"/>
     </group>
 
+    <item android:title="Filters"
+        android:id="@+id/home_menu_filters"
+        android:icon="@mipmap/ic_launcher"/>
+
 </menu>

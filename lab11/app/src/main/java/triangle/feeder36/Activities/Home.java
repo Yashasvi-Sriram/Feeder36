@@ -95,6 +95,10 @@ public class Home extends AppCompatActivity {
             case R.id.home_menu_synchronize:
                 new SyncDataBases().execute(IPSource.syncURL(), IPSource.responseSubmitURL());
                 break;
+            case R.id.home_menu_filters:
+                Intent filters = new Intent(Home.this, Filters.class);
+                startActivity(filters);
+                break;
             default:
                 break;
         }
@@ -222,7 +226,7 @@ public class Home extends AppCompatActivity {
                     // The request is of POST type
                     response_submit_conn.setRequestMethod("POST");
 
-                    // POST feedback responses to server
+                    // POST show_feedback responses to server
                     OutputStreamWriter response_writer = new OutputStreamWriter(response_submit_conn.getOutputStream());
                     response_writer.write(credentials);
                     response_writer.write(responses_post);
@@ -239,7 +243,7 @@ public class Home extends AppCompatActivity {
                     JSONArray successful_submit_json = new JSONArray(successful_submit_str);
                     for (int i = 0; i < successful_submit_json.length(); i++) {
                         dbManager.markFeedbackResponseAsSubmitted(String.valueOf(successful_submit_json.get(i)));
-                        Log.i(TLog.TAG, "submitFeedbackResponses: response submitted with feedback form pk " + String.valueOf(successful_submit_json.get(i)));
+                        Log.i(TLog.TAG, "submitFeedbackResponses: response submitted with show_feedback form pk " + String.valueOf(successful_submit_json.get(i)));
                     }
 
                     // Closing writer
@@ -435,14 +439,14 @@ public class Home extends AppCompatActivity {
                     // with same fields => no change
                     if (local_value.identical(remote_value)) {
                         // remove from remote hash
-                        Log.i(TLog.TAG, "syncFeedbackResponses: found a response is in sync with feedback form pk " + local_value.FEEDBACK_FORM_PK + " submit status " + local_value.SUBMIT_STATUS);
+                        Log.i(TLog.TAG, "syncFeedbackResponses: found a response is in sync with show_feedback form pk " + local_value.FEEDBACK_FORM_PK + " submit status " + local_value.SUBMIT_STATUS);
                         remote.remove(key);
                     }
                     // with different fields => updated at django
                     else {
                         // TODO: issue update notification
                         // update local db
-                        Log.i(TLog.TAG, "syncFeedbackResponses: (ERROR THIS SHOULD NOT HAPPEN!) update in with feedback form pk " + local_value.FEEDBACK_FORM_PK);
+                        Log.i(TLog.TAG, "syncFeedbackResponses: (ERROR THIS SHOULD NOT HAPPEN!) update in with show_feedback form pk " + local_value.FEEDBACK_FORM_PK);
                         remote.remove(key);
                     }
                 }
@@ -451,10 +455,10 @@ public class Home extends AppCompatActivity {
                     FeedbackFormDef remote_fb_form = dbManager.getFormOf(local_value);
                     if (remote_fb_form == null) {
                         // TODO: issue delete notification
-                        Log.i(TLog.TAG, "syncFeedbackResponses: delete with feedback form pk " + local_value.FEEDBACK_FORM_PK);
+                        Log.i(TLog.TAG, "syncFeedbackResponses: delete with show_feedback form pk " + local_value.FEEDBACK_FORM_PK);
                         dbManager.deleteEntryWithKeyValue(db.TABLES.FEEDBACK_RESPONSES.TABLE_NAME, db.TABLES.FEEDBACK_RESPONSES.FEEDBACK_FORM_PK, String.valueOf(key));
                     } else {
-                        Log.i(TLog.TAG, "syncFeedbackResponses: found response to be submitted with feedback form pk " + local_value.FEEDBACK_FORM_PK + " submit status " + local_value.SUBMIT_STATUS);
+                        Log.i(TLog.TAG, "syncFeedbackResponses: found response to be submitted with show_feedback form pk " + local_value.FEEDBACK_FORM_PK + " submit status " + local_value.SUBMIT_STATUS);
                     }
                 }
 
@@ -465,7 +469,7 @@ public class Home extends AppCompatActivity {
                 int key = (int) remote_entry.getKey();
                 FeedbackResponseDef new_value = (FeedbackResponseDef) remote_entry.getValue();
                 // TODO: issue create notification
-                Log.i(TLog.TAG, "syncFeedbackResponses: create with feedback form pk " + new_value.FEEDBACK_FORM_PK);
+                Log.i(TLog.TAG, "syncFeedbackResponses: create with show_feedback form pk " + new_value.FEEDBACK_FORM_PK);
                 dbManager.insert(new_value, 1);
             }
         }
@@ -624,7 +628,7 @@ public class Home extends AppCompatActivity {
 
                 @Override
                 public void onCaldroidViewCreated() {
-                    /* Initialises the list view below the CalView with present day tasks */
+                    /* Initialises the list view below the CalView with present day show_tasks */
                     onCaldroidSelectDate(new triangle.feeder36.Calender.Date(true));
                     reloadColoursForCalendar();
                 }
@@ -632,12 +636,12 @@ public class Home extends AppCompatActivity {
         }
 
         private void onCaldroidSelectDate(triangle.feeder36.Calender.Date date) {
-            Vector<TaskDef> tasksOnDay = dbManager.getDayTasks(date);
+            Vector<TaskDef> tasksOnDay = dbManager.getDayTasks(date, Home.this);
             Vector<CourseDef> coursesOfTasks = new Vector<>();
             for (int i = 0; i < tasksOnDay.size(); i++) {
                 coursesOfTasks.add(dbManager.getCourseOf(tasksOnDay.get(i)));
             }
-            Vector<FeedbackFormDef> feedbackFormsOnDay = dbManager.getDayFeedbackForms(date);
+            Vector<FeedbackFormDef> feedbackFormsOnDay = dbManager.getDayFeedbackForms(date, Home.this);
             Vector<CourseDef> coursesOfFbForms = new Vector<>();
             for (int i = 0; i < feedbackFormsOnDay.size(); i++) {
                 coursesOfFbForms.add(dbManager.getCourseOf(feedbackFormsOnDay.get(i)));
@@ -692,13 +696,19 @@ public class Home extends AppCompatActivity {
         private void reloadColoursForCalendar() {
             caldroidFragment.getBackgroundForDateTimeMap().clear();
             caldroidFragment.refreshView();
-            HashMap<String, Vector<CourseDef>> courseDefHashMap = dbManager.getDateCourseDefHashMap();
+            HashMap<String, Vector<CourseDef>> courseDefHashMap = dbManager.getDateCourseDefHashMap(Home.this);
             String defaultMultiColoringCol = "000000";
             DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+
             for (Map.Entry pair : courseDefHashMap.entrySet()) {
                 String task_date_str_i = (String) pair.getKey();
                 Vector<CourseDef> course_def_vec = (Vector<CourseDef>) pair.getValue();
+                Log.i(TLog.TAG,task_date_str_i + String.valueOf(course_def_vec.size()));
+            }
 
+            for (Map.Entry pair : courseDefHashMap.entrySet()) {
+                String task_date_str_i = (String) pair.getKey();
+                Vector<CourseDef> course_def_vec = (Vector<CourseDef>) pair.getValue();
 
                 if (course_def_vec.size() == 1) {
                     CourseDef course_i = course_def_vec.get(0);
@@ -715,7 +725,7 @@ public class Home extends AppCompatActivity {
 
                     ColorDrawable color_for_course_i = new ColorDrawable(color_int_i);
                     caldroidFragment.setBackgroundDrawableForDate(color_for_course_i, task_date_i);
-                } else {
+                } else if(course_def_vec.size() != 0) {
                     Date course_date_i = null;
                     try {
                         course_date_i = formatter.parse(task_date_str_i);

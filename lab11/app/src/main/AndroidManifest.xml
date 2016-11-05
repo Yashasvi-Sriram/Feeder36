@@ -22,7 +22,8 @@
         <activity android:name=".Activities.Home" />
         <activity android:name=".Activities.ChangePassword" />
         <activity android:name=".Activities.ReadTask" />
-        <activity android:name=".Activities.FillFeedback"></activity>
+        <activity android:name=".Activities.FillFeedback" />
+        <activity android:name=".Activities.Filters"></activity>
     </application>
 
 </manifest>
