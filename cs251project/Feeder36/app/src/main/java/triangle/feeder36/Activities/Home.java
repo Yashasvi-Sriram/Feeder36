@@ -608,7 +608,7 @@ public class Home extends AppCompatActivity {
     class CaldroidAndLists {
         ListView list_view_tasks, list_view_feedback;
         LinearLayout home, calendar_layout;
-        TextView task_heading, feedback_heading;
+        TextView task_heading, feedback_heading,selected_date_hint;
         CaldroidFragment caldroidFragment;
 
         db dbManager;
@@ -622,8 +622,9 @@ public class Home extends AppCompatActivity {
             list_view_tasks = (ListView) home.findViewById(R.id.list_view_tasks);
             list_view_feedback = (ListView) home.findViewById(R.id.list_view_feedback);
             calendar_layout = (LinearLayout) home.findViewById(R.id.calendar_layout);
-            task_heading = (TextView) findViewById(R.id.task_heading);
-            feedback_heading = (TextView) findViewById(R.id.feedback_heading);
+            task_heading = (TextView) home.findViewById(R.id.task_heading);
+            feedback_heading = (TextView) home.findViewById(R.id.feedback_heading);
+            selected_date_hint = (TextView) findViewById(R.id.selected_date_hint);
 
             dbManager = new db(Home.this, db.DB_NAME, null, db.DB_VERSION);
 
@@ -678,6 +679,7 @@ public class Home extends AppCompatActivity {
         }
 
         private void onCaldroidSelectDate(triangle.feeder36.Calender.Date date) {
+            selected_date_hint.setText(date.formalRepresentation());
             Vector<TaskDef> tasksOnDay = dbManager.getDayTasks(date, Home.this);
             Vector<CourseDef> coursesOfTasks = new Vector<>();
             for (int i = 0; i < tasksOnDay.size(); i++) {
