@@ -1,3 +1,8 @@
+{% extends 'instructor_login/base.html' %}
+    {% block navbar %}
+    {% endblock %}
+{% block body %}
 <h2>Invalid details</h2>
 
 <h3>Click <a href = "{% url 'instructor_login:login' %}">here</a> to re-login</h3>
+{% endblock %}
