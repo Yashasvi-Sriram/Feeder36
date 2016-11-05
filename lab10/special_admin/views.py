@@ -33,7 +33,7 @@ def home(request):
         # Logout request
         if 'log_out' in request.POST and request.POST['log_out'] == 'True':
             request.session['special_admin_logged'] = False
-            return render(request, 'special_admin/login.html')
+            return PerRedirect(reverse('special_admin:home'))
 
     # GET request
     elif request.method == 'GET':

@@ -77,6 +77,10 @@
                             alert('Empty Course Code!');
                             return;
                         }
+                        if ($('#course_code').val().indexOf("`") != -1){
+                            alert('Course code cannot contain ` !');
+                            return;
+                        }
                         signed_students = [];
                         $('#students_signed').find('.' + signed_class_name).each(function () {
                             signed_students.push($(this).attr('id'));
