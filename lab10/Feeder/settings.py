@@ -22,6 +22,7 @@ STATIC_URL = '/static/'
 INSTALLED_APPS = [
     'special_admin',
     'android',
+    'home',
     'instructor_login',
     'django.contrib.admin',
     'django.contrib.auth',

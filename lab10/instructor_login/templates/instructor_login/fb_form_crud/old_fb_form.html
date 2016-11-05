@@ -1,6 +1,7 @@
 {% extends 'instructor_login/base.html' %}
 {% load my_filter %}
 {% block specific_css %}
+    <!--suppress ALL -->
     <style>
         .question {
             width: 90%;
@@ -17,122 +18,192 @@
         .remove_question {
             margin-right: 10px;
         }
+
+        .tooltip > .tooltip-inner {
+            background-color: green;
+            color: #FFFFFF;
+            padding: 15px;
+            font-size: 25px;
+            font-family: 'VT323', monospace;
+        }
     </style>
 {% endblock %}
 {% block body %}
+    <script>
+        var no_students = Number({{ no_students }});
+        var bargraph = [];
+        var no_options = Number({{ no_options }});
+        var no_questions = Number({{ question_set|length }});
+
+        $(document).ready(function () {
+
+            var full_bar_width = Number($('#questions_and_responses').width());
+            for (var i = 0; i < no_questions; ++i) {
+
+                var ith_question_data = $('#ans' + i.toString());
+                for (var j = 0; j < no_options; ++j) {
+                    {#                    console.log(bargraph[i * no_options + j])#}
+                    $(ith_question_data)
+                            .find('.bar' + j.toString())
+                            .css("width", (bargraph[i * no_options + j] / no_students * full_bar_width).toString() + "px");
+                }
+
+            }
+
+        });
+    </script>
+
     {% if user and not user.is_anonymous %}
-    <div class='container-fluid'>
 
-        <h1 style='text-align: center;margin: 0;font-size: 50px'>{{ fb_form.name }} Feedback for <a
-                href="{% url 'instructor_login:feedback_forms' course.pk %}">{{ course.name }}</a></h1>
-        <hr>
+        <div class='container-fluid'>
 
-        <div class='col-xs-4'>
-            <form method="post" action="{% url 'instructor_login:old_feedback_form' fb_form.pk %}" class="form-horizontal">
-                {% csrf_token %}
-                <input type="submit" name="delete_fb_form" value="Delete" class="btn-danger">
-            </form>
-            <div>
-                <form id='create_fb_form_form'>
+            <h1 style='text-align: center;margin: 0;font-size: 50px'>{{ fb_form.name }} Feedback for <a
+                    href="{% url 'instructor_login:feedback_forms' course.pk %}">{{ course.name }}</a></h1>
+            <hr>
+
+            <div class='col-xs-4'>
+                <form method="post" action="{% url 'instructor_login:old_feedback_form' fb_form.pk %}"
+                      class="form-horizontal">
                     {% csrf_token %}
-                    <br>
-                    <input style='width: 100%;font-size: xx-large' type='text' id='fb_form_name' name='fb_form_name'
-                           value='{{ fb_form.name }}'
-                           placeholder='Give it a name'
-                           readonly><br>
-                    <h3>Deadline</h3>
-                    <span style="font-size: x-large">Date : </span><input style='width: 30%' id='fb_form_deadline_date'
-                                                                          type='date'
-                                                                          value='{{ year }}-{{ month }}-{{ day }}'
-                                                                          name='fb_form_deadline_date'
-                                                                          readonly>
-                    <span style="font-size: x-large">Time : 24hrs</span> <input style='width: 30%'
-                                                                                id='fb_form_deadline_time'
-                                                                                type='time' name='task_deadline_time'
-                                                                                value='{{ hour }}:{{ minute }}'
-                                                                                readonly><br><br>
-                    <input type='hidden' id='question_set' name='question_set' value=''>
+                    <input type="submit" name="delete_fb_form" value="Delete" class="btn-danger">
                 </form>
-            </div>
-        </div>
-        <div class='col-xs-1'></div>
-        <div class='col-xs-7'>
-
-            <div style='overflow: auto;height: 500px' class='row'>
-                <blockquote>
-                    {{ question_set|length }} questions were posted for this feedback<br>
-                    Total {{ response_count }} responses recorded<br>
-                </blockquote>
-                 <div class="panel-group" id="accordion">
-                     {% for question in question_set %}
-                        <div class="panel panel-default">
-                        <div class="panel-heading">
-                        <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#ans{{ forloop.counter0 }}">
-                        {{ question }}</a></h4>
-                        </div>
-                        <div id="ans{{ forloop.counter0 }}" class="panel-collapse collapse in">
-                        <div class="panel-body">
-                            {% if  response_count  > 0 %}
-                         <table class="table table-bordered">
-                            <thead>
-                              <tr>
-                                <th>Rating</th>
-                                <th>No of students</th>
-
-                              </tr>
-                             <thead>
-
-                            {% for data in num_dict|lookup:forloop.counter0 %}
-
-                                <tr>
-                                    <td>
-                                        {{forloop.counter0}}
-                                    </td>
-                                    <td>
-                                        {{data}}
-                                    </td>
-
-
-                                </tr>
-
-
-                            {% endfor %}
-                            </table>
-
-
-                            {% else %}
-                            <p> No Responses as of now</p>
-
-                            {% endif %}
-
-
-                        </div>
-                         </div>
-                        </div>
-                     {% endfor %}
-
-
-                </div>
-
                 <div>
-                    <h3>Suggestions from Students</h3>
+                    <form id='create_fb_form_form'>
+                        {% csrf_token %}
+                        <br>
+                        <input style='width: 100%;' type='text' id='fb_form_name' name='fb_form_name'
+                               value='{{ fb_form.name }}'
+                               placeholder='Give it a name'
+                               readonly><br>
+                        <h3>Deadline</h3>
+                        <span style="font-size: x-large">Date : </span><input style='width: 30%'
+                                                                              id='fb_form_deadline_date'
+                                                                              type='date'
+                                                                              value='{{ year }}-{{ month }}-{{ day }}'
+                                                                              name='fb_form_deadline_date'
+                                                                              readonly>
+                        <span style="font-size: x-large">Time : 24hrs</span> <input style='width: 30%'
+                                                                                    id='fb_form_deadline_time'
+                                                                                    type='time'
+                                                                                    name='task_deadline_time'
+                                                                                    value='{{ hour }}:{{ minute }}'
+                                                                                    readonly><br><br>
+                        <input type='hidden' id='question_set' name='question_set' value=''>
+                    </form>
+                </div>
+                <hr>
+                <div>
+                    <h3>
+                        <blockquote>
+                            <h2>{{ comment_response|length }} comments on this Feedback</h2>
+                        </blockquote>
+                        <ul style="overflow: auto;list-style: decimal">
+                            {% for text in comment_response %}
+                                <li>{{ text }}
+                                    <hr>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </h3>
+                </div>
+            </div>
 
-                    {% for text in text_response %}
-                     <ul>
-                      <li>{{ text }}</li>
-                    </ul>
-                    {% endfor %}
+            <div class='col-xs-8'>
+                <blockquote>
+                    <h3>
+                        <b>{{ question_set|length }} questions</b> were posted for this feedback<br>
+                        <b>{{ response_count }} students</b> responded until now out of <b>{{ no_students }}
+                        students</b> in this class<br>
+                    </h3>
+                </blockquote>
+                <script>
+                    $(document).ready(function () {
+                        $('[data-toggle="tooltip"]').tooltip();
+                    });
+                </script>
+                <div style='overflow: auto;height: 100%' class='row'>
 
+                    <div class="panel-group" id="questions_and_responses">
+                        {% for question in question_set %}
+                            <div class="panel panel-default">
+                                <div class="panel-heading"
+                                     data-toggle="collapse"
+                                     data-parent="#questions_and_responses"
+                                     href="#ans{{ forloop.counter0 }}"
+                                     style="cursor: pointer">
+                                    <h1 class="panel-title">
+                                        {{ question }}
+                                    </h1>
+                                </div>
+                                <div id="ans{{ forloop.counter0 }}"
+                                     class="panel-collapse collapse out">
+                                    <div class="panel-body" id="pannel_body{{ forloop.counter0 }}">
+
+                                        <div style="margin-left: 20px">
+
+                                            {% if response_count > 0 %}
+                                                <table class="table table-bordered">
+                                                    <colgroup>
+                                                        <col span="1" style="width: 10%;">
+                                                        <col span="1" style="width: 90%;">
+                                                    </colgroup>
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Rating</th>
+                                                        <th>No of students</th>
+                                                    </tr>
+                                                    <thead>
+                                                    <tbody>
+                                                    {% for data in num_dict|lookup:forloop.counter0 %}
+                                                        <tr data-toggle="tooltip"
+                                                            title="{{ data }} students"
+                                                            data-placement="left">
+                                                            <td>
+                                                                {{ forloop.counter0 }}
+                                                                <span class="glyphicon glyphicon-star"
+                                                                      style="color: deeppink"></span>
+                                                            </td>
+                                                            <td>
+                                                                <div class="bar{{ forloop.counter0 }}"
+                                                                     style="background-color: rgba(0, 121, 2, 0.87);
+                                                                             width: {{ data }}0px;
+                                                                             height: 30px;
+                                                                             color: white">{{ data }}
+                                                                    <script> bargraph.push(Number({{ data }}))</script>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    <tr>
+                                                        <td>
+                                                            <div class="avg_rating"
+                                                                 data-toggle="tooltip"
+                                                                 title="{{ avg_rating|lookup:forloop.counter0 }} average rating"
+                                                                 data-placement="left">
+                                                                {{ avg_rating|lookup:forloop.counter0 }}
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            {% else %}
+                                                <h1>No one responded to this feedback until now</h1>
+                                            {% endif %}
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
 
                 </div>
-
             </div>
         </div>
-    </div>
-{% else %}
-<h2>Invalid Access!!!</h2>
-<h2>You need to login as a user before accessing this page</h2>
-<h2><a href = "{% url 'instructor_login:login' %}">Click Here to login</a></h2>
-{% endif %}
+    {% else %}
+        <h2>Invalid Access!!!</h2>
+        <h2>You need to login as a user before accessing this page</h2>
+        <h2><a href="{% url 'instructor_login:login' %}">Click Here to login</a></h2>
+    {% endif %}
 {% endblock %}
