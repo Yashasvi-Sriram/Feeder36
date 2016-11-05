@@ -24,9 +24,9 @@
                 <blockquote>{{ all_course|length }} course(s) available</blockquote>
                 <table class="table table-hover table-striped" style="overflow: scroll">
                     <colgroup>
-                        <col span="1" style="width: 30%;">
-                        <col span="1" style="width: 60%;">
-                        <col span="1" style="width: 10%;">
+                        <col span="1" style="width: 20%;">
+                        <col span="1" style="width: 40%;">
+                        <col span="1" style="width: 40%;">
                     </colgroup>
                     <thead>
                     <tr>
@@ -50,7 +50,7 @@
                             </td>
                             <td>
                                 <a href="{% url 'instructor_login:new_feedback_form' course.pk %}">
-                                    <button class="btn-success">Create</button>
+                                    <button class="btn-success">Create feedback</button>
                                 </a>
                             </td>
                         </tr>
@@ -62,7 +62,7 @@
                 <blockquote>
                     {{ total }} Feedback(s) available for {{ course.name }}
                     <a href="{% url 'instructor_login:new_feedback_form' course.pk %}">
-                        <button class="btn-success">Create</button>
+                        <button class="btn-success">Create Feedback</button>
                     </a>
                 </blockquote>
 

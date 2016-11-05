@@ -21,7 +21,9 @@ dict = {}
 # Create your views here.
 def login(request):
     # template = loader.get_template('instructor_login/login.html')
-
+    user = request.user
+    if request.user.is_active:
+        return render(request, 'instructor_login/loggedin.html', {'user': request.user})
     return render(request, 'instructor_login/login.html', {'user': request.user})
 
 

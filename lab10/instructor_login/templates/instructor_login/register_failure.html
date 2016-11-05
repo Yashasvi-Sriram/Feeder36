@@ -1,4 +1,7 @@
-<body>
+    {% extends 'instructor_login/base.html' %}
+    {% block navbar %}
+    {% endblock %}
+    {% block body %}
 <h1>Registration Failed</h1>
 {% if form.errors %}
 	<!-- Error messaging -->
@@ -16,7 +19,7 @@
 	</div>
 	<!-- /Error messaging -->
 {% endif %}
+	{% endblock %}
 
 
 
-</body>

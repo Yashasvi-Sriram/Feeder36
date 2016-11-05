@@ -3,7 +3,7 @@ from django.contrib import admin
 
 urlpatterns = [
     # localhost:8036/
-    url(r'^$', include('home.urls')),
+    url(r'^', include('home.urls')),
     # localhost:8036/admin/
     url(r'^admin/', admin.site.urls),
     # localhost:8036/special_admin/
