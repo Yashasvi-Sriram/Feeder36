@@ -336,6 +336,8 @@ public class db extends Helper {
         SharedPreferences shPreferences = context.getSharedPreferences(context.getString(R.string.preferences_file), Context.MODE_PRIVATE);
         String no_such_key = context.getString(R.string.no_such_key);
         String filtered_courses_str = shPreferences.getString(context.getString(R.string.filtered_courses), no_such_key);
+        int show_tasks = shPreferences.getInt(context.getString(R.string.show_tasks) , 1);
+        int show_feedback = shPreferences.getInt(context.getString(R.string.show_feedback) , 1);
 
         Log.i(TLog.TAG, filtered_courses_str);
 
@@ -347,125 +349,120 @@ public class db extends Helper {
             /* if there is a stored information about filtering  */
             String[] filtered_courses_array = filtered_courses_str.split(Filters.DELIMITER);
 
-            String query1 = "SELECT * FROM " + TABLES.TASKS.TABLE_NAME + ";";
+            if (show_tasks == 1){
+                String query1 = "SELECT * FROM " + TABLES.TASKS.TABLE_NAME + ";";
+                Cursor c1 = db.rawQuery(query1, null);
+                c1.moveToFirst();
+                while (!c1.isAfterLast()) {
+                    TaskDef row = new TaskDef(c1);
+                    CourseDef courseDef = this.getCourseOf(row);
+                    DateTime rowDatetime = new DateTime(row.DEADLINE, Date.SIMPLE_REPR_SEPARATOR, Time.SIMPLE_REPR_SEPARATOR, DateTime.SIMPLE_REPR_SEPARATOR);
+                    Vector<CourseDef> courseDefVector = vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation());
 
-            Cursor c1 = db.rawQuery(query1, null);
-            c1.moveToFirst();
+                    if (courseDefVector == null) {
+                        vectorHashMap.put(rowDatetime.$DATE.simpleRepresentation(), new Vector<CourseDef>());
 
-            while (!c1.isAfterLast()) {
-
-                TaskDef row = new TaskDef(c1);
-                CourseDef courseDef = this.getCourseOf(row);
-                DateTime rowDatetime = new DateTime(row.DEADLINE, Date.SIMPLE_REPR_SEPARATOR, Time.SIMPLE_REPR_SEPARATOR, DateTime.SIMPLE_REPR_SEPARATOR);
-                Vector<CourseDef> courseDefVector = vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation());
-
-                if (courseDefVector == null) {
-                    vectorHashMap.put(rowDatetime.$DATE.simpleRepresentation(), new Vector<CourseDef>());
-
-                    for (String filtered_course : filtered_courses_array) {
-                        if (courseDef.CODE.equals(filtered_course)) {
-                            vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation()).add(courseDef);
-                            Log.i(TLog.TAG, "adding course " + courseDef.CODE + " to hash map due to task " + row.TAG);
-                            break;
+                        for (String filtered_course : filtered_courses_array) {
+                            if (courseDef.CODE.equals(filtered_course)) {
+                                vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation()).add(courseDef);
+                                Log.i(TLog.TAG, "adding course " + courseDef.CODE + " to hash map due to task " + row.TAG);
+                                break;
+                            }
                         }
                     }
-                } else {
-                    for (String filtered_course : filtered_courses_array) {
-                        if (courseDef.CODE.equals(filtered_course)) {
-                            vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation()).add(courseDef);
-                            Log.i(TLog.TAG, "adding course " + courseDef.CODE + " to hash map due to task " + row.TAG);
-                            break;
+                    else {
+                        for (String filtered_course : filtered_courses_array) {
+                            if (courseDef.CODE.equals(filtered_course)) {
+                                vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation()).add(courseDef);
+                                Log.i(TLog.TAG, "adding course " + courseDef.CODE + " to hash map due to task " + row.TAG);
+                                break;
+                            }
                         }
                     }
+                    c1.moveToNext();
                 }
-
-                c1.moveToNext();
+                c1.close();
             }
-            c1.close();
 
-            String query2 = "SELECT * FROM " + TABLES.FEEDBACK_FORMS.TABLE_NAME + ";";
+            if (show_feedback == 1){
+                String query2 = "SELECT * FROM " + TABLES.FEEDBACK_FORMS.TABLE_NAME + ";";
+                Cursor c2 = db.rawQuery(query2, null);
+                c2.moveToFirst();
+                while (!c2.isAfterLast()) {
+                    FeedbackFormDef row = new FeedbackFormDef(c2);
+                    CourseDef courseDef = getCourseOf(row);
+                    DateTime rowDatetime = new DateTime(row.DEADLINE, Date.SIMPLE_REPR_SEPARATOR, Time.SIMPLE_REPR_SEPARATOR, DateTime.SIMPLE_REPR_SEPARATOR);
+                    Vector<CourseDef> taskDefVector = vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation());
 
-            Cursor c2 = db.rawQuery(query2, null);
-            c2.moveToFirst();
-
-            while (!c2.isAfterLast()) {
-                FeedbackFormDef row = new FeedbackFormDef(c2);
-                CourseDef courseDef = getCourseOf(row);
-                DateTime rowDatetime = new DateTime(row.DEADLINE, Date.SIMPLE_REPR_SEPARATOR, Time.SIMPLE_REPR_SEPARATOR, DateTime.SIMPLE_REPR_SEPARATOR);
-                Vector<CourseDef> taskDefVector = vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation());
-
-                if (taskDefVector == null) {
-                    vectorHashMap.put(rowDatetime.$DATE.simpleRepresentation(), new Vector<CourseDef>());
-                    for (String filtered_course : filtered_courses_array) {
-                        if (courseDef.CODE.equals(filtered_course)) {
-                            vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation()).add(courseDef);
-                            Log.i(TLog.TAG, "adding course " + courseDef.CODE + " to hash map due to feedback " + row.NAME);
-                            break;
+                    if (taskDefVector == null) {
+                        vectorHashMap.put(rowDatetime.$DATE.simpleRepresentation(), new Vector<CourseDef>());
+                        for (String filtered_course : filtered_courses_array) {
+                            if (courseDef.CODE.equals(filtered_course)) {
+                                vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation()).add(courseDef);
+                                Log.i(TLog.TAG, "adding course " + courseDef.CODE + " to hash map due to feedback " + row.NAME);
+                                break;
+                            }
+                        }
+                    } else {
+                        for (String filtered_course : filtered_courses_array) {
+                            if (courseDef.CODE.equals(filtered_course)) {
+                                vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation()).add(courseDef);
+                                Log.i(TLog.TAG, "adding course " + courseDef.CODE + " to hash map due to feedback " + row.NAME);
+                                break;
+                            }
                         }
                     }
-                } else {
-                    for (String filtered_course : filtered_courses_array) {
-                        if (courseDef.CODE.equals(filtered_course)) {
-                            vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation()).add(courseDef);
-                            Log.i(TLog.TAG, "adding course " + courseDef.CODE + " to hash map due to feedback " + row.NAME);
-                            break;
-                        }
+                    c2.moveToNext();
+                }
+                c2.close();
+            }
+        }
+        else {
+
+            if (show_tasks == 1){
+                String query1 = "SELECT * FROM " + TABLES.TASKS.TABLE_NAME + ";";
+                Cursor c1 = db.rawQuery(query1, null);
+                c1.moveToFirst();
+                while (!c1.isAfterLast()) {
+                    TaskDef row = new TaskDef(c1);
+                    CourseDef courseDef = this.getCourseOf(row);
+                    DateTime rowDatetime = new DateTime(row.DEADLINE, Date.SIMPLE_REPR_SEPARATOR, Time.SIMPLE_REPR_SEPARATOR, DateTime.SIMPLE_REPR_SEPARATOR);
+                    Vector<CourseDef> courseDefVector = vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation());
+                    if (courseDefVector == null) {
+                        vectorHashMap.put(rowDatetime.$DATE.simpleRepresentation(), new Vector<CourseDef>());
+                        vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation()).add(courseDef);
+                        Log.i(TLog.TAG, "adding course " + courseDef.CODE + " to hash map due to task " + row.TAG);
+                    } else {
+                        vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation()).add(courseDef);
+                        Log.i(TLog.TAG, "adding course " + courseDef.CODE + " to hash map due to task " + row.TAG);
                     }
+                    c1.moveToNext();
                 }
-
-                c2.moveToNext();
+                c1.close();
             }
 
-            c2.close();
-        } else {
-            String query1 = "SELECT * FROM " + TABLES.TASKS.TABLE_NAME + ";";
-
-            Cursor c1 = db.rawQuery(query1, null);
-            c1.moveToFirst();
-
-            while (!c1.isAfterLast()) {
-
-                TaskDef row = new TaskDef(c1);
-                CourseDef courseDef = this.getCourseOf(row);
-                DateTime rowDatetime = new DateTime(row.DEADLINE, Date.SIMPLE_REPR_SEPARATOR, Time.SIMPLE_REPR_SEPARATOR, DateTime.SIMPLE_REPR_SEPARATOR);
-                Vector<CourseDef> courseDefVector = vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation());
-
-                if (courseDefVector == null) {
-                    vectorHashMap.put(rowDatetime.$DATE.simpleRepresentation(), new Vector<CourseDef>());
-                    vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation()).add(courseDef);
-                    Log.i(TLog.TAG, "adding course " + courseDef.CODE + " to hash map due to task " + row.TAG);
-                } else {
-                    vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation()).add(courseDef);
-                    Log.i(TLog.TAG, "adding course " + courseDef.CODE + " to hash map due to task " + row.TAG);
+            if (show_feedback == 1){
+                String query2 = "SELECT * FROM " + TABLES.FEEDBACK_FORMS.TABLE_NAME + ";";
+                Cursor c2 = db.rawQuery(query2, null);
+                c2.moveToFirst();
+                while (!c2.isAfterLast()) {
+                    FeedbackFormDef row = new FeedbackFormDef(c2);
+                    CourseDef courseDef = getCourseOf(row);
+                    DateTime rowDatetime = new DateTime(row.DEADLINE, Date.SIMPLE_REPR_SEPARATOR, Time.SIMPLE_REPR_SEPARATOR, DateTime.SIMPLE_REPR_SEPARATOR);
+                    Vector<CourseDef> taskDefVector = vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation());
+                    if (taskDefVector == null) {
+                        vectorHashMap.put(rowDatetime.$DATE.simpleRepresentation(), new Vector<CourseDef>());
+                        vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation()).add(courseDef);
+                        Log.i(TLog.TAG, "adding course " + courseDef.CODE + " to hash map due to feedback " + row.NAME);
+                    } else {
+                        vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation()).add(courseDef);
+                        Log.i(TLog.TAG, "adding course " + courseDef.CODE + " to hash map due to feedback " + row.NAME);
+                    }
+                    c2.moveToNext();
                 }
-
-                c1.moveToNext();
+                c2.close();
             }
-            c1.close();
 
-            String query2 = "SELECT * FROM " + TABLES.FEEDBACK_FORMS.TABLE_NAME + ";";
-
-            Cursor c2 = db.rawQuery(query2, null);
-            c2.moveToFirst();
-
-            while (!c2.isAfterLast()) {
-                FeedbackFormDef row = new FeedbackFormDef(c2);
-                CourseDef courseDef = getCourseOf(row);
-                DateTime rowDatetime = new DateTime(row.DEADLINE, Date.SIMPLE_REPR_SEPARATOR, Time.SIMPLE_REPR_SEPARATOR, DateTime.SIMPLE_REPR_SEPARATOR);
-                Vector<CourseDef> taskDefVector = vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation());
-
-                if (taskDefVector == null) {
-                    vectorHashMap.put(rowDatetime.$DATE.simpleRepresentation(), new Vector<CourseDef>());
-                    vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation()).add(courseDef);
-                    Log.i(TLog.TAG, "adding course " + courseDef.CODE + " to hash map due to feedback " + row.NAME);
-                } else {
-                    vectorHashMap.get(rowDatetime.$DATE.simpleRepresentation()).add(courseDef);
-                    Log.i(TLog.TAG, "adding course " + courseDef.CODE + " to hash map due to feedback " + row.NAME);
-                }
-
-                c2.moveToNext();
-            }
-            c2.close();
         }
         db.close();
         return vectorHashMap;
@@ -546,11 +543,16 @@ public class db extends Helper {
         SharedPreferences shPreferences = context.getSharedPreferences(context.getString(R.string.preferences_file), Context.MODE_PRIVATE);
         String no_such_key = context.getString(R.string.no_such_key);
         String filtered_courses_str = shPreferences.getString(context.getString(R.string.filtered_courses), no_such_key);
+        int show_tasks = shPreferences.getInt(context.getString(R.string.show_tasks), 1);
 
         Log.i(TLog.TAG, filtered_courses_str);
 
         SQLiteDatabase db = getWritableDatabase();
         Vector<TaskDef> retVector = new Vector<>();
+
+        if (show_tasks == 0){
+            return retVector;
+        }
 
         if (!filtered_courses_str.matches(no_such_key)) {
 
@@ -730,11 +732,16 @@ public class db extends Helper {
         SharedPreferences shPreferences = context.getSharedPreferences(context.getString(R.string.preferences_file), Context.MODE_PRIVATE);
         String no_such_key = context.getString(R.string.no_such_key);
         String filtered_courses_str = shPreferences.getString(context.getString(R.string.filtered_courses), no_such_key);
+        int show_feedback = shPreferences.getInt(context.getString(R.string.show_feedback), 1);
 
         Log.i(TLog.TAG, filtered_courses_str);
 
         SQLiteDatabase db = getWritableDatabase();
         Vector<FeedbackFormDef> retVector = new Vector<>();
+
+        if (show_feedback == 0){
+            return retVector;
+        }
 
         if (!filtered_courses_str.matches(no_such_key)) {
 

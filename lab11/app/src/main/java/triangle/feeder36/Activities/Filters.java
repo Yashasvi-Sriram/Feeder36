@@ -44,8 +44,8 @@ public class Filters extends AppCompatActivity {
 
     private void reloadFiltersFromSharedPreferences() {
 
-        int show_tasks_value = shPreferences.getInt(getString(R.string.show_tasks), 0);
-        int show_feedback_value = shPreferences.getInt(getString(R.string.show_feedback), 0);
+        int show_tasks_value = shPreferences.getInt(getString(R.string.show_tasks), 1);
+        int show_feedback_value = shPreferences.getInt(getString(R.string.show_feedback), 1);
 
         if (show_tasks_value == 0) {
             this.show_tasks.setChecked(false);
@@ -61,10 +61,10 @@ public class Filters extends AppCompatActivity {
 
         String no_such_key = getString(R.string.no_such_key);
         String filtered_courses_str = shPreferences.getString(getString(R.string.filtered_courses), no_such_key);
+
         if (!filtered_courses_str.equals(no_such_key)) {
             /* if there is a stored information about filtering  */
             String[] filtered_courses_array = filtered_courses_str.split(DELIMITER);
-
             for (int i = 0; i < courses.getChildCount(); i++) {
                 /* check the already selected courses */
                 CheckBox checkBox = (CheckBox) filters.findViewById(i);
@@ -77,6 +77,14 @@ public class Filters extends AppCompatActivity {
                 }
             }
 
+        }
+        else {
+            /* show all courses */
+            for (int i = 0; i < courses.getChildCount(); i++) {
+                /* check the already selected courses */
+                CheckBox checkBox = (CheckBox) filters.findViewById(i);
+                checkBox.setChecked(true);
+            }
         }
 
 
