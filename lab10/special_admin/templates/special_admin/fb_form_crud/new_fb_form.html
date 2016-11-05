@@ -1,0 +1,153 @@
+{% extends 'special_admin/base.html' %}
+{% block specific_css %}
+    <style>
+        .question {
+            width: 90%;
+            margin-bottom: 10px;
+            margin-top: 10px;
+        }
+
+        #questions li {
+            list-style: decimal;
+            margin-bottom: 10px;
+            margin-top: 10px;
+        }
+
+        .remove_question {
+            margin-right: 10px;
+        }
+    </style>
+{% endblock %}
+{% block body %}
+    <div class='container-fluid'>
+
+        <h1 style='text-align: center;margin: 0;font-size: 50px'>New Feedback for {{ course.name }}</h1>
+        <hr>
+
+        <div class='col-xs-3'>
+
+            <blockquote class="text-danger">
+                <h2>WARNING:</h2>
+                <h3>Feedback form once created <b>CANNOT</b> be edited.</h3>
+            </blockquote>
+
+            <blockquote class="text-primary">
+                <h3>NOTE: </h3>
+
+                <h3><small>Feeder asks Quantitative questions better...</small></h3>
+                <h4>How much do you like CS101?<span class="glyphicon glyphicon-ok"></span></h4>
+                <h4>What do you think about CS101?<span class="glyphicon glyphicon-remove"></span></h4>
+
+                <h3><small>It's always better to be time specific</small></h3>
+                <h4>How was Mid sem?<span class="glyphicon glyphicon-ok"></span></h4>
+                <h4>How was yesterday's class?<span class="glyphicon glyphicon-remove"></span></h4>
+                <h4>How was 24 Aug class?<span class="glyphicon glyphicon-ok"></span></h4>
+
+                <h3><small>You can ask propositional questions</small></h3>
+                <h4>Should we conduct exam on 15 Aug?<span class="glyphicon glyphicon-ok"></span></h4>
+                <h4>Should we conduct exam on Sunday?<span class="glyphicon glyphicon-remove"></span></h4>
+                <h4>Should we conduct exam on this Sunday?<span class="glyphicon glyphicon-remove"></span></h4>
+            </blockquote>
+        </div>
+        <div class='col-xs-8'>
+            <div>
+                <form method='post' action='{% url 'special_admin:new_feedback_form' course.pk %}'
+                      id='create_fb_form_form'>
+                    {% csrf_token %}
+                    <input id='validate' type='button' name='create_fb_form' value='Create' class='btn-success'>
+                    <br><br>
+                    <input style='width: 100%' type='text' id='fb_form_name' name='fb_form_name' value=''
+                           placeholder='Give it a name'><br>
+                    <h3>DeadLine</h3>
+                    <span style='font-size: x-large'>Date : </span> <input style='width: 30%' type='date'
+                                                                           name='fb_form_deadline_date'>
+                    <span style='font-size: x-large'>Time : 24hrs</span> <input style='width: 30%' type='time'
+                                                                                name='fb_form_deadline_time'><br><br>
+                    <input type='hidden' id='question_set' name='question_set' value=''>
+                    <script>
+                        var questions_array = [];
+                        var delimiter = "{{ delimiter }}";
+
+                        $(document).ready(function () {
+
+                            $('#validate').click(function () {
+                                {#     Validate the form here    #}
+                                // empty name
+                                if ($('#fb_form_name').val() == '') {
+                                    alert('No Name!');
+                                    return;
+                                }
+                                // empty question set
+                                var all_question_inputs = $('#questions').find('input');
+                                if ($(all_question_inputs).length <= 0) {
+                                    alert('No Questions!');
+                                    return;
+                                }
+
+                                questions_array = [];
+                                var invalid_question_format = false;
+                                // invalid question format
+                                $(all_question_inputs).each(function () {
+                                    var question_str = $(this).val();
+                                    if (question_str.length > 0) {
+                                        for (var i = 0; i < question_str.length; ++i) {
+                                            if (question_str.charAt(i) == delimiter) {
+                                                alert('Question cannot contain ' + delimiter);
+                                                invalid_question_format = true;
+                                                return;
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        alert('Empty Question(s)');
+                                        invalid_question_format = true;
+                                        return;
+                                    }
+                                    questions_array.push($(this).val());
+                                });
+
+                                // If everything is okay then prepare the question_set and submit
+                                if (!invalid_question_format) {
+                                    $('#question_set').val(questions_array.join(delimiter));
+                                    $('#create_fb_form_form').submit();
+                                }
+                            });
+                        });
+                    </script>
+                </form>
+            </div>
+
+            <div style='background: rgba(1, 1, 1, 0.05);overflow: auto;height: 500px' class='row'>
+                <script>
+                    var new_question_input_html = '<li>' +
+                            '<button class="btn-danger remove_question">X</button>' +
+                            '<input placeholder="Pose a question to the class..." class="question" type="text">' +
+                            '</li>';
+
+                    function add_question() {
+                        $('#questions').append(new_question_input_html);
+                    }
+
+                    $(document).ready(function () {
+                        {# At least one question #}
+                        add_question();
+
+                        $('#new_question_btn').click(function () {
+                            add_question();
+                        });
+
+                        var questions = $('#questions');
+
+                        $(questions).on('click', 'button', function () {
+                            $(this).parent().remove();
+                        });
+                    });
+
+                </script>
+                <ul id='questions'></ul>
+                <button id='new_question_btn' class='btn-primary' style='font-size: x-large;margin-left: 10px'>New Question</button>
+            </div>
+        </div>
+        <div class='col-xs-1'></div>
+    </div>
+{% endblock %}

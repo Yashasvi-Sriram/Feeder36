@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:fillViewport="true"
+    tools:context="triangle.feeder36.Activities.Home">
+
+<LinearLayout
+    android:id="@+id/home"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <LinearLayout
+        android:id="@+id/calendar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" />
+
+    <TextView
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tasks"
+        android:id="@+id/task_heading"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="18sp"
+        android:textStyle="normal|bold"
+        android:textColor="@color/caldroid_black"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp" />
+    <ListView
+        android:id="@+id/list_view_tasks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Feedbacks"
+        android:id="@+id/feedback_heading"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="18sp"
+        android:textColor="@color/caldroid_black"
+        android:textStyle="normal|bold"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp" />
+
+    <ListView
+        android:nestedScrollingEnabled="false"
+        android:id="@+id/list_view_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
+</ScrollView>
