@@ -1,0 +1,172 @@
+{% extends 'special_admin/base.html' %}
+{% block body %}
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-xs-2"></div>
+            <div class="col-xs-7">
+                <h1 style="text-align: center;margin: 0;font-size: 50px">{{ course.name }}..</h1>
+            </div>
+            <div class="col-xs-1">
+{#                <a href="{% url 'special_admin:tasks' course.pk %}">#}
+{#                    <button class="btn-info" style="width: 100px;height: 50px;font-size: xx-large">#}
+{#                        Tasks#}
+{#                    </button>#}
+{#                </a>#}
+            </div>
+            <div class="col-xs-2">
+{#                <a href="{% url 'special_admin:feedback_forms' course.pk %}">#}
+{#                    <button class="btn-default" style="width: 150px;height: 50px;font-size: xx-large">#}
+{#                        Feedback#}
+{#                    </button>#}
+{#                </a>#}
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-xs-2">
+                <form method="post" action="{% url 'special_admin:old_course' course.pk %}" class="form-horizontal">
+                    {% csrf_token %}
+                    <input type="submit" name="delete_course" value="Delete" class="btn-danger">
+                </form>
+                <form method="post" action="{% url 'special_admin:old_course' course.pk %}" id="update_course_form">
+                    {% csrf_token %}
+                    <br>
+                    <input style='width: 100%' type='text' id='course_code'  name='course_code' value='{{ course.code }}'
+                           placeholder='code'><br><br>
+                    <input style='width: 100%' type='text' name='course_name' value='{{ course.name }}'
+                           placeholder='name'><br><br>
+                    <input type="hidden" value="" id="students_input" name="students">
+                    <input id="validate" type='button' name='update_course' value='Update' class='btn-info'>
+                    <script type="text/javascript">
+                        var signed_students = [];
+                        var signed_class_name = 'signed';
+                        var no_signed = {{ signed_students|length }};
+                        var no_available = {{ unsigned_students|length }};
+
+                        function update_totals() {
+                            $('#no_students_available').text(no_available);
+                            $('#no_students_signed').text(no_signed);
+                        }
+
+                        $(document).ready(function () {
+                            $('#validate').click(function () {
+                                if ($('#course_code').val() == "") {
+                                    alert('Empty Course Code!');
+                                    return;
+                                }
+                                if ($('#course_code').val().indexOf("`") != -1){
+                                    alert('Course code cannot contain ` !');
+                                    return;
+                                }
+                                signed_students = [];
+                                $('#students_signed').find('.' + signed_class_name).each(function () {
+                                    signed_students.push($(this).attr('id'));
+                                });
+                                $('#students_input').val(signed_students.join(","));
+                                $('#update_course_form').submit();
+                            });
+                        });
+                    </script>
+                </form>
+            </div>
+            {#      Students enrollment script      #}
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    update_totals();
+
+                    $('#students_signed').find('.course').click(function () {
+                        $(this).fadeOut(0).removeClass(signed_class_name);
+                        $('#students_available').find('#' + $(this).attr('id')).fadeIn(0);
+                        no_available++;
+                        no_signed--;
+                        update_totals();
+                    });
+                    $('#students_available').find('.course').click(function () {
+                        $(this).fadeOut(0);
+                        $('#students_signed').find('#' + $(this).attr('id')).fadeIn(0).addClass(signed_class_name);
+                        no_available--;
+                        no_signed++;
+                        update_totals();
+                    });
+                });
+            </script>
+            <div class='col-xs-5'>
+                <blockquote><span id='no_students_signed'></span> students registered</blockquote>
+                <table id='students_signed' class='table table-hover table-striped' style='overflow: scroll'>
+                    <colgroup>
+                        <col span="1" style="width: 50%;">
+                        <col span="1" style="width: 50%;">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>User Name</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for student in all_students %}
+                        <tr id='{{ student.pk }}'
+                                {% if student not in signed_students %}
+                            style="display: none"
+                            class='course'
+                                {% else %}
+                            class='course signed'
+                                {% endif %}>
+                            <td>
+                                <a href='{% url 'special_admin:old_student' student.pk %}'>
+                                    {{ student.name }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href='{% url 'special_admin:old_student' student.pk %}'>
+                                    {{ student.user_name }}
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class='col-xs-5'>
+                <blockquote><span id='no_students_available'></span> students available</blockquote>
+                <table id='students_available' class='table table-hover table-striped' style='overflow: scroll'>
+                    <colgroup>
+                        <col span="1" style="width: 50%;">
+                        <col span="1" style="width: 50%;">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>User Name</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for student in all_students %}
+                        <tr id='{{ student.pk }}' class='course'
+                                {% if student not in unsigned_students %}
+                            style="display: none"
+                            class='course  signed'
+                                {% else %}
+                            class='course'
+                                {% endif %}>
+                            <td>
+                                <a href='{% url 'special_admin:old_student' student.pk %}'>
+                                    {{ student.name }}
+                                </a>
+                            </td>
+                            <td>
+                                <a href='{% url 'special_admin:old_student' student.pk %}'>
+                                    {{ student.user_name }}
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

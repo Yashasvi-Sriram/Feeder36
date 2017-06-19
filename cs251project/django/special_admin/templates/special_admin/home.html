@@ -1,0 +1,11 @@
+{% extends 'special_admin/base.html' %}
+{% block body %}
+    <h1 class="container-fluid" style="text-align: center;">
+        Hello, Here you can control the Courses and Students
+    </h1>
+    <a href="{% url 'special_admin:restart' %}">
+        <button class="btn-danger" style="position: fixed;top: 40%;left: 37%;height: 100px;width: 500px;">Reset Feed'er
+            System(Import from csv)
+        </button>
+    </a>
+{% endblock %}
