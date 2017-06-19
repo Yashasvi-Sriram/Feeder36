@@ -1,8 +1,0 @@
-<resources>
-    <string name="app_name">Feed\'er36</string>
-    <string name="preferences_file">triangle.feeder36.preferences</string>
-    <string name="filtered_courses">filtered_courses</string>
-    <string name="no_such_key">no_such_key</string>
-    <string name="show_tasks">show_tasks</string>
-    <string name="show_feedback">show_feedback</string>
-</resources>
