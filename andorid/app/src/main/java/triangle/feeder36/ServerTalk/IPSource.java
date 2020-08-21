@@ -1,8 +1,8 @@
 package triangle.feeder36.ServerTalk;
 
 public class IPSource {
-    public static String IP = "10.0.2.2";
-    public static String PORT = "8036";
+    public static String IP = "192.168.1.14";
+    public static String PORT = "8000";
 
     public static String BASE = "http://" + IP + ":" + PORT + "/android/";
 

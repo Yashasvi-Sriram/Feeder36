@@ -3,13 +3,14 @@ package triangle.feeder36.Activities;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -132,8 +133,7 @@ public class ChangePassword extends AppCompatActivity {
                     if (users.size() == 0) {
                         UserInfo newUser = new UserInfo(post_user_name, post_new_password);
                         dbManager.insert(newUser);
-                    }
-                    else if (!users.get(0).USER_NAME.matches(post_user_name) || !users.get(0).PASSWORD.matches(post_new_password)) {
+                    } else if (!users.get(0).USER_NAME.matches(post_user_name) || !users.get(0).PASSWORD.matches(post_new_password)) {
                         UserInfo newUser = new UserInfo(post_user_name, post_new_password);
                         dbManager.updateEntryWithKeyValue(newUser, db.TABLES.USER_INFO.USER_NAME, users.get(0).USER_NAME);
                     }

@@ -13,7 +13,8 @@ SECRET_KEY = 't0l2rpb54b7_o-_=r60izyxg#(!fv)8ym$bkl*=aqebcq6ux(v'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.1.14', 'localhost', '127.0.0.1']
+
 
 STATIC_URL = '/static/'
 
@@ -33,13 +34,12 @@ INSTALLED_APPS = [
     'social.apps.django_app.default',
 ]
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
