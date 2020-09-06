@@ -9,3 +9,7 @@ OAuth2 android login
 ++Anonymous student
 
 android API check from phone only
+
+remove specific ip
+make debug = FALSE in django
+warning at log out ++
